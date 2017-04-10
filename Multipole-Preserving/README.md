@@ -2,7 +2,6 @@
 
 This directory contains the notbooks related to the article *Multipole-preserving quadratures for the discretization of functions in real-space electronic structure calculations*, Phys. Chem. Chem. Phys., 2015,17, 31582, about the multipole preserving of the ionic charge.
 
-![Cinchonidine energy versus the grid spacing](http://bigdft.org/Wiki/index.php?title=File:Percent-cinchonidine.png)
 
 Two notebooks shows the total energy error in percentage in fucntion of the grid spacing for two systems:
 * the simple H atom;
