@@ -1,0 +1,1934 @@
+---
+ INIT: #                      % ,  Time (s), Max, Min Load (relative)
+   Classes:
+     Flib LowLevel      : [ 10.3,  33.,  1.29,  0.89]
+     Communications     : [ 22.9,  73.,  1.26,  0.85]
+     BLAS-LAPACK        : [ 0.2,  0.64,  1.17,  0.59]
+     PS Computation     : [ 0.5,  1.7,  2.53,  0.18]
+     Potential          : [ 0.2,  0.50,  1.12,  0.00]
+     Convolutions       : [ 17.4,  55.,  1.08,  0.83]
+     Linear Algebra     : [ 13.2,  42.,  1.06,  0.87]
+     Other              : [ 21.2,  67.,  1.03,  0.93]
+     Initialization     : [ 6.4,  20.,  1.15,  0.91]
+     Total              : [ 92.2,  3.19E+02,  1.00,  1.00]
+   Categories: #Ordered by time consumption
+     convolQuartic:
+       Data             : [ 8.8,  28.,  1.09,  0.87]
+       Class            : Convolutions
+       Info             : No OpenCL
+     Allreduce, Large Size:
+       Data             : [ 8.3,  27.,  1.30,  0.84]
+       Class            : Communications
+       Info             : Allreduce operations for more than 5 elements
+     sparse_matmul:
+       Data             : [ 7.4,  23.,  1.05,  0.95]
+       Class            : Linear Algebra
+       Info             : self-made
+     ApplyLocPot:
+       Data             : [ 7.0,  22.,  1.05,  0.83]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     wfd_creation:
+       Data             : [ 6.9,  22.,  1.00,  1.00]
+       Class            : Other
+       Info             : Miscellaneous
+     Allreduce, Small Size:
+       Data             : [ 5.3,  17.,  1.69,  0.64]
+       Class            : Communications
+       Info             : Allreduce operations for less than 5 elements
+     Un-TransComm:
+       Data             : [ 5.2,  17.,  1.14,  0.89]
+       Class            : Communications
+       Info             : ALLtoALLV
+     lovrlp^-1:
+       Data             : [ 4.7,  15.,  1.14,  0.68]
+       Class            : Linear Algebra
+       Info             : exact or appr
+     lincombtrans:
+       Data             : [ 4.6,  15.,  1.01,  0.93]
+       Class            : Other
+       Info             : Miscellaneous
+     Routine Profiling:
+       Data             : [ 3.6,  12.,  1.67,  0.99]
+       Class            : Flib LowLevel
+       Info             : Profiling performances for debugging
+     ApplyProj:
+       Data             : [ 3.1,  9.8,  1.23,  0.55]
+       Class            : Other
+       Info             : RMA pattern
+     Init to Zero:
+       Data             : [ 2.6,  8.4,  1.10,  0.92]
+       Class            : Flib LowLevel
+       Info             : Memset of storage space
+     ovrlptransComp:
+       Data             : [ 2.6,  8.2,  1.05,  0.98]
+       Class            : Other
+       Info             : Miscellaneous
+     Vector copy:
+       Data             : [ 2.1,  6.8,  1.17,  0.81]
+       Class            : Flib LowLevel
+       Info             : Memory copy of arrays (excluded allocations)
+     Array allocations:
+       Data             : [ 1.9,  6.2,  1.65,  0.72]
+       Class            : Flib LowLevel
+       Info             : Heap storage allocation and associated profiling
+     init_collcomm:
+       Data             : [ 1.7,  5.5,  1.18,  0.71]
+       Class            : Initialization
+       Info             : Miscellaneous
+     init_collco_sr:
+       Data             : [ 1.7,  5.5,  1.18,  0.93]
+       Class            : Initialization
+       Info             : Miscellaneous
+     ApplyLocKin:
+       Data             : [ 1.6,  5.0,  1.15,  0.59]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     sumrho_TMB:
+       Data             : [ 1.5,  4.7,  1.32,  0.93]
+       Class            : Other
+       Info             : port to GPU?
+     PSolver Communication:
+       Data             : [ 1.1,  3.6,  1.36,  0.33]
+       Class            : Communications
+       Info             : MPI_ALLTOALL and MPI_ALLGATHERV
+     CrtDescriptors:
+       Data             : [ 1.0,  3.2,  1.15,  0.99]
+       Class            : Initialization
+       Info             : RMA Pattern
+     transform_matr:
+       Data             : [ 0.9,  2.9,  1.02,  0.96]
+       Class            : Other
+       Info             : small to large
+     commbasis4dens:
+       Data             : [ 0.9,  2.8,  1.18,  0.76]
+       Class            : Communications
+       Info             : Miscellaneous
+     init_orbs_lin:
+       Data             : [ 0.9,  2.8,  1.01,  0.99]
+       Class            : Initialization
+       Info             : Miscellaneous
+     ovrlptransComm:
+       Data             : [ 0.9,  2.7,  1.32,  0.57]
+       Class            : Communications
+       Info             : mpi_allreduce
+     check_sumrho:
+       Data             : [ 0.7,  2.4,  1.56,  0.99]
+       Class            : Initialization
+       Info             : unitary check
+     Un-TransSwitch:
+       Data             : [ 0.6,  1.9,  1.41,  0.76]
+       Class            : Other
+       Info             : RMA pattern
+     lovrlp^-1/2par:
+       Data             : [ 0.6,  1.8,  1.24,  0.40]
+       Class            : Linear Algebra
+       Info             : exact or appr
+     compressd_comm:
+       Data             : [ 0.5,  1.7,  1.42,  0.63]
+       Class            : Communications
+       Info             : Allgatherv
+     chebyshev_comp:
+       Data             : [ 0.5,  1.7,  1.48,  0.84]
+       Class            : Linear Algebra
+       Info             : matmul/matadd
+     FOE_auxiliary:
+       Data             : [ 0.5,  1.5,  1.24,  0.66]
+       Class            : Other
+       Info             : Miscellaneous
+     PSolver Computation:
+       Data             : [ 0.4,  1.3,  2.86,  0.00]
+       Class            : PS Computation
+       Info             : 3D SG_FFT and related operations
+     Pot_commun:
+       Data             : [ 0.3,  0.83,  2.05,  0.36]
+       Class            : Communications
+       Info             : AllGathrv grid
+     sumrho_allred:
+       Data             : [ 0.2,  0.73,  1.11,  0.51]
+       Class            : Communications
+       Info             : mpiallred
+     optimize_DIIS:
+       Data             : [ 0.2,  0.70,  1.06,  0.91]
+       Class            : Other
+       Info             : Other
+     Blas (d-s-c-z)GeMM:
+       Data             : [ 0.2,  0.64,  1.17,  0.59]
+       Class            : BLAS-LAPACK
+       Info             : Blas General Matrix-Matrix multiplications of any float type
+     init_matrCompr:
+       Data             : [ 0.2,  0.62,  1.02,  0.96]
+       Class            : Initialization
+       Info             : Miscellaneous
+     comm_llr:
+       Data             : [ 0.2,  0.60,  1.00,  1.00]
+       Class            : Communications
+       Info             : Miscellaneous
+     Exchange-Correlation:
+       Data             : [ 0.2,  0.50,  1.12,  0.00]
+       Class            : Potential
+       Info             : Operations needed to construct local XC potential
+     check_pot:
+       Data             : [ 0.1,  0.44,  1.27,  0.95]
+       Class            : Initialization
+       Info             : unitary check
+     PSolver Kernel Creation:
+       Data             : [ 0.1,  0.38,  1.47,  0.81]
+       Class            : PS Computation
+       Info             : ISF operations and creation of the kernel
+     Pot_after_comm:
+       Data             : [ 0.1,  0.38,  1.13,  0.79]
+       Class            : Other
+       Info             : global_to_loca
+     calc_bounds:
+       Data             : [ 0.1,  0.30,  1.18,  0.90]
+       Class            : Other
+       Info             : Miscellaneous
+     Pot_comm start:
+       Data             : [ 0.1,  0.21,  1.55,  0.45]
+       Class            : Communications
+       Info             : MPI_types/_get
+     small2large:
+       Data             : [ 0.0,  0.10,  1.10,  0.91]
+       Class            : Other
+       Info             : Miscellaneous
+     large2small:
+       Data             : [ 0.0,  0.10,  1.19,  0.86]
+       Class            : Other
+       Info             : Miscellaneous
+     norm_trans:
+       Data             : [ 0.0,  7.64E-02,  1.28,  0.94]
+       Class            : Other
+       Info             : Miscellaneous
+     dev_from_unity:
+       Data             : [ 0.0,  6.17E-02,  1.21,  0.18]
+       Class            : Other
+       Info             : Miscellaneous
+     CrtLocPot:
+       Data             : [ 0.0,  4.64E-02,  1.13,  0.00]
+       Class            : Initialization
+       Info             : Miscellaneous
+     init_locregs:
+       Data             : [ 0.0,  3.92E-02,  1.05,  0.96]
+       Class            : Initialization
+       Info             : Miscellaneous
+     updatelocreg1:
+       Data             : [ 0.0,  3.88E-02,  1.04,  0.95]
+       Class            : Other
+       Info             : Miscellaneous
+     init_commPot:
+       Data             : [ 0.0,  1.28E-02,  1.03,  0.98]
+       Class            : Initialization
+       Info             : Miscellaneous
+     chebyshev_coef:
+       Data             : [ 0.0,  8.33E-03,  1.09,  0.99]
+       Class            : Other
+       Info             : Miscellaneous
+     compressd_mcpy:
+       Data             : [ 0.0,  6.70E-03,  1.35,  0.77]
+       Class            : Other
+       Info             : Miscellaneous
+     calctrace_comp:
+       Data             : [ 0.0,  4.14E-04,  1.23,  0.59]
+       Class            : Other
+       Info             : Miscellaneous
+     calctrace_comm:
+       Data             : [ 0.0,  2.76E-04,  1.80,  0.62]
+       Class            : Communications
+       Info             : allreduce
+     glsynchham2:
+       Data             : [ 0.0,  2.67E-04,  1.37,  0.72]
+       Class            : Other
+       Info             : Miscellaneous
+     glsynchham1:
+       Data             : [ 0.0,  2.46E-05,  1.30,  0.78]
+       Class            : Other
+       Info             : Miscellaneous
+     getlocbasinit:
+       Data             : [ 0.0,  8.14E-06,  2.20,  0.91]
+       Class            : Other
+       Info             : Miscellaneous
+ WFN_OPT: #                   % ,  Time (s), Max, Min Load (relative)
+   Classes:
+     Flib LowLevel      : [ 7.4,  1.33E+02,  1.46,  0.78]
+     Communications     : [ 25.0,  4.50E+02,  1.35,  0.71]
+     BLAS-LAPACK        : [ 0.2,  4.3,  1.17,  0.59]
+     PS Computation     : [ 1.3,  24.,  2.88,  0.00]
+     Potential          : [ 0.7,  13.,  1.27,  0.00]
+     Convolutions       : [ 20.9,  3.77E+02,  1.08,  0.82]
+     Linear Algebra     : [ 17.2,  3.10E+02,  1.06,  0.89]
+     Other              : [ 23.8,  4.29E+02,  1.03,  0.87]
+     Total              : [ 96.6,  1.80E+03,  1.00,  1.00]
+   Categories: #Ordered by time consumption
+     sparse_matmul:
+       Data             : [ 11.0,  1.99E+02,  1.05,  0.95]
+       Class            : Linear Algebra
+       Info             : self-made
+     convolQuartic:
+       Data             : [ 9.5,  1.72E+02,  1.10,  0.87]
+       Class            : Convolutions
+       Info             : No OpenCL
+     ApplyLocPot:
+       Data             : [ 9.5,  1.71E+02,  1.06,  0.82]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Allreduce, Small Size:
+       Data             : [ 9.4,  1.70E+02,  1.51,  0.63]
+       Class            : Communications
+       Info             : Allreduce operations for less than 5 elements
+     sumrho_TMB:
+       Data             : [ 7.3,  1.31E+02,  1.04,  0.93]
+       Class            : Other
+       Info             : port to GPU?
+     Un-TransComm:
+       Data             : [ 4.6,  83.,  1.13,  0.86]
+       Class            : Communications
+       Info             : ALLtoALLV
+     lovrlp^-1:
+       Data             : [ 3.8,  69.,  1.15,  0.60]
+       Class            : Linear Algebra
+       Info             : exact or appr
+     ApplyProj:
+       Data             : [ 3.7,  67.,  1.23,  0.55]
+       Class            : Other
+       Info             : RMA pattern
+     PSolver Communication:
+       Data             : [ 3.6,  65.,  1.37,  0.30]
+       Class            : Communications
+       Info             : MPI_ALLTOALL and MPI_ALLGATHERV
+     lincombtrans:
+       Data             : [ 3.4,  62.,  1.08,  0.93]
+       Class            : Other
+       Info             : Miscellaneous
+     ovrlptransComp:
+       Data             : [ 2.8,  51.,  1.06,  0.98]
+       Class            : Other
+       Info             : Miscellaneous
+     Init to Zero:
+       Data             : [ 2.8,  50.,  1.10,  0.89]
+       Class            : Flib LowLevel
+       Info             : Memset of storage space
+     Vector copy:
+       Data             : [ 2.6,  47.,  1.53,  0.76]
+       Class            : Flib LowLevel
+       Info             : Memory copy of arrays (excluded allocations)
+     FOE_auxiliary:
+       Data             : [ 2.5,  44.,  1.24,  0.66]
+       Class            : Other
+       Info             : Miscellaneous
+     chebyshev_comp:
+       Data             : [ 2.4,  43.,  1.51,  0.88]
+       Class            : Linear Algebra
+       Info             : matmul/matadd
+     Allreduce, Large Size:
+       Data             : [ 2.2,  40.,  1.56,  0.52]
+       Class            : Communications
+       Info             : Allreduce operations for more than 5 elements
+     buildgrad_mcpy:
+       Data             : [ 2.0,  36.,  1.12,  0.90]
+       Class            : Other
+       Info             : Miscellaneous
+     ApplyLocKin:
+       Data             : [ 1.9,  35.,  1.14,  0.60]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Array allocations:
+       Data             : [ 1.8,  33.,  2.03,  0.57]
+       Class            : Flib LowLevel
+       Info             : Heap storage allocation and associated profiling
+     PSolver Computation:
+       Data             : [ 1.3,  24.,  2.88,  0.00]
+       Class            : PS Computation
+       Info             : 3D SG_FFT and related operations
+     ovrlptransComm:
+       Data             : [ 1.3,  24.,  1.38,  0.48]
+       Class            : Communications
+       Info             : mpi_allreduce
+     Pot_commun:
+       Data             : [ 1.3,  23.,  2.10,  0.36]
+       Class            : Communications
+       Info             : AllGathrv grid
+     commbasis4dens:
+       Data             : [ 1.1,  19.,  1.26,  0.76]
+       Class            : Communications
+       Info             : Miscellaneous
+     compressd_comm:
+       Data             : [ 1.0,  18.,  1.34,  0.77]
+       Class            : Communications
+       Info             : Allgatherv
+     Exchange-Correlation:
+       Data             : [ 0.7,  13.,  1.27,  0.00]
+       Class            : Potential
+       Info             : Operations needed to construct local XC potential
+     transform_matr:
+       Data             : [ 0.7,  12.,  1.05,  0.94]
+       Class            : Other
+       Info             : small to large
+     Pot_after_comm:
+       Data             : [ 0.6,  11.,  1.19,  0.74]
+       Class            : Other
+       Info             : global_to_loca
+     Un-TransSwitch:
+       Data             : [ 0.5,  8.2,  1.50,  0.77]
+       Class            : Other
+       Info             : RMA pattern
+     Blas (d-s-c-z)GeMM:
+       Data             : [ 0.2,  4.3,  1.17,  0.59]
+       Class            : BLAS-LAPACK
+       Info             : Blas General Matrix-Matrix multiplications of any float type
+     sumrho_allred:
+       Data             : [ 0.2,  3.9,  1.24,  0.83]
+       Class            : Communications
+       Info             : mpiallred
+     dev_from_unity:
+       Data             : [ 0.2,  3.5,  1.22,  0.18]
+       Class            : Other
+       Info             : Miscellaneous
+     Pot_comm start:
+       Data             : [ 0.2,  3.3,  1.36,  0.62]
+       Class            : Communications
+       Info             : MPI_types/_get
+     Routine Profiling:
+       Data             : [ 0.2,  3.0,  1.67,  0.98]
+       Class            : Flib LowLevel
+       Info             : Profiling performances for debugging
+     optimize_DIIS:
+       Data             : [ 0.1,  1.5,  1.07,  0.90]
+       Class            : Other
+       Info             : Other
+     small2large:
+       Data             : [ 0.0,  0.69,  1.13,  0.91]
+       Class            : Other
+       Info             : Miscellaneous
+     large2small:
+       Data             : [ 0.0,  0.65,  1.14,  0.89]
+       Class            : Other
+       Info             : Miscellaneous
+     chebyshev_coef:
+       Data             : [ 0.0,  0.21,  1.33,  0.99]
+       Class            : Other
+       Info             : Miscellaneous
+     compressd_mcpy:
+       Data             : [ 0.0,  8.07E-02,  1.26,  0.77]
+       Class            : Other
+       Info             : Miscellaneous
+     foe_aux_mcpy:
+       Data             : [ 0.0,  6.27E-02,  1.73,  0.43]
+       Class            : Other
+       Info             : Miscellaneous
+     calctrace_comp:
+       Data             : [ 0.0,  1.85E-03,  1.19,  0.59]
+       Class            : Other
+       Info             : Miscellaneous
+     calc_bounds:
+       Data             : [ 0.0,  1.59E-03,  1.21,  0.96]
+       Class            : Other
+       Info             : Miscellaneous
+     calctrace_comm:
+       Data             : [ 0.0,  1.28E-03,  1.73,  0.66]
+       Class            : Communications
+       Info             : allreduce
+     glsynchham2:
+       Data             : [ 0.0,  1.19E-03,  1.32,  0.74]
+       Class            : Other
+       Info             : Miscellaneous
+     glsynchham1:
+       Data             : [ 0.0,  7.71E-04,  1.34,  0.74]
+       Class            : Other
+       Info             : Miscellaneous
+     getlocbasinit:
+       Data             : [ 0.0,  1.21E-04,  1.25,  0.95]
+       Class            : Other
+       Info             : Miscellaneous
+     linscalinit:
+       Data             : [ 0.0,  8.01E-05,  2.17,  0.76]
+       Class            : Other
+       Info             : Miscellaneous
+ LAST: #                      % ,  Time (s), Max, Min Load (relative)
+   Classes:
+     Flib LowLevel      : [ 9.5,  5.3,  1.15,  0.96]
+     Communications     : [ 7.0,  3.9,  5.44,  0.50]
+     PS Computation     : [ 0.8,  0.42,  2.90,  0.00]
+     Finalization       : [ 81.7,  45.,  1.05,  0.63]
+     Total              : [ 99.0,  56.,  1.00,  1.00]
+   Categories: #Ordered by time consumption
+     Forces:
+       Data             : [ 81.7,  45.,  1.05,  0.63]
+       Class            : Finalization
+       Info             : Miscellaneous
+     Array allocations:
+       Data             : [ 6.4,  3.5,  1.24,  0.95]
+       Class            : Flib LowLevel
+       Info             : Heap storage allocation and associated profiling
+     Allreduce, Large Size:
+       Data             : [ 4.8,  2.7,  7.27,  0.12]
+       Class            : Communications
+       Info             : Allreduce operations for more than 5 elements
+     Vector copy:
+       Data             : [ 3.1,  1.7,  1.03,  0.98]
+       Class            : Flib LowLevel
+       Info             : Memory copy of arrays (excluded allocations)
+     PSolver Communication:
+       Data             : [ 2.1,  1.2,  1.37,  0.32]
+       Class            : Communications
+       Info             : MPI_ALLTOALL and MPI_ALLGATHERV
+     PSolver Computation:
+       Data             : [ 0.8,  0.42,  2.90,  0.00]
+       Class            : PS Computation
+       Info             : 3D SG_FFT and related operations
+     Allreduce, Small Size:
+       Data             : [ 0.0,  1.16E-02,  1.83,  0.02]
+       Class            : Communications
+       Info             : Allreduce operations for less than 5 elements
+     Gather:
+       Data             : [ 0.0,  1.77E-03,  82.96,  0.06]
+       Class            : Communications
+       Info             : Gather operations, in general moderate size arrays
+     Routine Profiling:
+       Data             : [ 0.0,  7.58E-04,  1.49,  0.84]
+       Class            : Flib LowLevel
+       Info             : Profiling performances for debugging
+     Init to Zero:
+       Data             : [ 0.0,  5.37E-04,  2.16,  0.62]
+       Class            : Flib LowLevel
+       Info             : Memset of storage space
+ SUMMARY: #                   % ,  Time (s)
+   INIT                 : [ 14.6,  3.19E+02]
+   WFN_OPT              : [ 82.8,  1.80E+03]
+   LAST                 : [ 2.6,  56.]
+   Total                : [ 100.0,  2.18E+03]
+ Routines timing and number of calls:
+ - Main_program: [ 2.210E+03,  1, ~*]
+   Subroutines:
+   - call_bigdft: [ 2.177E+03,  1,  98.52%*]
+     Subroutines:
+     - cluster: [ 2.177E+03,  1,  100.01%]
+       Subroutines:
+       - linear_scaling: [ 1.803E+03,  1,  82.81%]
+         Subroutines:
+         - getLocalizedBasis: [ 1.013E+03,  15,  56.17%]
+           Subroutines:
+           - calculate_energy_and_gradient_linear: [ 443.,  67,  43.75%]
+             Subroutines:
+             - preconditionall2: [ 197.,  134,  44.43%]
+             - orthoconstraintNonorthogonal: [ 164.,  67,  37.05%]
+               Subroutines:
+               - untranspose_localized: [ 44.4,  134,  27.10%]
+               - build_linear_combination_transposed: [ 38.7,  134,  23.61%]
+               - calculate_overlap_transposed: [ 29.0,  67,  17.67%]
+               - transpose_localized: [ 21.9,  67,  13.33%]
+               - compress_matrix_distributed: [ 11.2,  67,  6.82%]
+               - symmetrize_matrix: [ 8.61,  67,  5.25%]
+               - psi_to_locreg: [ 0.382,  3216,  0.23%]
+             - build_gradient: [ 41.4,  67,  9.35%]
+               Subroutines:
+               - build_linear_combination_transposed: [ 19.1,  67,  46.12%]
+               - transpose_localized: [ 17.2,  67,  41.60%]
+             - build_linear_combination_transposed: [ 19.8,  67,  4.47%]
+             - calculate_trace: [ 12.7,  67,  2.87%]
+             - psi_to_locreg: [ 0.742,  6432,  0.17%]
+           - renormalize_kernel: [ 141.,  67,  13.94%]
+             Subroutines:
+             - overlapPowerGeneral: [ 111.,  67,  78.45%]
+               Subroutines:
+               - ice: [ 63.5,  67,  57.20%]
+                 Subroutines:
+                 - chebyshev_clean: [ 31.8,  76,  50.04%]
+                 - compress_matrix_distributed: [ 13.3,  201,  20.88%]
+                 - check_emergency_stop: [ 1.99,  76,  3.13%]
+                 - scale_and_shift_matrix: [ 1.29,  76,  2.03%]
+                 - check_eigenvalue_spectrum: [ 8.012E-02,  76,  0.13%]
+                 - evnoise: [ 6.736E-03,  228,  0.01%]
+                 - chebft2: [ 6.560E-03,  228,  0.01%]
+                 - chebft: [ 6.413E-03,  228,  0.01%]
+                 - chder: [ 5.330E-03,  228,  0.01%]
+               - check_accur_overlap_minus_one_sparse: [ 33.3,  201,  29.97%]
+             - retransform_local: [ 28.8,  134,  20.43%]
+               Subroutines:
+               - compress_matrix_distributed: [ 8.48,  134,  29.46%]
+           - LocalHamiltonianApplication: [ 138.,  134,  13.58%]
+           - SynchronizeHamiltonianApplication: [ 96.4,  67,  9.52%]
+           - hpsitopsi_linear: [ 63.9,  52,  6.31%]
+             Subroutines:
+             - improveOrbitals: [ 60.0,  52,  93.90%]
+               Subroutines:
+               - optimizeDIIS: [ 59.8,  52,  99.70%]
+           - transpose_localized: [ 26.6,  134,  2.62%]
+           - NonLocalHamiltonianApplication: [ 25.6,  67,  2.52%]
+           - calculate_overlap_transposed: [ 22.5,  82,  2.22%]
+           - full_local_potential: [ 15.7,  67,  1.55%]
+           - overlapPowerGeneral: [ 14.8,  15,  1.46%]
+             Subroutines:
+             - ice: [ 10.6,  15,  71.84%]
+               Subroutines:
+               - chebyshev_clean: [ 7.60,  18,  71.73%]
+               - compress_matrix_distributed: [ 0.747,  15,  7.05%]
+               - check_emergency_stop: [ 0.706,  18,  6.66%]
+               - scale_and_shift_matrix: [ 0.306,  18,  2.88%]
+               - check_eigenvalue_spectrum: [ 1.590E-02,  18,  0.15%]
+               - chebft: [ 7.529E-04,  18,  0.01%]
+               - evnoise: [ 6.726E-04,  18,  0.01%]
+               - chebft2: [ 6.530E-04,  18,  0.01%]
+               - chder: [ 5.536E-04,  18,  0.01%]
+             - check_accur_overlap_minus_one_sparse: [ 2.47,  15,  16.66%]
+           - start_onesided_communication: [ 1.74,  15,  0.17%]
+           - small_to_large_locreg: [ 1.36,  67,  0.13%]
+             Subroutines:
+             - Lpsi_to_global: [ 0.462,  3216,  33.97%]
+           - estimate_energy_change: [ 0.458,  52,  0.05%]
+           - local_potential_dimensions: [ 9.619E-04,  15,  0.00%]
+         - get_coeff: [ 523.,  57,  28.99%]
+           Subroutines:
+           - foe: [ 312.,  57,  59.60%]
+             Subroutines:
+             - chebyshev_clean: [ 226.,  69,  72.29%]
+               Subroutines:
+               - compress_matrix_distributed: [ 8.20,  69,  3.63%]
+             - retransform: [ 25.6,  124,  8.22%]
+               Subroutines:
+               - compress_matrix_distributed: [ 10.3,  124,  40.35%]
+             - overlap_minus_onehalf: [ 15.4,  15,  4.93%]
+               Subroutines:
+               - overlapPowerGeneral: [ 15.4,  15,  99.92%]
+                 Subroutines:
+                 - ice: [ 9.97,  15,  64.74%]
+                   Subroutines:
+                   - chebyshev_clean: [ 6.81,  18,  68.30%]
+                   - compress_matrix_distributed: [ 1.63,  15,  16.35%]
+                   - scale_and_shift_matrix: [ 0.310,  18,  3.11%]
+                   - check_eigenvalue_spectrum: [ 1.631E-02,  18,  0.16%]
+                   - check_emergency_stop: [ 1.426E-02,  18,  0.14%]
+                   - chebft: [ 8.050E-04,  18,  0.01%]
+                   - evnoise: [ 7.049E-04,  18,  0.01%]
+                   - chebft2: [ 6.696E-04,  18,  0.01%]
+                   - chder: [ 5.580E-04,  18,  0.01%]
+                 - check_accur_overlap_minus_one_sparse: [ 3.18,  15,  20.63%]
+             - compress_matrix_distributed: [ 6.96,  124,  2.23%]
+             - check_emergency_stop: [ 6.16,  520,  1.97%]
+             - calculate_trace_distributed: [ 2.72,  575,  0.87%]
+             - chebyshev_fast: [ 2.61,  513,  0.84%]
+             - scale_and_shift_matrix: [ 1.84,  69,  0.59%]
+             - trace_sparse: [ 0.115,  186,  0.04%]
+             - evnoise: [ 0.111,  520,  0.04%]
+             - chebft: [ 9.469E-02,  1040,  0.03%]
+             - chebft2: [ 8.065E-02,  1040,  0.03%]
+             - check_eigenvalue_spectrum: [ 6.769E-02,  68,  0.02%]
+             - determine_fermi_level: [ 3.730E-02,  513,  0.01%]
+             - chder: [ 2.826E-02,  1040,  0.01%]
+             - init_fermi_level: [ 1.747E-03,  62,  0.00%]
+           - LocalHamiltonianApplication: [ 60.2,  84,  11.51%]
+           - full_local_potential: [ 42.5,  42,  8.12%]
+           - communicate_basis_for_density_collective: [ 26.5,  15,  5.06%]
+           - SynchronizeHamiltonianApplication: [ 21.5,  42,  4.11%]
+           - calculate_overlap_transposed: [ 20.5,  57,  3.92%]
+           - NonLocalHamiltonianApplication: [ 16.0,  42,  3.05%]
+           - transpose_localized: [ 11.9,  57,  2.28%]
+           - start_onesided_communication: [ 2.61,  42,  0.50%]
+           - small_to_large_locreg: [ 0.913,  42,  0.17%]
+             Subroutines:
+             - Lpsi_to_global: [ 0.319,  2016,  34.95%]
+           - local_potential_dimensions: [ 1.735E-03,  42,  0.00%]
+         - sumrho_for_TMBs: [ 157.,  58,  8.71%]
+           Subroutines:
+           - communicate_density: [ 5.04,  58,  3.21%]
+         - updatePotential: [ 107.,  57,  5.95%]
+           Subroutines:
+           - H_potential: [ 89.8,  57,  83.93%]
+             Subroutines:
+             - G_PoissonSolver: [ 89.4,  57,  99.52%]
+           - XC_potential: [ 17.3,  57,  16.19%]
+         - mix_rhopot: [ 1.73,  57,  0.10%]
+           Subroutines:
+           - ab7_mixing_eval: [ 1.38,  57,  79.83%]
+         - check_negative_rho: [ 0.964,  57,  0.05%]
+       - input_wf: [ 222.,  1,  10.18%]
+         Subroutines:
+         - inputguessConfinement: [ 222.,  1,  99.81%]
+           Subroutines:
+           - getLocalizedBasis: [ 184.,  1,  83.03%]
+             Subroutines:
+             - calculate_energy_and_gradient_linear: [ 95.4,  15,  51.84%]
+               Subroutines:
+               - orthoconstraintNonorthogonal: [ 55.3,  15,  57.92%]
+                 Subroutines:
+                 - overlapPowerGeneral: [ 20.7,  15,  37.45%]
+                   Subroutines:
+                   - ice: [ 16.7,  15,  80.80%]
+                     Subroutines:
+                     - chebyshev_clean: [ 14.0,  30,  83.77%]
+                     - compress_matrix_distributed: [ 0.849,  15,  5.08%]
+                     - scale_and_shift_matrix: [ 0.514,  30,  3.08%]
+                     - check_eigenvalue_spectrum: [ 2.619E-02,  30,  0.16%]
+                     - check_emergency_stop: [ 2.172E-02,  30,  0.13%]
+                     - chebft: [ 1.226E-03,  30,  0.01%]
+                     - evnoise: [ 1.030E-03,  30,  0.01%]
+                     - chebft2: [ 1.013E-03,  30,  0.01%]
+                     - chder: [ 8.314E-04,  30,  0.00%]
+                   - check_accur_overlap_minus_one_sparse: [ 2.33,  15,  11.26%]
+                 - untranspose_localized: [ 9.20,  30,  16.65%]
+                 - build_linear_combination_transposed: [ 8.70,  30,  15.73%]
+                 - calculate_overlap_transposed: [ 6.46,  15,  11.68%]
+                 - transpose_localized: [ 3.88,  15,  7.02%]
+                 - compress_matrix_distributed: [ 2.16,  15,  3.91%]
+                 - symmetrize_matrix: [ 1.93,  15,  3.50%]
+                 - psi_to_locreg: [ 8.911E-02,  720,  0.16%]
+               - preconditionall2: [ 30.2,  15,  31.63%]
+               - build_linear_combination_transposed: [ 4.35,  15,  4.56%]
+               - transpose_localized: [ 1.65,  15,  1.73%]
+               - calculate_overlap_transposed: [ 1.40,  15,  1.47%]
+               - calculate_trace: [ 0.473,  15,  0.50%]
+               - psi_to_locreg: [ 8.168E-02,  720,  0.09%]
+             - hpsitopsi_linear: [ 35.6,  14,  19.36%]
+               Subroutines:
+               - orthonormalizeLocalized: [ 26.4,  14,  74.05%]
+                 Subroutines:
+                 - overlapPowerGeneral: [ 20.6,  14,  77.86%]
+                   Subroutines:
+                   - ice: [ 16.2,  14,  78.72%]
+                     Subroutines:
+                     - chebyshev_clean: [ 12.5,  27,  77.41%]
+                     - compress_matrix_distributed: [ 0.656,  14,  4.05%]
+                     - scale_and_shift_matrix: [ 0.458,  27,  2.83%]
+                     - check_emergency_stop: [ 0.173,  27,  1.07%]
+                     - check_eigenvalue_spectrum: [ 2.375E-02,  27,  0.15%]
+                     - chebft: [ 1.029E-03,  27,  0.01%]
+                     - evnoise: [ 9.376E-04,  27,  0.01%]
+                     - chebft2: [ 9.182E-04,  27,  0.01%]
+                     - chder: [ 7.615E-04,  27,  0.00%]
+                   - check_accur_overlap_minus_one_sparse: [ 2.31,  14,  11.23%]
+                 - transpose_localized: [ 1.95,  14,  7.37%]
+                 - calculate_overlap_transposed: [ 1.38,  14,  5.22%]
+                 - untranspose_localized: [ 0.988,  14,  3.74%]
+                 - build_linear_combination_transposed: [ 0.677,  14,  2.56%]
+               - improveOrbitals: [ 8.48,  14,  23.82%]
+                 Subroutines:
+                 - optimizeDIIS: [ 8.45,  14,  99.63%]
+             - LocalHamiltonianApplication: [ 23.9,  30,  12.97%]
+             - SynchronizeHamiltonianApplication: [ 16.3,  15,  8.89%]
+             - NonLocalHamiltonianApplication: [ 5.72,  15,  3.11%]
+             - transpose_localized: [ 3.77,  15,  2.05%]
+             - full_local_potential: [ 1.03,  15,  0.56%]
+             - calculate_overlap_transposed: [ 0.887,  1,  0.48%]
+             - estimate_energy_change: [ 0.374,  14,  0.20%]
+             - small_to_large_locreg: [ 0.306,  15,  0.17%]
+               Subroutines:
+               - Lpsi_to_global: [ 0.104,  720,  33.86%]
+             - start_onesided_communication: [ 0.214,  1,  0.12%]
+             - local_potential_dimensions: [ 2.341E-04,  1,  0.00%]
+           - get_coeff: [ 17.0,  1,  7.67%]
+             Subroutines:
+             - foe: [ 12.6,  1,  74.20%]
+               Subroutines:
+               - chebyshev_clean: [ 8.87,  3,  70.43%]
+                 Subroutines:
+                 - compress_matrix_distributed: [ 0.267,  3,  3.01%]
+               - overlap_minus_onehalf: [ 1.62,  1,  12.86%]
+                 Subroutines:
+                 - overlapPowerGeneral: [ 1.62,  1,  100.02%]
+                   Subroutines:
+                   - ice: [ 1.30,  1,  80.29%]
+                     Subroutines:
+                     - chebyshev_clean: [ 0.937,  2,  72.06%]
+                     - check_emergency_stop: [ 0.104,  2,  7.97%]
+                     - compress_matrix_distributed: [ 5.325E-02,  1,  4.10%]
+                     - scale_and_shift_matrix: [ 3.407E-02,  2,  2.62%]
+                     - check_eigenvalue_spectrum: [ 1.841E-03,  2,  0.14%]
+                     - chebft: [ 1.875E-04,  2,  0.01%]
+                     - evnoise: [ 1.808E-04,  2,  0.01%]
+                     - chebft2: [ 1.804E-04,  2,  0.01%]
+                     - chder: [ 1.696E-04,  2,  0.01%]
+                   - check_accur_overlap_minus_one_sparse: [ 0.173,  1,  10.66%]
+               - retransform: [ 0.802,  4,  6.36%]
+                 Subroutines:
+                 - compress_matrix_distributed: [ 0.319,  4,  39.71%]
+               - compress_matrix_distributed: [ 0.233,  4,  1.85%]
+               - chebyshev_fast: [ 9.347E-02,  18,  0.74%]
+               - calculate_trace_distributed: [ 8.939E-02,  20,  0.71%]
+               - scale_and_shift_matrix: [ 8.018E-02,  3,  0.64%]
+               - evnoise: [ 4.457E-03,  19,  0.04%]
+               - trace_sparse: [ 4.338E-03,  6,  0.03%]
+               - chebft: [ 3.696E-03,  38,  0.03%]
+               - chebft2: [ 3.288E-03,  38,  0.03%]
+               - check_eigenvalue_spectrum: [ 2.952E-03,  3,  0.02%]
+               - check_emergency_stop: [ 1.896E-03,  19,  0.02%]
+               - determine_fermi_level: [ 1.505E-03,  18,  0.01%]
+               - chder: [ 1.144E-03,  38,  0.01%]
+               - init_fermi_level: [ 1.775E-04,  2,  0.00%]
+             - LocalHamiltonianApplication: [ 1.42,  2,  8.33%]
+             - full_local_potential: [ 1.03,  1,  6.04%]
+             - calculate_overlap_transposed: [ 0.532,  2,  3.13%]
+             - SynchronizeHamiltonianApplication: [ 0.452,  1,  2.66%]
+             - NonLocalHamiltonianApplication: [ 0.381,  1,  2.24%]
+             - transpose_localized: [ 0.284,  1,  1.67%]
+             - start_onesided_communication: [ 5.920E-02,  1,  0.35%]
+             - small_to_large_locreg: [ 2.205E-02,  1,  0.13%]
+               Subroutines:
+               - Lpsi_to_global: [ 7.857E-03,  48,  35.63%]
+             - local_potential_dimensions: [ 1.460E-04,  1,  0.00%]
+           - sumrho_for_TMBs: [ 6.57,  2,  2.96%]
+             Subroutines:
+             - communicate_density: [ 0.819,  2,  12.46%]
+           - updatePotential: [ 3.97,  2,  1.79%]
+             Subroutines:
+             - H_potential: [ 3.36,  2,  84.60%]
+               Subroutines:
+               - G_PoissonSolver: [ 3.34,  2,  99.48%]
+             - XC_potential: [ 0.604,  2,  15.22%]
+           - communicate_basis_for_density_collective: [ 3.58,  2,  1.61%]
+           - orthonormalizeLocalized: [ 3.12,  1,  1.41%]
+             Subroutines:
+             - overlap_power_minus_one_half_parallel: [ 2.72,  1,  87.29%]
+               Subroutines:
+               - overlap_plus_minus_one_half_exact: [ 0.387,  48,  14.22%]
+             - transpose_localized: [ 0.124,  1,  3.96%]
+             - calculate_overlap_transposed: [ 9.736E-02,  1,  3.12%]
+             - untranspose_localized: [ 6.844E-02,  1,  2.19%]
+             - build_linear_combination_transposed: [ 5.000E-02,  1,  1.60%]
+           - mix_rhopot: [ 6.255E-02,  3,  0.03%]
+             Subroutines:
+             - ab7_mixing_eval: [ 4.224E-02,  3,  67.54%]
+       - system_initialization: [ 38.9,  1,  1.79%]
+         Subroutines:
+         - createProjectorsArrays: [ 19.1,  1,  49.20%]
+           Subroutines:
+           - localize_projectors: [ 7.98,  1,  41.80%]
+             Subroutines:
+             - fill_logrid: [ 0.974,  21648,  12.20%]
+             - num_segkeys: [ 0.637,  21648,  7.98%]
+           - segkeys: [ 0.920,  21648,  4.82%]
+           - fill_logrid: [ 0.885,  21648,  4.63%]
+           - transform_keyglob_to_keygloc: [ 0.655,  21648,  3.43%]
+           - allocate_arrays: [ 7.885E-02,  1,  0.41%]
+         - initLocregs: [ 11.7,  1,  30.11%]
+           Subroutines:
+           - determine_locregSphere_parallel: [ 11.7,  1,  100.12%]
+             Subroutines:
+             - determine_wfdSphere: [ 9.70,  48,  82.91%]
+             - determine_boxbounds_sphere: [ 1.60,  48,  13.66%]
+             - communicate_locreg_descriptors_keys: [ 0.239,  1,  2.04%]
+             - locreg_bounds: [ 8.447E-02,  48,  0.72%]
+             - communicate_locreg_descriptors_basics: [ 4.180E-02,  1,  0.36%]
+         - createWavefunctionsDescriptors: [ 3.19,  1,  8.19%]
+           Subroutines:
+           - fill_logrid: [ 2.82,  2,  88.40%]
+           - segkeys: [ 0.258,  2,  8.10%]
+           - num_segkeys: [ 6.886E-02,  2,  2.16%]
+         - init_orbitals_data_for_linear: [ 2.82,  1,  7.26%]
+           Subroutines:
+           - assignToLocreg2: [ 2.82,  2,  99.96%]
+         - update_wavefunctions_size: [ 4.210E-02,  1,  0.11%]
+         - lzd_init_llr: [ 3.985E-02,  1,  0.10%]
+         - mpi_environment_set: [ 2.341E-04,  2,  0.00%]
+       - nonlocal_forces_linear: [ 35.1,  1,  1.61%]
+       - create_large_tmbs: [ 23.6,  1,  1.09%]
+         Subroutines:
+         - update_locreg: [ 20.4,  1,  86.24%]
+           Subroutines:
+           - initLocregs: [ 11.4,  1,  56.00%]
+             Subroutines:
+             - determine_locregSphere_parallel: [ 11.4,  1,  100.21%]
+               Subroutines:
+               - determine_wfdSphere: [ 9.23,  48,  80.98%]
+               - determine_boxbounds_sphere: [ 1.60,  48,  14.02%]
+               - communicate_locreg_descriptors_keys: [ 0.317,  1,  2.78%]
+               - locreg_bounds: [ 0.195,  48,  1.71%]
+               - communicate_locreg_descriptors_basics: [ 2.472E-02,  1,  0.22%]
+           - init_comms_linear: [ 8.86,  1,  43.45%]
+             Subroutines:
+             - get_weights: [ 5.73,  1,  64.67%]
+             - get_switch_indices: [ 1.79,  1,  20.25%]
+             - determine_communication_arrays: [ 1.29,  1,  14.59%]
+             - assign_weight_to_process: [ 1.704E-02,  1,  0.19%]
+             - get_index_in_global2: [ 1.668E-02,  1,  0.19%]
+             - determine_num_orbs_per_gridpoint_new: [ 1.018E-02,  1,  0.11%]
+         - update_nlpsp: [ 3.27,  1,  13.87%]
+           Subroutines:
+           - set_nlpsp_to_wfd: [ 1.92,  10824,  58.59%]
+             Subroutines:
+             - init_tolr: [ 5.321E-02,  1493,  2.77%]
+       - init_matrix_taskgroups: [ 6.88,  3,  0.32%]
+       - init_comms_linear: [ 4.91,  1,  0.23%]
+         Subroutines:
+         - get_weights: [ 4.10,  1,  83.51%]
+         - determine_communication_arrays: [ 0.496,  1,  10.10%]
+         - get_switch_indices: [ 0.270,  1,  5.49%]
+         - assign_weight_to_process: [ 1.757E-02,  1,  0.36%]
+         - get_index_in_global2: [ 1.639E-02,  1,  0.33%]
+         - determine_num_orbs_per_gridpoint_new: [ 1.147E-02,  1,  0.23%]
+       - init_sparse_matrix_wrapper: [ 4.64,  3,  0.21%]
+         Subroutines:
+         - determine_sparsity_pattern: [ 0.891,  2,  19.20%]
+         - determine_sparsity_pattern_distance: [ 0.188,  4,  4.04%]
+       - check_communication_sumrho: [ 3.73,  1,  0.17%]
+       - H_potential: [ 3.18,  2,  0.15%]
+         Subroutines:
+         - G_PoissonSolver: [ 3.17,  2,  99.70%]
+       - check_communications_locreg: [ 1.89,  2,  0.09%]
+         Subroutines:
+         - transpose_localized: [ 0.561,  2,  29.69%]
+         - untranspose_localized: [ 0.284,  2,  15.01%]
+       - get_weights_sumrho: [ 0.857,  1,  0.04%]
+       - full_local_potential: [ 0.311,  1,  0.01%]
+       - init_matrixindex_in_compressed_fortransposed: [ 0.180,  3,  0.01%]
+       - timing_dump_results: [ 7.662E-02,  2,  0.00%]
+       - assign_weight_to_process_sumrho: [ 6.503E-02,  1,  0.00%]
+       - start_onesided_communication: [ 1.300E-02,  1,  0.00%]
+       - communication_arrays_repartitionrho_general: [ 5.576E-03,  1,  0.00%]
+       - local_potential_dimensions: [ 1.578E-04,  1,  0.00%]
+       - increase_FOE_cutoff: [ 1.523E-04,  1,  0.00%]
+     - timing_dump_results: [ 3.264E-02,  1,  0.00%]
+   - inputs_from_dict: [ 17.1,  1,  0.78%]
+     Subroutines:
+     - input_keys_fill_all: [ 6.10,  1,  35.64%]
+     - astruct_set_from_dict: [ 5.92,  1,  34.61%]
+     - processor_id_per_node: [ 1.42,  1,  8.32%]
+     - atomic_data_set_from_dict: [ 0.250,  1,  1.46%]
+     - input_keys_dump: [ 0.134,  1,  0.79%]
+     - occupation_set_from_dict: [ 2.026E-04,  1,  0.00%]
+     - read_n_orbitals: [ 1.722E-04,  1,  0.00%]
+     - allocateBasicArraysInputLin: [ 7.973E-05,  1,  0.00%]
+     - input_analyze: [ 7.560E-05,  1,  0.00%]
+   - astruct_file_merge_to_dict: [ 4.90,  1,  0.22%]
+   - read_input_dict_from_files: [ 0.276,  1,  0.01%]
+     Subroutines:
+     - merge_input_file_to_dict: [ 7.807E-02,  1,  28.29%]
+   - mpi_environment_set: [ 4.395E-05,  1,  0.00%]
+ CPU parallelism:
+   MPI tasks            : 1034
+   OMP threads          : 4
+ Hostnames:
+ - nid00196
+ - nid00196
+ - nid00294
+ - nid00294
+ - nid00295
+ - nid00295
+ - nid00296
+ - nid00296
+ - nid00297
+ - nid00297
+ - nid00298
+ - nid00298
+ - nid00299
+ - nid00299
+ - nid00495
+ - nid00495
+ - nid00496
+ - nid00496
+ - nid00497
+ - nid00497
+ - nid00498
+ - nid00498
+ - nid00499
+ - nid00499
+ - nid00500
+ - nid00500
+ - nid00501
+ - nid00501
+ - nid00502
+ - nid00502
+ - nid00503
+ - nid00503
+ - nid00504
+ - nid00504
+ - nid00505
+ - nid00505
+ - nid00506
+ - nid00506
+ - nid00507
+ - nid00507
+ - nid00508
+ - nid00508
+ - nid00509
+ - nid00509
+ - nid00510
+ - nid00510
+ - nid00511
+ - nid00511
+ - nid00512
+ - nid00512
+ - nid00513
+ - nid00513
+ - nid00514
+ - nid00514
+ - nid00515
+ - nid00515
+ - nid00516
+ - nid00516
+ - nid00517
+ - nid00517
+ - nid00518
+ - nid00518
+ - nid00519
+ - nid00519
+ - nid00520
+ - nid00520
+ - nid00521
+ - nid00521
+ - nid00522
+ - nid00522
+ - nid00523
+ - nid00523
+ - nid00524
+ - nid00524
+ - nid00525
+ - nid00525
+ - nid00526
+ - nid00526
+ - nid00527
+ - nid00527
+ - nid00528
+ - nid00528
+ - nid00529
+ - nid00529
+ - nid00530
+ - nid00530
+ - nid00531
+ - nid00531
+ - nid00532
+ - nid00532
+ - nid00533
+ - nid00533
+ - nid00534
+ - nid00534
+ - nid00535
+ - nid00535
+ - nid00536
+ - nid00536
+ - nid00537
+ - nid00537
+ - nid00538
+ - nid00538
+ - nid00539
+ - nid00539
+ - nid00540
+ - nid00540
+ - nid00541
+ - nid00541
+ - nid00542
+ - nid00542
+ - nid00543
+ - nid00543
+ - nid00544
+ - nid00544
+ - nid00545
+ - nid00545
+ - nid00546
+ - nid00546
+ - nid00547
+ - nid00547
+ - nid00548
+ - nid00548
+ - nid00549
+ - nid00549
+ - nid00550
+ - nid00550
+ - nid00551
+ - nid00551
+ - nid00552
+ - nid00552
+ - nid00553
+ - nid00553
+ - nid00554
+ - nid00554
+ - nid00555
+ - nid00555
+ - nid00556
+ - nid00556
+ - nid00557
+ - nid00557
+ - nid00558
+ - nid00558
+ - nid00559
+ - nid00559
+ - nid00560
+ - nid00560
+ - nid00561
+ - nid00561
+ - nid00562
+ - nid00562
+ - nid00563
+ - nid00563
+ - nid00564
+ - nid00564
+ - nid00565
+ - nid00565
+ - nid00566
+ - nid00566
+ - nid00567
+ - nid00567
+ - nid00568
+ - nid00568
+ - nid00569
+ - nid00569
+ - nid00570
+ - nid00570
+ - nid00571
+ - nid00571
+ - nid00572
+ - nid00572
+ - nid00573
+ - nid00573
+ - nid00574
+ - nid00574
+ - nid00575
+ - nid00575
+ - nid00576
+ - nid00576
+ - nid00577
+ - nid00577
+ - nid00578
+ - nid00578
+ - nid00579
+ - nid00579
+ - nid00580
+ - nid00580
+ - nid00581
+ - nid00581
+ - nid00582
+ - nid00582
+ - nid00583
+ - nid00583
+ - nid00584
+ - nid00584
+ - nid00585
+ - nid00585
+ - nid00586
+ - nid00586
+ - nid00587
+ - nid00587
+ - nid00588
+ - nid00588
+ - nid00589
+ - nid00589
+ - nid00590
+ - nid00590
+ - nid00591
+ - nid00591
+ - nid00592
+ - nid00592
+ - nid00593
+ - nid00593
+ - nid00594
+ - nid00594
+ - nid00595
+ - nid00595
+ - nid00596
+ - nid00596
+ - nid00597
+ - nid00597
+ - nid00598
+ - nid00598
+ - nid00599
+ - nid00599
+ - nid00600
+ - nid00600
+ - nid00601
+ - nid00601
+ - nid00602
+ - nid00602
+ - nid00603
+ - nid00603
+ - nid00604
+ - nid00604
+ - nid00605
+ - nid00605
+ - nid00606
+ - nid00606
+ - nid00607
+ - nid00607
+ - nid00608
+ - nid00608
+ - nid00609
+ - nid00609
+ - nid00610
+ - nid00610
+ - nid00611
+ - nid00611
+ - nid00612
+ - nid00612
+ - nid00613
+ - nid00613
+ - nid00614
+ - nid00614
+ - nid00615
+ - nid00615
+ - nid00616
+ - nid00616
+ - nid00617
+ - nid00617
+ - nid00618
+ - nid00618
+ - nid00619
+ - nid00619
+ - nid00620
+ - nid00620
+ - nid00621
+ - nid00621
+ - nid00622
+ - nid00622
+ - nid00623
+ - nid00623
+ - nid00624
+ - nid00624
+ - nid00625
+ - nid00625
+ - nid00626
+ - nid00626
+ - nid00627
+ - nid00627
+ - nid00628
+ - nid00628
+ - nid00629
+ - nid00629
+ - nid00630
+ - nid00630
+ - nid00631
+ - nid00631
+ - nid00632
+ - nid00632
+ - nid00633
+ - nid00633
+ - nid00634
+ - nid00634
+ - nid00635
+ - nid00635
+ - nid00636
+ - nid00636
+ - nid00637
+ - nid00637
+ - nid00638
+ - nid00638
+ - nid00639
+ - nid00639
+ - nid00640
+ - nid00640
+ - nid00641
+ - nid00641
+ - nid00642
+ - nid00642
+ - nid00643
+ - nid00643
+ - nid00644
+ - nid00644
+ - nid00645
+ - nid00645
+ - nid00646
+ - nid00646
+ - nid00647
+ - nid00647
+ - nid00648
+ - nid00648
+ - nid00649
+ - nid00649
+ - nid00650
+ - nid00650
+ - nid00651
+ - nid00651
+ - nid00652
+ - nid00652
+ - nid00653
+ - nid00653
+ - nid00654
+ - nid00654
+ - nid00672
+ - nid00672
+ - nid00673
+ - nid00673
+ - nid00674
+ - nid00674
+ - nid00675
+ - nid00675
+ - nid00676
+ - nid00676
+ - nid00677
+ - nid00677
+ - nid00678
+ - nid00678
+ - nid00679
+ - nid00679
+ - nid00680
+ - nid00680
+ - nid00681
+ - nid00681
+ - nid00682
+ - nid00682
+ - nid00683
+ - nid00683
+ - nid00684
+ - nid00684
+ - nid00685
+ - nid00685
+ - nid00686
+ - nid00686
+ - nid00687
+ - nid00687
+ - nid00688
+ - nid00688
+ - nid00689
+ - nid00689
+ - nid00690
+ - nid00690
+ - nid00691
+ - nid00691
+ - nid00692
+ - nid00692
+ - nid00693
+ - nid00693
+ - nid00694
+ - nid00694
+ - nid00695
+ - nid00695
+ - nid00696
+ - nid00696
+ - nid00697
+ - nid00697
+ - nid00698
+ - nid00698
+ - nid00699
+ - nid00699
+ - nid00700
+ - nid00700
+ - nid00701
+ - nid00701
+ - nid00702
+ - nid00702
+ - nid00703
+ - nid00703
+ - nid00704
+ - nid00704
+ - nid00705
+ - nid00705
+ - nid00706
+ - nid00706
+ - nid00707
+ - nid00707
+ - nid00708
+ - nid00708
+ - nid00709
+ - nid00709
+ - nid00710
+ - nid00710
+ - nid00711
+ - nid00711
+ - nid00712
+ - nid00712
+ - nid00713
+ - nid00713
+ - nid00714
+ - nid00714
+ - nid00715
+ - nid00715
+ - nid00716
+ - nid00716
+ - nid00717
+ - nid00717
+ - nid00718
+ - nid00718
+ - nid00719
+ - nid00719
+ - nid00720
+ - nid00720
+ - nid00721
+ - nid00721
+ - nid00722
+ - nid00722
+ - nid00723
+ - nid00723
+ - nid00724
+ - nid00724
+ - nid00725
+ - nid00725
+ - nid00726
+ - nid00726
+ - nid00727
+ - nid00727
+ - nid00728
+ - nid00728
+ - nid00729
+ - nid00729
+ - nid00730
+ - nid00730
+ - nid00731
+ - nid00731
+ - nid00732
+ - nid00732
+ - nid00733
+ - nid00733
+ - nid00734
+ - nid00734
+ - nid00735
+ - nid00735
+ - nid00736
+ - nid00736
+ - nid00737
+ - nid00737
+ - nid00738
+ - nid00738
+ - nid00739
+ - nid00739
+ - nid00740
+ - nid00740
+ - nid00741
+ - nid00741
+ - nid00742
+ - nid00742
+ - nid00743
+ - nid00743
+ - nid00744
+ - nid00744
+ - nid00745
+ - nid00745
+ - nid00746
+ - nid00746
+ - nid00747
+ - nid00747
+ - nid00748
+ - nid00748
+ - nid00749
+ - nid00749
+ - nid00750
+ - nid00750
+ - nid00751
+ - nid00751
+ - nid00752
+ - nid00752
+ - nid00753
+ - nid00753
+ - nid00754
+ - nid00754
+ - nid00755
+ - nid00755
+ - nid00756
+ - nid00756
+ - nid00757
+ - nid00757
+ - nid00758
+ - nid00758
+ - nid00759
+ - nid00759
+ - nid00760
+ - nid00760
+ - nid00761
+ - nid00761
+ - nid00762
+ - nid00762
+ - nid00763
+ - nid00763
+ - nid00764
+ - nid00764
+ - nid00765
+ - nid00765
+ - nid00766
+ - nid00766
+ - nid00767
+ - nid00767
+ - nid00772
+ - nid00772
+ - nid00773
+ - nid00773
+ - nid00774
+ - nid00774
+ - nid00775
+ - nid00775
+ - nid00776
+ - nid00776
+ - nid00777
+ - nid00777
+ - nid00778
+ - nid00778
+ - nid00779
+ - nid00779
+ - nid00780
+ - nid00780
+ - nid00781
+ - nid00781
+ - nid00782
+ - nid00782
+ - nid00783
+ - nid00783
+ - nid00784
+ - nid00784
+ - nid00785
+ - nid00785
+ - nid00786
+ - nid00786
+ - nid00787
+ - nid00787
+ - nid00788
+ - nid00788
+ - nid00789
+ - nid00789
+ - nid00790
+ - nid00790
+ - nid00791
+ - nid00791
+ - nid00792
+ - nid00792
+ - nid00793
+ - nid00793
+ - nid00794
+ - nid00794
+ - nid00795
+ - nid00795
+ - nid00796
+ - nid00796
+ - nid00797
+ - nid00797
+ - nid00798
+ - nid00798
+ - nid00799
+ - nid00799
+ - nid00800
+ - nid00800
+ - nid00801
+ - nid00801
+ - nid00802
+ - nid00802
+ - nid00803
+ - nid00803
+ - nid00804
+ - nid00804
+ - nid00805
+ - nid00805
+ - nid00806
+ - nid00806
+ - nid00807
+ - nid00807
+ - nid00808
+ - nid00808
+ - nid00809
+ - nid00809
+ - nid00810
+ - nid00810
+ - nid00811
+ - nid00811
+ - nid00812
+ - nid00812
+ - nid00813
+ - nid00813
+ - nid00814
+ - nid00814
+ - nid00815
+ - nid00815
+ - nid00816
+ - nid00816
+ - nid00817
+ - nid00817
+ - nid00818
+ - nid00818
+ - nid00819
+ - nid00819
+ - nid00820
+ - nid00820
+ - nid00821
+ - nid00821
+ - nid00822
+ - nid00822
+ - nid00823
+ - nid00823
+ - nid00824
+ - nid00824
+ - nid00825
+ - nid00825
+ - nid00826
+ - nid00826
+ - nid00827
+ - nid00827
+ - nid00828
+ - nid00828
+ - nid00829
+ - nid00829
+ - nid00830
+ - nid00830
+ - nid00831
+ - nid00831
+ - nid00832
+ - nid00832
+ - nid00833
+ - nid00833
+ - nid00834
+ - nid00834
+ - nid00835
+ - nid00835
+ - nid00840
+ - nid00840
+ - nid00841
+ - nid00841
+ - nid00842
+ - nid00842
+ - nid00843
+ - nid00843
+ - nid00844
+ - nid00844
+ - nid00845
+ - nid00845
+ - nid00846
+ - nid00846
+ - nid00848
+ - nid00848
+ - nid00849
+ - nid00849
+ - nid00850
+ - nid00850
+ - nid00851
+ - nid00851
+ - nid00852
+ - nid00852
+ - nid00853
+ - nid00853
+ - nid00854
+ - nid00854
+ - nid00855
+ - nid00855
+ - nid00856
+ - nid00856
+ - nid00857
+ - nid00857
+ - nid00858
+ - nid00858
+ - nid00859
+ - nid00859
+ - nid00860
+ - nid00860
+ - nid00861
+ - nid00861
+ - nid00862
+ - nid00862
+ - nid00863
+ - nid00863
+ - nid00864
+ - nid00864
+ - nid00865
+ - nid00865
+ - nid00866
+ - nid00866
+ - nid00867
+ - nid00867
+ - nid00868
+ - nid00868
+ - nid00869
+ - nid00869
+ - nid00870
+ - nid00870
+ - nid00871
+ - nid00871
+ - nid00872
+ - nid00872
+ - nid00873
+ - nid00873
+ - nid00874
+ - nid00874
+ - nid00875
+ - nid00875
+ - nid00876
+ - nid00876
+ - nid00877
+ - nid00877
+ - nid00878
+ - nid00878
+ - nid00879
+ - nid00879
+ - nid00880
+ - nid00880
+ - nid00881
+ - nid00881
+ - nid00882
+ - nid00882
+ - nid00883
+ - nid00883
+ - nid00884
+ - nid00884
+ - nid00885
+ - nid00885
+ - nid00886
+ - nid00886
+ - nid00887
+ - nid00887
+ - nid00888
+ - nid00888
+ - nid00889
+ - nid00889
+ - nid00890
+ - nid00890
+ - nid00891
+ - nid00891
+ - nid00892
+ - nid00892
+ - nid00893
+ - nid00893
+ - nid00894
+ - nid00894
+ - nid00895
+ - nid00895
+ - nid00896
+ - nid00896
+ - nid00897
+ - nid00897
+ - nid00898
+ - nid00898
+ - nid00899
+ - nid00899
+ - nid00900
+ - nid00900
+ - nid00901
+ - nid00901
+ - nid00902
+ - nid00902
+ - nid00903
+ - nid00903
+ - nid00904
+ - nid00904
+ - nid00905
+ - nid00905
+ - nid00906
+ - nid00906
+ - nid00907
+ - nid00907
+ - nid00908
+ - nid00908
+ - nid00909
+ - nid00909
+ - nid00910
+ - nid00910
+ - nid00911
+ - nid00911
+ - nid00912
+ - nid00912
+ - nid00913
+ - nid00913
+ - nid00914
+ - nid00914
+ - nid00915
+ - nid00915
+ - nid00916
+ - nid00916
+ - nid00917
+ - nid00917
+ - nid00918
+ - nid00918
+ - nid00919
+ - nid00919
+ - nid00920
+ - nid00920
+ - nid00921
+ - nid00921
+ - nid00922
+ - nid00922
+ - nid00923
+ - nid00923
+ - nid00924
+ - nid00924
+ - nid00925
+ - nid00925
+ - nid00926
+ - nid00926
+ - nid00927
+ - nid00927
+ - nid00928
+ - nid00928
+ - nid01518
+ - nid01518
+ - nid01519
+ - nid01519
+ - nid01520
+ - nid01520
+ - nid01521
+ - nid01521
+ - nid01522
+ - nid01522
+ - nid01524
+ - nid01524
+ - nid01525
+ - nid01525
+ - nid01526
+ - nid01526
+ - nid01527
+ - nid01527
+ - nid01528
+ - nid01528
+ - nid01529
+ - nid01529
+ - nid01530
+ - nid01530
+ - nid01531
+ - nid01531
+ - nid01532
+ - nid01532
+ - nid01533
+ - nid01533
+ - nid01534
+ - nid01534
+ - nid01535
+ - nid01535
+ - nid03094
+ - nid03094
+ - nid03095
+ - nid03095
+ - nid03096
+ - nid03096
+ - nid03097
+ - nid03097
+ - nid03098
+ - nid03098
+ - nid03099
+ - nid03099
+ - nid03100
+ - nid03100
+ - nid03588
+ - nid03588
+ - nid03589
+ - nid03589
+ - nid03590
+ - nid03590
+ - nid03591
+ - nid03591
+ - nid03592
+ - nid03592
+ - nid03593
+ - nid03593
+ - nid03594
+ - nid03594
+ - nid03595
+ - nid03595
+ - nid03620
+ - nid03620
+ - nid03621
+ - nid03621
+ - nid03622
+ - nid03622
+ - nid03623
+ - nid03623
+ - nid03624
+ - nid03624
+ - nid03625
+ - nid03625
+ - nid03626
+ - nid03626
+ - nid03627
+ - nid03627
+ - nid03628
+ - nid03628
+ - nid03629
+ - nid03629
+ - nid03630
+ - nid03630
+ - nid03631
+ - nid03631
+ - nid03632
+ - nid03632
+ - nid03633
+ - nid03633
+ - nid03634
+ - nid03634
+ - nid03635
+ - nid03635
+ - nid03636
+ - nid03636
+ - nid03637
+ - nid03637
+ - nid03638
+ - nid03638
+ - nid03639
+ - nid03639
+ - nid03640
+ - nid03640
+ - nid03641
+ - nid03641
+ - nid03642
+ - nid03642
+ - nid03643
+ - nid03643
+ - nid03644
+ - nid03644
+ - nid03645
+ - nid03645
+ - nid03646
+ - nid03646
+ - nid03647
+ - nid03647
+ - nid03648
+ - nid03648
+ - nid03649
+ - nid03649
+ - nid03650
+ - nid03650
+ - nid03651
+ - nid03651
+ - nid03652
+ - nid03652
+ - nid03653
+ - nid03653
+ - nid03654
+ - nid03654
+ - nid03655
+ - nid03655
+ - nid03656
+ - nid03656
+ - nid03657
+ - nid03657
+ - nid03658
+ - nid03658
+ - nid03659
+ - nid03659
+ - nid03660
+ - nid03660
+ - nid04075
+ - nid04075
+ - nid04076
+ - nid04076
+ - nid04077
+ - nid04077
+ - nid04078
+ - nid04078
+ - nid04079
+ - nid04079
+ - nid04080
+ - nid04080
+ - nid04288
+ - nid04288
+ - nid04289
+ - nid04289
+ - nid04290
+ - nid04290
+ - nid04291
+ - nid04291
+ - nid04296
+ - nid04296
+ - nid04297
+ - nid04297
+ - nid04298
+ - nid04298
+ - nid04299
+ - nid04299
+ - nid04300
+ - nid04300
+ - nid04414
+ - nid04414
+ - nid04415
+ - nid04415
+ - nid04416
+ - nid04416
+ - nid04680
+ - nid04680
+ - nid04681
+ - nid04681
+ - nid04682
+ - nid04682
+ - nid05233
+ - nid05233
+ - nid05234
+ - nid05234
+ - nid05235
+ - nid05235
+ - nid05236
+ - nid05236
+ - nid05237
+ - nid05237
+ - nid05238
+ - nid05238
+ - nid05239
+ - nid05239
+ - nid05240
+ - nid05240
+ Report timestamp       : 2014-10-13 16:45:56.022
