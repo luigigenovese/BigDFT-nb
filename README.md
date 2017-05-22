@@ -10,5 +10,6 @@ The idea of this project is to enforce collaboations between people with the obj
 * Stabilise and track production results
 * Track data and analysis for future reuse
 * Provide a playground for research continuity
+* Use light performance evaluation for a production run
 
 Each study should go in a subdirectory, and should be accompanied by one (or more) Jupyter notebooks, explaining the results and how to retrieve the data.
