@@ -1,0 +1,1432 @@
+---
+ INIT: #                      % ,  Time (s), Max, Min Load (relative)
+   Classes:
+     Flib LowLevel      : [ 0.8,  3.5,  1.24,  0.90]
+     Communications     : [ 4.2,  19.,  1.33,  0.79]
+     BLAS-LAPACK        : [ 8.6,  38.,  1.03,  0.95]
+     PS Computation     : [ 0.0,  0.18,  2.40,  0.32]
+     Potential          : [ 0.0,  9.47E-02,  1.89,  0.00]
+     Convolutions       : [ 5.6,  25.,  1.12,  0.82]
+     Other              : [ 0.8,  3.4,  1.10,  0.91]
+     Initialization     : [ 79.6,  3.55E+02,  1.00,  1.00]
+     Total              : [ 99.6,  4.46E+02,  1.00,  1.00]
+   Categories: #Ordered by time consumption
+     Input_comput:
+       Data             : [ 79.0,  3.52E+02,  1.00,  1.00]
+       Class            : Initialization
+       Info             : Miscellaneous
+     Blas (d-s-c-z)GeMM:
+       Data             : [ 8.6,  38.,  1.03,  0.95]
+       Class            : BLAS-LAPACK
+       Info             : Blas General Matrix-Matrix multiplications of any float type
+     ApplyLocPotKin:
+       Data             : [ 3.7,  16.,  1.14,  0.83]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Rho_comput:
+       Data             : [ 2.0,  8.7,  1.10,  0.81]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Allreduce, Large Size:
+       Data             : [ 1.5,  6.7,  1.33,  0.82]
+       Class            : Communications
+       Info             : Allreduce operations for more than 5 elements
+     Pot_commun:
+       Data             : [ 1.0,  4.3,  1.01,  0.99]
+       Class            : Communications
+       Info             : AllGathrv grid
+     Un-TransComm:
+       Data             : [ 0.9,  4.2,  1.17,  0.90]
+       Class            : Communications
+       Info             : ALLtoALLV
+     Allreduce, Small Size:
+       Data             : [ 0.6,  2.8,  2.23,  0.04]
+       Class            : Communications
+       Info             : Allreduce operations for less than 5 elements
+     ApplyProj:
+       Data             : [ 0.6,  2.5,  1.08,  0.89]
+       Class            : Other
+       Info             : RMA pattern
+     wavefunction:
+       Data             : [ 0.5,  2.1,  1.36,  0.83]
+       Class            : Initialization
+       Info             : Miscellaneous
+     Init to Zero:
+       Data             : [ 0.3,  1.2,  1.04,  0.77]
+       Class            : Flib LowLevel
+       Info             : Memset of storage space
+     Array allocations:
+       Data             : [ 0.3,  1.2,  1.68,  0.87]
+       Class            : Flib LowLevel
+       Info             : Heap storage allocation and associated profiling
+     PSolver Communication:
+       Data             : [ 0.2,  0.85,  1.14,  0.75]
+       Class            : Communications
+       Info             : MPI_ALLTOALL and MPI_ALLGATHERV
+     Un-TransSwitch:
+       Data             : [ 0.2,  0.85,  1.15,  0.92]
+       Class            : Other
+       Info             : RMA pattern
+     CrtDescriptors:
+       Data             : [ 0.2,  0.84,  1.55,  0.96]
+       Class            : Initialization
+       Info             : RMA Pattern
+     Routine Profiling:
+       Data             : [ 0.2,  0.74,  1.21,  0.99]
+       Class            : Flib LowLevel
+       Info             : Profiling performances for debugging
+     Vector copy:
+       Data             : [ 0.1,  0.27,  1.02,  0.99]
+       Class            : Flib LowLevel
+       Info             : Memory copy of arrays (excluded allocations)
+     PSolver Computation:
+       Data             : [ 0.0,  0.12,  2.84,  0.00]
+       Class            : PS Computation
+       Info             : 3D SG_FFT and related operations
+     Exchange-Correlation:
+       Data             : [ 0.0,  9.47E-02,  1.89,  0.00]
+       Class            : Potential
+       Info             : Operations needed to construct local XC potential
+     PSolver Kernel Creation:
+       Data             : [ 0.0,  5.84E-02,  1.61,  0.96]
+       Class            : PS Computation
+       Info             : ISF operations and creation of the kernel
+     Rho_commun:
+       Data             : [ 0.0,  9.85E-03,  38.95,  0.00]
+       Class            : Communications
+       Info             : AllReduce grid
+     CrtLocPot:
+       Data             : [ 0.0,  5.41E-03,  2.33,  0.00]
+       Class            : Initialization
+       Info             : Miscellaneous
+     calc_bounds:
+       Data             : [ 0.0,  4.95E-05,  1.26,  0.94]
+       Class            : Other
+       Info             : Miscellaneous
+     Pot_after_comm:
+       Data             : [ 0.0,  1.35E-05,  2.34,  0.74]
+       Class            : Other
+       Info             : global_to_loca
+ WFN_OPT: #                   % ,  Time (s), Max, Min Load (relative)
+   Classes:
+     Flib LowLevel      : [ 4.7,  72.,  1.27,  0.81]
+     Communications     : [ 27.7,  4.21E+02,  1.32,  0.73]
+     BLAS-LAPACK        : [ 12.4,  1.88E+02,  1.05,  0.96]
+     PS Computation     : [ 0.1,  1.1,  2.91,  0.00]
+     Potential          : [ 0.1,  1.6,  1.97,  0.00]
+     Convolutions       : [ 44.1,  6.69E+02,  1.14,  0.84]
+     Linear Algebra     : [ 7.1,  1.08E+02,  1.05,  0.97]
+     Other              : [ 3.8,  58.,  1.08,  0.91]
+     Total              : [ 100.0,  1.52E+03,  1.00,  1.00]
+   Categories: #Ordered by time consumption
+     Precondition:
+       Data             : [ 25.3,  3.84E+02,  1.15,  0.84]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Blas (d-s-c-z)GeMM:
+       Data             : [ 12.4,  1.88E+02,  1.05,  0.96]
+       Class            : BLAS-LAPACK
+       Info             : Blas General Matrix-Matrix multiplications of any float type
+     ApplyLocPotKin:
+       Data             : [ 12.1,  1.83E+02,  1.16,  0.82]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Allreduce, Small Size:
+       Data             : [ 9.5,  1.44E+02,  1.79,  0.34]
+       Class            : Communications
+       Info             : Allreduce operations for less than 5 elements
+     Pot_commun:
+       Data             : [ 7.2,  1.09E+02,  1.01,  0.99]
+       Class            : Communications
+       Info             : AllGathrv grid
+     Chol_comput:
+       Data             : [ 7.1,  1.08E+02,  1.05,  0.97]
+       Class            : Linear Algebra
+       Info             : ALLReduce orbs
+     Allreduce, Large Size:
+       Data             : [ 6.8,  1.04E+02,  1.19,  0.83]
+       Class            : Communications
+       Info             : Allreduce operations for more than 5 elements
+     Rho_comput:
+       Data             : [ 6.7,  1.02E+02,  1.13,  0.84]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Un-TransComm:
+       Data             : [ 3.6,  55.,  1.05,  0.94]
+       Class            : Communications
+       Info             : ALLtoALLV
+     ApplyProj:
+       Data             : [ 2.1,  31.,  1.12,  0.88]
+       Class            : Other
+       Info             : RMA pattern
+     Array allocations:
+       Data             : [ 1.8,  28.,  1.58,  0.86]
+       Class            : Flib LowLevel
+       Info             : Heap storage allocation and associated profiling
+     Init to Zero:
+       Data             : [ 1.7,  26.,  1.12,  0.82]
+       Class            : Flib LowLevel
+       Info             : Memset of storage space
+     Diis:
+       Data             : [ 1.3,  20.,  1.01,  0.98]
+       Class            : Other
+       Info             : Other
+     Vector copy:
+       Data             : [ 1.1,  17.,  1.15,  0.66]
+       Class            : Flib LowLevel
+       Info             : Memory copy of arrays (excluded allocations)
+     PSolver Communication:
+       Data             : [ 0.6,  9.6,  1.11,  0.78]
+       Class            : Communications
+       Info             : MPI_ALLTOALL and MPI_ALLGATHERV
+     Un-TransSwitch:
+       Data             : [ 0.4,  6.3,  1.15,  0.83]
+       Class            : Other
+       Info             : RMA pattern
+     Exchange-Correlation:
+       Data             : [ 0.1,  1.6,  1.97,  0.00]
+       Class            : Potential
+       Info             : Operations needed to construct local XC potential
+     Routine Profiling:
+       Data             : [ 0.1,  1.2,  1.19,  0.95]
+       Class            : Flib LowLevel
+       Info             : Profiling performances for debugging
+     PSolver Computation:
+       Data             : [ 0.1,  1.1,  2.91,  0.00]
+       Class            : PS Computation
+       Info             : 3D SG_FFT and related operations
+     Rho_commun:
+       Data             : [ 0.0,  0.18,  40.03,  0.00]
+       Class            : Communications
+       Info             : AllReduce grid
+     LagrM_comput:
+       Data             : [ 0.0,  1.04E-03,  2.77,  0.72]
+       Class            : Linear Algebra
+       Info             : DGEMM
+     Chol_commun:
+       Data             : [ 0.0,  5.17E-04,  1.07,  0.97]
+       Class            : Communications
+       Info             : null
+     LagrM_commun:
+       Data             : [ 0.0,  4.94E-04,  1.06,  0.96]
+       Class            : Communications
+       Info             : ALLReduce orbs
+     Pot_after_comm:
+       Data             : [ 0.0,  2.06E-04,  1.15,  0.91]
+       Class            : Other
+       Info             : global_to_loca
+ LAST: #                      % ,  Time (s), Max, Min Load (relative)
+   Classes:
+     Flib LowLevel      : [ 1.9,  3.0,  1.33,  0.89]
+     Communications     : [ 14.5,  22.,  1.31,  0.70]
+     BLAS-LAPACK        : [ 56.8,  86.,  1.02,  0.99]
+     PS Computation     : [ 0.1,  0.12,  2.91,  0.00]
+     Potential          : [ 0.1,  8.58E-02,  1.97,  0.00]
+     Convolutions       : [ 13.4,  20.,  1.13,  0.83]
+     Other              : [ 1.2,  1.8,  1.12,  0.88]
+     Finalization       : [ 6.3,  9.6,  1.23,  0.76]
+     Total              : [ 94.4,  1.52E+02,  1.00,  1.00]
+   Categories: #Ordered by time consumption
+     Lapack (dsy-ssy-che-zhe)eev:
+       Data             : [ 50.3,  76.,  1.02,  0.99]
+       Class            : BLAS-LAPACK
+       Info             : Lapack Eigenvalue Problem
+     Rho_comput:
+       Data             : [ 7.0,  11.,  1.12,  0.84]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Blas (d-s-c-z)GeMM:
+       Data             : [ 6.5,  9.9,  1.04,  0.97]
+       Class            : BLAS-LAPACK
+       Info             : Blas General Matrix-Matrix multiplications of any float type
+     ApplyLocPotKin:
+       Data             : [ 6.4,  9.7,  1.14,  0.82]
+       Class            : Convolutions
+       Info             : OpenCL ported
+     Forces:
+       Data             : [ 6.3,  9.6,  1.23,  0.76]
+       Class            : Finalization
+       Info             : Miscellaneous
+     Allreduce, Large Size:
+       Data             : [ 5.3,  8.0,  1.48,  0.48]
+       Class            : Communications
+       Info             : Allreduce operations for more than 5 elements
+     Pot_commun:
+       Data             : [ 4.0,  6.0,  1.01,  0.99]
+       Class            : Communications
+       Info             : AllGathrv grid
+     Rho_commun:
+       Data             : [ 2.1,  3.2,  1.31,  0.78]
+       Class            : Communications
+       Info             : AllReduce grid
+     Allreduce, Small Size:
+       Data             : [ 1.7,  2.6,  1.90,  0.16]
+       Class            : Communications
+       Info             : Allreduce operations for less than 5 elements
+     ApplyProj:
+       Data             : [ 1.1,  1.7,  1.12,  0.88]
+       Class            : Other
+       Info             : RMA pattern
+     Array allocations:
+       Data             : [ 1.1,  1.6,  1.60,  0.92]
+       Class            : Flib LowLevel
+       Info             : Heap storage allocation and associated profiling
+     Un-TransComm:
+       Data             : [ 0.8,  1.2,  1.02,  0.97]
+       Class            : Communications
+       Info             : ALLtoALLV
+     Init to Zero:
+       Data             : [ 0.8,  1.2,  1.14,  0.84]
+       Class            : Flib LowLevel
+       Info             : Memset of storage space
+     PSolver Communication:
+       Data             : [ 0.7,  1.0,  1.14,  0.76]
+       Class            : Communications
+       Info             : MPI_ALLTOALL and MPI_ALLGATHERV
+     Un-TransSwitch:
+       Data             : [ 0.1,  0.16,  1.16,  0.83]
+       Class            : Other
+       Info             : RMA pattern
+     PSolver Computation:
+       Data             : [ 0.1,  0.12,  2.91,  0.00]
+       Class            : PS Computation
+       Info             : 3D SG_FFT and related operations
+     Exchange-Correlation:
+       Data             : [ 0.1,  8.58E-02,  1.97,  0.00]
+       Class            : Potential
+       Info             : Operations needed to construct local XC potential
+     Vector copy:
+       Data             : [ 0.1,  8.09E-02,  1.01,  0.99]
+       Class            : Flib LowLevel
+       Info             : Memory copy of arrays (excluded allocations)
+     Routine Profiling:
+       Data             : [ 0.0,  6.14E-02,  1.19,  0.95]
+       Class            : Flib LowLevel
+       Info             : Profiling performances for debugging
+     Gather:
+       Data             : [ 0.0,  5.24E-04,  37.86,  0.06]
+       Class            : Communications
+       Info             : Gather operations, in general moderate size arrays
+     Pot_after_comm:
+       Data             : [ 0.0,  1.08E-05,  2.10,  0.86]
+       Class            : Other
+       Info             : global_to_loca
+ SUMMARY: #                   % ,  Time (s)
+   INIT                 : [ 21.1,  4.46E+02]
+   WFN_OPT              : [ 71.8,  1.52E+03]
+   LAST                 : [ 7.2,  1.52E+02]
+   Total                : [ 100.0,  2.12E+03]
+ Routines timing and number of calls:
+ - Main_program: [ 2.118E+03,  1, ~*]
+   Subroutines:
+   - call_bigdft: [ 2.117E+03,  1,  99.94%*]
+     Subroutines:
+     - cluster: [ 2.117E+03,  1,  99.98%]
+       Subroutines:
+       - preconditionall2: [ 473.,  19,  22.33%]
+       - input_wf: [ 441.,  1,  20.83%]
+         Subroutines:
+         - LDiagHam: [ 397.,  1,  89.95%]
+         - LocalHamiltonianApplication: [ 19.3,  1,  4.39%]
+         - full_local_potential: [ 4.27,  1,  0.97%]
+         - NonLocalHamiltonianApplication: [ 3.23,  1,  0.73%]
+           Subroutines:
+           - apply_oneproj: [ 2.48,  1287,  76.81%]
+         - updatePotential: [ 0.719,  1,  0.16%]
+           Subroutines:
+           - H_potential: [ 0.536,  1,  74.56%]
+             Subroutines:
+             - G_PoissonSolver: [ 0.535,  1,  99.87%]
+           - XC_potential: [ 0.182,  1,  25.33%]
+         - check_linear_and_create_Lzd: [ 2.359E-02,  1,  0.01%]
+         - SynchronizeHamiltonianApplication: [ 9.836E-05,  1,  0.00%]
+         - local_potential_dimensions: [ 9.674E-05,  3,  0.00%]
+       - LocalHamiltonianApplication: [ 229.,  20,  10.80%]
+       - full_local_potential: [ 113.,  20,  5.36%]
+       - NonLocalHamiltonianApplication: [ 45.2,  20,  2.14%]
+         Subroutines:
+         - apply_oneproj: [ 32.0,  25740,  70.78%]
+       - SynchronizeHamiltonianApplication: [ 20.3,  20,  0.96%]
+       - H_potential: [ 12.4,  22,  0.59%]
+         Subroutines:
+         - G_PoissonSolver: [ 12.3,  22,  99.28%]
+       - nonlocal_forces: [ 9.32,  1,  0.44%]
+       - system_initialization: [ 4.76,  1,  0.22%]
+         Subroutines:
+         - createProjectorsArrays: [ 1.29,  1,  27.05%]
+           Subroutines:
+           - localize_projectors: [ 0.372,  1,  28.83%]
+             Subroutines:
+             - fill_logrid: [ 0.119,  2706,  32.04%]
+             - num_segkeys: [ 7.647E-02,  2706,  20.56%]
+           - set_nlpsp_to_wfd: [ 0.304,  1353,  23.56%]
+             Subroutines:
+             - init_tolr: [ 0.223,  1353,  73.37%]
+           - segkeys: [ 0.114,  2706,  8.83%]
+           - fill_logrid: [ 0.111,  2706,  8.63%]
+           - transform_keyglob_to_keygloc: [ 8.190E-02,  2706,  6.35%]
+           - allocate_arrays: [ 9.841E-03,  1,  0.76%]
+         - createWavefunctionsDescriptors: [ 0.857,  1,  18.01%]
+           Subroutines:
+           - fill_logrid: [ 0.362,  2,  42.26%]
+           - segkeys: [ 4.137E-02,  2,  4.83%]
+           - num_segkeys: [ 1.090E-02,  2,  1.27%]
+         - mpi_environment_set: [ 7.664E-05,  2,  0.00%]
+       - XC_potential: [ 3.45,  20,  0.16%]
+       - timing_dump_results: [ 7.049E-02,  2,  0.00%]
+     - timing_dump_results: [ 2.897E-02,  1,  0.00%]
+   - inputs_from_dict: [ 0.803,  1,  0.04%]
+     Subroutines:
+     - input_keys_fill_all: [ 0.199,  1,  24.73%]
+     - input_keys_dump: [ 0.134,  1,  16.74%]
+     - astruct_set_from_dict: [ 0.114,  1,  14.19%]
+     - atomic_data_set_from_dict: [ 3.109E-02,  1,  3.87%]
+     - processor_id_per_node: [ 5.142E-03,  1,  0.64%]
+     - occupation_set_from_dict: [ 7.507E-05,  1,  0.01%]
+     - allocateBasicArraysInputLin: [ 6.205E-05,  1,  0.01%]
+     - read_n_orbitals: [ 5.754E-05,  1,  0.01%]
+     - input_analyze: [ 5.554E-05,  1,  0.01%]
+   - read_input_dict_from_files: [ 0.263,  1,  0.01%]
+     Subroutines:
+     - merge_input_file_to_dict: [ 7.605E-02,  1,  28.92%]
+   - astruct_file_merge_to_dict: [ 0.181,  1,  0.01%]
+   - mpi_environment_set: [ 2.885E-05,  1,  0.00%]
+ CPU parallelism:
+   MPI tasks            : 1034
+   OMP threads          : 4
+ Hostnames:
+ - nid01701
+ - nid01701
+ - nid01702
+ - nid01702
+ - nid01703
+ - nid01703
+ - nid01704
+ - nid01704
+ - nid01705
+ - nid01705
+ - nid01706
+ - nid01706
+ - nid01707
+ - nid01707
+ - nid01708
+ - nid01708
+ - nid01709
+ - nid01709
+ - nid01710
+ - nid01710
+ - nid01711
+ - nid01711
+ - nid01712
+ - nid01712
+ - nid01713
+ - nid01713
+ - nid01714
+ - nid01714
+ - nid01715
+ - nid01715
+ - nid01716
+ - nid01716
+ - nid01717
+ - nid01717
+ - nid01718
+ - nid01718
+ - nid01719
+ - nid01719
+ - nid01720
+ - nid01720
+ - nid01721
+ - nid01721
+ - nid01722
+ - nid01722
+ - nid01723
+ - nid01723
+ - nid01724
+ - nid01724
+ - nid01725
+ - nid01725
+ - nid01726
+ - nid01726
+ - nid01727
+ - nid01727
+ - nid01728
+ - nid01728
+ - nid01729
+ - nid01729
+ - nid01730
+ - nid01730
+ - nid01731
+ - nid01731
+ - nid01732
+ - nid01732
+ - nid01733
+ - nid01733
+ - nid01734
+ - nid01734
+ - nid01735
+ - nid01735
+ - nid01736
+ - nid01736
+ - nid01737
+ - nid01737
+ - nid01738
+ - nid01738
+ - nid01739
+ - nid01739
+ - nid01740
+ - nid01740
+ - nid01741
+ - nid01741
+ - nid01742
+ - nid01742
+ - nid01743
+ - nid01743
+ - nid01744
+ - nid01744
+ - nid01745
+ - nid01745
+ - nid01746
+ - nid01746
+ - nid01747
+ - nid01747
+ - nid01748
+ - nid01748
+ - nid01749
+ - nid01749
+ - nid01750
+ - nid01750
+ - nid01751
+ - nid01751
+ - nid01752
+ - nid01752
+ - nid01753
+ - nid01753
+ - nid01754
+ - nid01754
+ - nid01755
+ - nid01755
+ - nid01756
+ - nid01756
+ - nid01757
+ - nid01757
+ - nid01758
+ - nid01758
+ - nid01759
+ - nid01759
+ - nid01760
+ - nid01760
+ - nid01761
+ - nid01761
+ - nid01762
+ - nid01762
+ - nid01763
+ - nid01763
+ - nid01764
+ - nid01764
+ - nid01765
+ - nid01765
+ - nid01766
+ - nid01766
+ - nid01767
+ - nid01767
+ - nid01768
+ - nid01768
+ - nid01769
+ - nid01769
+ - nid01770
+ - nid01770
+ - nid01771
+ - nid01771
+ - nid01772
+ - nid01772
+ - nid01773
+ - nid01773
+ - nid01774
+ - nid01774
+ - nid01775
+ - nid01775
+ - nid01776
+ - nid01776
+ - nid01777
+ - nid01777
+ - nid01778
+ - nid01778
+ - nid01779
+ - nid01779
+ - nid01780
+ - nid01780
+ - nid01781
+ - nid01781
+ - nid01782
+ - nid01782
+ - nid01783
+ - nid01783
+ - nid01784
+ - nid01784
+ - nid01785
+ - nid01785
+ - nid01786
+ - nid01786
+ - nid01787
+ - nid01787
+ - nid01788
+ - nid01788
+ - nid01789
+ - nid01789
+ - nid01790
+ - nid01790
+ - nid01791
+ - nid01791
+ - nid01792
+ - nid01792
+ - nid01793
+ - nid01793
+ - nid01794
+ - nid01794
+ - nid01795
+ - nid01795
+ - nid01796
+ - nid01796
+ - nid01797
+ - nid01797
+ - nid01798
+ - nid01798
+ - nid01799
+ - nid01799
+ - nid01800
+ - nid01800
+ - nid01801
+ - nid01801
+ - nid01802
+ - nid01802
+ - nid01803
+ - nid01803
+ - nid01804
+ - nid01804
+ - nid01805
+ - nid01805
+ - nid01806
+ - nid01806
+ - nid01807
+ - nid01807
+ - nid01808
+ - nid01808
+ - nid01809
+ - nid01809
+ - nid01810
+ - nid01810
+ - nid01811
+ - nid01811
+ - nid01812
+ - nid01812
+ - nid01813
+ - nid01813
+ - nid01814
+ - nid01814
+ - nid01815
+ - nid01815
+ - nid01816
+ - nid01816
+ - nid01817
+ - nid01817
+ - nid01818
+ - nid01818
+ - nid01819
+ - nid01819
+ - nid01820
+ - nid01820
+ - nid01821
+ - nid01821
+ - nid01822
+ - nid01822
+ - nid01823
+ - nid01823
+ - nid01824
+ - nid01824
+ - nid01825
+ - nid01825
+ - nid01826
+ - nid01826
+ - nid01827
+ - nid01827
+ - nid01828
+ - nid01828
+ - nid01829
+ - nid01829
+ - nid01830
+ - nid01830
+ - nid01831
+ - nid01831
+ - nid01832
+ - nid01832
+ - nid01833
+ - nid01833
+ - nid01834
+ - nid01834
+ - nid01835
+ - nid01835
+ - nid01836
+ - nid01836
+ - nid01837
+ - nid01837
+ - nid01838
+ - nid01838
+ - nid01839
+ - nid01839
+ - nid01840
+ - nid01840
+ - nid01841
+ - nid01841
+ - nid01842
+ - nid01842
+ - nid01843
+ - nid01843
+ - nid01844
+ - nid01844
+ - nid01845
+ - nid01845
+ - nid01846
+ - nid01846
+ - nid01847
+ - nid01847
+ - nid01848
+ - nid01848
+ - nid01849
+ - nid01849
+ - nid01850
+ - nid01850
+ - nid01851
+ - nid01851
+ - nid01852
+ - nid01852
+ - nid01853
+ - nid01853
+ - nid01854
+ - nid01854
+ - nid01855
+ - nid01855
+ - nid01856
+ - nid01856
+ - nid01857
+ - nid01857
+ - nid01858
+ - nid01858
+ - nid01859
+ - nid01859
+ - nid01860
+ - nid01860
+ - nid01861
+ - nid01861
+ - nid01862
+ - nid01862
+ - nid01863
+ - nid01863
+ - nid01864
+ - nid01864
+ - nid01865
+ - nid01865
+ - nid01866
+ - nid01866
+ - nid01867
+ - nid01867
+ - nid01868
+ - nid01868
+ - nid01869
+ - nid01869
+ - nid01870
+ - nid01870
+ - nid01871
+ - nid01871
+ - nid01872
+ - nid01872
+ - nid01873
+ - nid01873
+ - nid01874
+ - nid01874
+ - nid01875
+ - nid01875
+ - nid01876
+ - nid01876
+ - nid01877
+ - nid01877
+ - nid01878
+ - nid01878
+ - nid01879
+ - nid01879
+ - nid01880
+ - nid01880
+ - nid01881
+ - nid01881
+ - nid01882
+ - nid01882
+ - nid01883
+ - nid01883
+ - nid01884
+ - nid01884
+ - nid01885
+ - nid01885
+ - nid01886
+ - nid01886
+ - nid01887
+ - nid01887
+ - nid01888
+ - nid01888
+ - nid01889
+ - nid01889
+ - nid01890
+ - nid01890
+ - nid01891
+ - nid01891
+ - nid01892
+ - nid01892
+ - nid01893
+ - nid01893
+ - nid01894
+ - nid01894
+ - nid01895
+ - nid01895
+ - nid01896
+ - nid01896
+ - nid01897
+ - nid01897
+ - nid01898
+ - nid01898
+ - nid01899
+ - nid01899
+ - nid01900
+ - nid01900
+ - nid01901
+ - nid01901
+ - nid01902
+ - nid01902
+ - nid01903
+ - nid01903
+ - nid01904
+ - nid01904
+ - nid01905
+ - nid01905
+ - nid01906
+ - nid01906
+ - nid01907
+ - nid01907
+ - nid01908
+ - nid01908
+ - nid01909
+ - nid01909
+ - nid01910
+ - nid01910
+ - nid01911
+ - nid01911
+ - nid01912
+ - nid01912
+ - nid01913
+ - nid01913
+ - nid01914
+ - nid01914
+ - nid01915
+ - nid01915
+ - nid01916
+ - nid01916
+ - nid01917
+ - nid01917
+ - nid01918
+ - nid01918
+ - nid01919
+ - nid01919
+ - nid01924
+ - nid01924
+ - nid01925
+ - nid01925
+ - nid01926
+ - nid01926
+ - nid01927
+ - nid01927
+ - nid01928
+ - nid01928
+ - nid01929
+ - nid01929
+ - nid01930
+ - nid01930
+ - nid01931
+ - nid01931
+ - nid01932
+ - nid01932
+ - nid01933
+ - nid01933
+ - nid01934
+ - nid01934
+ - nid01935
+ - nid01935
+ - nid01936
+ - nid01936
+ - nid01937
+ - nid01937
+ - nid01938
+ - nid01938
+ - nid01939
+ - nid01939
+ - nid01940
+ - nid01940
+ - nid01941
+ - nid01941
+ - nid01942
+ - nid01942
+ - nid01943
+ - nid01943
+ - nid01944
+ - nid01944
+ - nid01945
+ - nid01945
+ - nid01946
+ - nid01946
+ - nid01947
+ - nid01947
+ - nid01948
+ - nid01948
+ - nid01949
+ - nid01949
+ - nid01950
+ - nid01950
+ - nid01951
+ - nid01951
+ - nid01952
+ - nid01952
+ - nid01953
+ - nid01953
+ - nid01954
+ - nid01954
+ - nid01955
+ - nid01955
+ - nid01956
+ - nid01956
+ - nid01957
+ - nid01957
+ - nid01958
+ - nid01958
+ - nid01959
+ - nid01959
+ - nid01960
+ - nid01960
+ - nid01961
+ - nid01961
+ - nid01962
+ - nid01962
+ - nid01963
+ - nid01963
+ - nid01964
+ - nid01964
+ - nid01965
+ - nid01965
+ - nid01966
+ - nid01966
+ - nid01967
+ - nid01967
+ - nid01968
+ - nid01968
+ - nid01969
+ - nid01969
+ - nid01970
+ - nid01970
+ - nid01971
+ - nid01971
+ - nid01972
+ - nid01972
+ - nid01973
+ - nid01973
+ - nid01974
+ - nid01974
+ - nid01975
+ - nid01975
+ - nid01976
+ - nid01976
+ - nid01977
+ - nid01977
+ - nid01978
+ - nid01978
+ - nid01979
+ - nid01979
+ - nid01980
+ - nid01980
+ - nid01981
+ - nid01981
+ - nid01982
+ - nid01982
+ - nid01983
+ - nid01983
+ - nid01984
+ - nid01984
+ - nid01985
+ - nid01985
+ - nid01986
+ - nid01986
+ - nid01987
+ - nid01987
+ - nid01992
+ - nid01992
+ - nid01993
+ - nid01993
+ - nid01994
+ - nid01994
+ - nid01995
+ - nid01995
+ - nid01996
+ - nid01996
+ - nid01997
+ - nid01997
+ - nid01998
+ - nid01998
+ - nid01999
+ - nid01999
+ - nid02000
+ - nid02000
+ - nid02001
+ - nid02001
+ - nid02002
+ - nid02002
+ - nid02003
+ - nid02003
+ - nid02004
+ - nid02004
+ - nid02005
+ - nid02005
+ - nid02006
+ - nid02006
+ - nid02007
+ - nid02007
+ - nid02008
+ - nid02008
+ - nid02009
+ - nid02009
+ - nid02010
+ - nid02010
+ - nid02011
+ - nid02011
+ - nid02012
+ - nid02012
+ - nid02013
+ - nid02013
+ - nid02014
+ - nid02014
+ - nid02015
+ - nid02015
+ - nid02016
+ - nid02016
+ - nid02017
+ - nid02017
+ - nid02018
+ - nid02018
+ - nid02019
+ - nid02019
+ - nid02020
+ - nid02020
+ - nid02021
+ - nid02021
+ - nid02022
+ - nid02022
+ - nid02023
+ - nid02023
+ - nid02024
+ - nid02024
+ - nid02025
+ - nid02025
+ - nid02026
+ - nid02026
+ - nid02027
+ - nid02027
+ - nid02028
+ - nid02028
+ - nid02029
+ - nid02029
+ - nid02030
+ - nid02030
+ - nid02031
+ - nid02031
+ - nid02032
+ - nid02032
+ - nid02033
+ - nid02033
+ - nid02034
+ - nid02034
+ - nid02035
+ - nid02035
+ - nid02036
+ - nid02036
+ - nid02037
+ - nid02037
+ - nid02038
+ - nid02038
+ - nid02039
+ - nid02039
+ - nid02040
+ - nid02040
+ - nid02041
+ - nid02041
+ - nid02042
+ - nid02042
+ - nid02043
+ - nid02043
+ - nid02044
+ - nid02044
+ - nid02045
+ - nid02045
+ - nid02046
+ - nid02046
+ - nid02047
+ - nid02047
+ - nid02048
+ - nid02048
+ - nid02049
+ - nid02049
+ - nid02050
+ - nid02050
+ - nid02051
+ - nid02051
+ - nid02052
+ - nid02052
+ - nid02053
+ - nid02053
+ - nid02054
+ - nid02054
+ - nid02055
+ - nid02055
+ - nid02056
+ - nid02056
+ - nid02057
+ - nid02057
+ - nid02058
+ - nid02058
+ - nid02059
+ - nid02059
+ - nid02060
+ - nid02060
+ - nid02061
+ - nid02061
+ - nid02062
+ - nid02062
+ - nid02063
+ - nid02063
+ - nid02064
+ - nid02064
+ - nid02065
+ - nid02065
+ - nid02066
+ - nid02066
+ - nid02067
+ - nid02067
+ - nid02068
+ - nid02068
+ - nid02069
+ - nid02069
+ - nid02070
+ - nid02070
+ - nid02071
+ - nid02071
+ - nid02072
+ - nid02072
+ - nid02073
+ - nid02073
+ - nid02074
+ - nid02074
+ - nid02075
+ - nid02075
+ - nid02076
+ - nid02076
+ - nid02077
+ - nid02077
+ - nid02078
+ - nid02078
+ - nid02079
+ - nid02079
+ - nid02080
+ - nid02080
+ - nid02081
+ - nid02081
+ - nid02082
+ - nid02082
+ - nid02083
+ - nid02083
+ - nid02084
+ - nid02084
+ - nid02085
+ - nid02085
+ - nid02086
+ - nid02086
+ - nid02087
+ - nid02087
+ - nid02088
+ - nid02088
+ - nid02089
+ - nid02089
+ - nid02090
+ - nid02090
+ - nid02091
+ - nid02091
+ - nid02092
+ - nid02092
+ - nid02093
+ - nid02093
+ - nid02094
+ - nid02094
+ - nid02095
+ - nid02095
+ - nid02096
+ - nid02096
+ - nid02097
+ - nid02097
+ - nid02098
+ - nid02098
+ - nid02099
+ - nid02099
+ - nid02100
+ - nid02100
+ - nid02101
+ - nid02101
+ - nid02102
+ - nid02102
+ - nid02103
+ - nid02103
+ - nid02104
+ - nid02104
+ - nid02105
+ - nid02105
+ - nid02106
+ - nid02106
+ - nid02107
+ - nid02107
+ - nid02108
+ - nid02108
+ - nid02109
+ - nid02109
+ - nid02110
+ - nid02110
+ - nid02111
+ - nid02111
+ - nid02112
+ - nid02112
+ - nid02113
+ - nid02113
+ - nid02115
+ - nid02115
+ - nid02116
+ - nid02116
+ - nid02117
+ - nid02117
+ - nid02118
+ - nid02118
+ - nid02119
+ - nid02119
+ - nid02120
+ - nid02120
+ - nid02121
+ - nid02121
+ - nid02122
+ - nid02122
+ - nid02123
+ - nid02123
+ - nid02124
+ - nid02124
+ - nid02125
+ - nid02125
+ - nid02126
+ - nid02126
+ - nid02127
+ - nid02127
+ - nid02128
+ - nid02128
+ - nid02129
+ - nid02129
+ - nid02130
+ - nid02130
+ - nid02131
+ - nid02131
+ - nid02132
+ - nid02132
+ - nid02133
+ - nid02133
+ - nid02134
+ - nid02134
+ - nid02135
+ - nid02135
+ - nid02136
+ - nid02136
+ - nid02137
+ - nid02137
+ - nid02138
+ - nid02138
+ - nid02139
+ - nid02139
+ - nid02140
+ - nid02140
+ - nid02141
+ - nid02141
+ - nid02142
+ - nid02142
+ - nid02143
+ - nid02143
+ - nid02144
+ - nid02144
+ - nid02145
+ - nid02145
+ - nid02146
+ - nid02146
+ - nid02147
+ - nid02147
+ - nid02148
+ - nid02148
+ - nid02149
+ - nid02149
+ - nid02150
+ - nid02150
+ - nid02151
+ - nid02151
+ - nid02152
+ - nid02152
+ - nid02153
+ - nid02153
+ - nid02154
+ - nid02154
+ - nid02155
+ - nid02155
+ - nid02156
+ - nid02156
+ - nid02157
+ - nid02157
+ - nid02158
+ - nid02158
+ - nid02159
+ - nid02159
+ - nid02160
+ - nid02160
+ - nid02161
+ - nid02161
+ - nid02162
+ - nid02162
+ - nid02163
+ - nid02163
+ - nid02164
+ - nid02164
+ - nid02165
+ - nid02165
+ - nid02166
+ - nid02166
+ - nid02167
+ - nid02167
+ - nid02168
+ - nid02168
+ - nid02169
+ - nid02169
+ - nid02170
+ - nid02170
+ - nid02171
+ - nid02171
+ - nid02172
+ - nid02172
+ - nid02173
+ - nid02173
+ - nid02174
+ - nid02174
+ - nid02175
+ - nid02175
+ - nid02176
+ - nid02176
+ - nid02177
+ - nid02177
+ - nid02178
+ - nid02178
+ - nid02179
+ - nid02179
+ - nid02180
+ - nid02180
+ - nid02181
+ - nid02181
+ - nid02182
+ - nid02182
+ - nid02183
+ - nid02183
+ - nid02184
+ - nid02184
+ - nid02185
+ - nid02185
+ - nid02186
+ - nid02186
+ - nid02187
+ - nid02187
+ - nid02188
+ - nid02188
+ - nid02189
+ - nid02189
+ - nid02190
+ - nid02190
+ - nid02191
+ - nid02191
+ - nid02192
+ - nid02192
+ - nid02193
+ - nid02193
+ - nid02194
+ - nid02194
+ - nid02195
+ - nid02195
+ - nid02196
+ - nid02196
+ - nid02197
+ - nid02197
+ - nid02198
+ - nid02198
+ - nid02199
+ - nid02199
+ - nid02200
+ - nid02200
+ - nid02201
+ - nid02201
+ - nid02202
+ - nid02202
+ - nid02203
+ - nid02203
+ - nid02204
+ - nid02204
+ - nid02205
+ - nid02205
+ - nid02206
+ - nid02206
+ - nid02207
+ - nid02207
+ - nid02208
+ - nid02208
+ - nid02209
+ - nid02209
+ - nid02210
+ - nid02210
+ - nid02211
+ - nid02211
+ - nid02212
+ - nid02212
+ - nid02213
+ - nid02213
+ - nid02214
+ - nid02214
+ - nid02215
+ - nid02215
+ - nid02216
+ - nid02216
+ - nid02217
+ - nid02217
+ - nid02218
+ - nid02218
+ - nid02219
+ - nid02219
+ - nid02220
+ - nid02220
+ - nid02221
+ - nid02221
+ - nid02222
+ - nid02222
+ - nid02223
+ - nid02223
+ - nid02224
+ - nid02224
+ - nid02225
+ - nid02225
+ - nid02226
+ - nid02226
+ Report timestamp       : 2014-10-14 09:08:05.071
