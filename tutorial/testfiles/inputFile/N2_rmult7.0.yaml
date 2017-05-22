@@ -1,0 +1,6 @@
+dft:
+  hgrids: 0.4
+  norbv: 8
+  nvirt: 4
+  rmult: [7.0, 9.0]
+posinp: N2_posinp.xyz
