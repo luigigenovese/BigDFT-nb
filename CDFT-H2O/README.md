@@ -1,6 +1,6 @@
 # Dissociation curves of the water dimer and the H2O + HO- dimer: using fragments and Constrained DFT
 
-This set of four notebooks aims is a presents how to use the fragment approach and Constrained DFT with BigDFT. 
+This set of four notebooks presents how to use the fragment approach and Constrained DFT with BigDFT. 
 
 In the first two notebooks, the system under study is the water dimer, and the quantity of interest is the dissociation curve (*i.e.* the energy of the dimer as a function of the distance between both molecules). The use of the fragment approach to tackle this problem is presented and compared to the standard cubic and linear calculations.
 
