@@ -1,0 +1,2359 @@
+---
+ Code logo:
+   "__________________________________ A fast and precise DFT wavelet code
+   |     |     |     |     |     |
+   |     |     |     |     |     |      BBBB         i       gggggg
+   |_____|_____|_____|_____|_____|     B    B               g
+   |     |  :  |  :  |     |     |    B     B        i     g
+   |     |-0+--|-0+--|     |     |    B    B         i     g        g
+   |_____|__:__|__:__|_____|_____|___ BBBBB          i     g         g
+   |  :  |     |     |  :  |     |    B    B         i     g         g
+   |--+0-|     |     |-0+--|     |    B     B     iiii     g         g
+   |__:__|_____|_____|__:__|_____|    B     B        i      g        g
+   |     |  :  |  :  |     |     |    B BBBB        i        g      g
+   |     |-0+--|-0+--|     |     |    B        iiiii          gggggg
+   |_____|__:__|__:__|_____|_____|__BBBBB
+   |     |     |     |  :  |     |                           TTTTTTTTT
+   |     |     |     |--+0-|     |  DDDDDD          FFFFF        T
+   |_____|_____|_____|__:__|_____| D      D        F        TTTT T
+   |     |     |     |  :  |     |D        D      F        T     T
+   |     |     |     |--+0-|     |D         D     FFFF     T     T
+   |_____|_____|_____|__:__|_____|D___      D     F         T    T
+   |     |     |  :  |     |     |D         D     F          TTTTT
+   |     |     |--+0-|     |     | D        D     F         T    T
+   |_____|_____|__:__|_____|_____|          D     F        T     T
+   |     |     |     |     |     |         D               T    T
+   |     |     |     |     |     |   DDDDDD       F         TTTT
+   |_____|_____|_____|_____|_____|______                    www.bigdft.org   "
+
+ Reference Paper                       : The Journal of Chemical Physics 129, 014109 (2008)
+ Version Number                        : 1.8.1
+ Timestamp of this run                 : 2017-05-31 10:16:45.713
+ Root process Hostname                 : DALUBUNTU
+ Number of MPI tasks                   :  8
+ OpenMP parallelization                :  Yes
+ Maximal OpenMP threads per MPI task   :  1
+ MPI tasks of root process node        :  8
+  #------------------------------------------------------------------ Code compiling options
+ Compilation options:
+   Configure arguments:
+     " '--prefix' '/home/marco/BIGDFT/binaries/v1.8/install' 'FC=mpif90' 'FCFLAGS=-fopenmp 
+     -O2' 'LDFLAGS=-L/home/marco/BIGDFT/binaries/v1.8/install/lib ' 
+     'C_INCLUDE_PATH=/home/marco/BIGDFT/binaries/v1.8/install/include' 
+     'PKG_CONFIG_PATH=/home/marco/BIGDFT/binaries/v1.8/install/lib/pkgconfig:/home/marco/BIGD
+     FT/binaries/v1.8/install/share/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig:/usr/lib/pk
+     gconfig:/usr/share/pkgconfig'"
+   Compilers (CC, FC, CXX)             :  [ gcc, mpif90, g++ ]
+   Compiler flags:
+     CFLAGS                            : -g -O2
+     FCFLAGS                           : -fopenmp -O2
+     CXXFLAGS                          : -g -O2
+  #------------------------------------------------------------------------ Input parameters
+ radical                               : N2_rmult9
+ outdir                                : ../log/
+ logfile                               : Yes
+ run_from_files                        : Yes
+ skip                                  : No
+ dft:
+   gnrm_cv                             : 1.0e-08 # Convergence criterion gradient
+   hgrids                              : 0.4 #    Grid spacing in the three directions (bohr)
+   inputpsiid                          : 2 #      Input guess wavefunctions
+   itermax_virt                        : 1 #      Max. iterations of wfn. opt. steps for virtual orbitals
+   output_wf                           : 0 #      Output of the support functions
+   rmult: [9.0, 9.0] #                            c(f)rmult*radii_cf(:,1(2))=coarse(fine) atom-based radius
+   norbv                               : -256 #   Davidson subspace dimension (No. virtual orbitals)
+   disablesym                          : Yes #    Disable the symmetry detection
+   ngrids: [0, 0, 0] #                            Number of grid spacing division in each direction
+   ixc                                 : 1 #      Exchange-correlation parameter (LDA=1,PBE=11)
+   qcharge                             : 0 #      Charge of the system. Can be integer or real.
+   elecfield: [0., 0., 0.] #                      Electric field (Ex,Ey,Ez)
+   nspin                               : 1 #      Spin polarization treatment
+   mpol                                : 0 #      Total magnetic moment
+   itermax                             : 50 #     Max. iterations of wfn. opt. steps
+   itermin                             : 0 #      Minimal iterations of wfn. optimzed steps
+   nrepmax                             : 1 #      Max. number of re-diag. runs
+   ncong                               : 6 #      No. of CG it. for preconditioning eq.
+   idsx                                : 6 #      Wfn. diis history
+   dispersion                          : 0 #      Dispersion correction potential (values 1,2,3,4,5), 0=none
+   output_denspot                      : 0 #      Output of the density or the potential
+   rbuf                                : 0. #     Length of the tail (AU)
+   ncongt                              : 30 #     No. of tail CG iterations
+   nvirt                               : 0 #      No. of virtual orbs
+   nplot                               : 0 #      No. of plotted orbs
+   gnrm_cv_virt                        : 1.e-4 #  Convergence criterion gradient for virtual orbitals
+   external_potential                  : 0.0 #    Multipole moments of an external potential
+   calculate_strten                    : Yes #    Boolean to activate the calculation of the stress tensor. Might be set to No for 
+    #                                              performance reasons
+   plot_mppot_axes: [-1, -1, -1] #                Plot the potential generated by the multipoles along axes through this 
+    #                                              point. Negative values mean no plot.
+   plot_pot_axes: [-1, -1, -1] #                  Plot the potential along axes through this point. Negative values mean 
+    #                                              no plot.
+   occupancy_control                   : None #   Dictionary of the atomic matrices to be applied for a given iteration number
+   itermax_occ_ctrl                    : 0 #      Number of iterations of occupancy control scheme. Should be between itermin and 
+    #                                              itermax
+   nrepmax_occ_ctrl                    : 1 #      Number of re-diagonalizations of occupancy control scheme.
+   alpha_hf                            : -1.0 #   Part of the exact exchange contribution for hybrid functionals
+ tddft:
+   decompose_perturbation              : ../data-Ez_1em2_rmult_9/ # Indicate the directory of the perturbation to be decomposed in the basis of empty states
+   tddft_approach                      : none #   Time-Dependent DFT method
+ psolver:
+   kernel:
+     screening                         : 0 #      Mu screening parameter
+     isf_order                         : 16 #     Order of the Interpolating Scaling Function family
+     stress_tensor                     : Yes #    Triggers the calculation of the stress tensor
+   environment:
+     cavity                            : none #   Type of the cavity
+     fd_order                          : 16 #     Order of the Finite-difference derivatives for the GPS solver
+     itermax                           : 200 #    Maximum number of iterations of the GPS outer loop
+     minres                            : 1.e-8 #  Convergence threshold of the loop
+     pb_method                         : none #   Defines the method for the Poisson Boltzmann Equation
+   setup:
+     accel                             : none #   Material Acceleration
+     taskgroup_size                    : 0 #      Size of the taskgroups of the Poisson Solver
+     global_data                       : No #     Charge density and Electrostatic potential are given by global arrays
+     verbose                           : Yes #    Verbosity switch
+     output                            : none #   Quantities to be plotted after the main solver routine
+ chess:
+   foe:
+     ef_interpol_det                   : 1.e-12 # FOE max determinant of cubic interpolation matrix
+     ef_interpol_chargediff            : 1.0 #    FOE max charge difference for interpolation
+     evbounds_nsatur                   : 3 #      Number of FOE cycles before the eigenvalue bounds are shrinked (linear)
+     evboundsshrink_nsatur             : 4 #      Maximal number of unsuccessful eigenvalue bounds shrinkings
+     fscale                            : 5.e-2 #  Initial guess for the error fucntion decay length
+     fscale_lowerbound                 : 5.e-3 #  Lower bound for the error function decay length
+     fscale_upperbound                 : 5.e-2 #  Upper bound for the error function decay length
+     eval_range_foe: [-0.5, 0.5] #                Lower and upper bound of the eigenvalue spectrum, will be adjusted 
+      #                                            automatically if chosen unproperly
+     accuracy_foe                      : 1.e-5 #  Required accuracy for the Chebyshev fit for FOE
+     accuracy_ice                      : 1.e-8 #  Required accuracy for the Chebyshev fit for ICE (calculation of matrix powers)
+     accuracy_penalty                  : 1.e-5 #  Required accuracy for the Chebyshev fit for the penalty function
+   lapack:
+     blocksize_pdsyev                  : -8 #     SCALAPACK linear scaling blocksize for diagonalization
+     blocksize_pdgemm                  : -8 #     SCALAPACK linear scaling blocksize for matrix matrix multiplication
+     maxproc_pdsyev                    : 4 #      SCALAPACK linear scaling max num procs
+     maxproc_pdgemm                    : 4 #      SCALAPACK linear scaling max num procs
+   pexsi:
+     pexsi_npoles                      : 40 #     Number of poles used by PEXSI
+     pexsi_mumin                       : -1.0 #   Initial guess for the lower bound of the chemical potential used by PEXSI
+     pexsi_mumax                       : 1.0 #    Initial guess for the upper bound of the chemical potential used by PEXSI
+     pexsi_mu                          : 0.5 #    Initial guess for the  chemical potential used by PEXSI
+     pexsi_temperature                 : 1.e-3 #  Temperature used by PEXSI
+     pexsi_tol_charge                  : 1.e-3 #  Charge tolerance used PEXSI
+     pexsi_np_sym_fact                 : 16 #     Number of tasks for the symbolic factorization used by PEXSI
+     pexsi_DeltaE                      : 10.0 #   Upper bound for the spectral radius of S^-1H (in hartree?) used by PEXSI
+ output:
+   atomic_density_matrix               : None #   Dictionary of the atoms for which the atomic density matrix has to be plotted
+ kpt:
+   method                              : manual # K-point sampling method
+   kpt: #                                         Kpt coordinates
+   -  [0., 0., 0.]
+   wkpt: [1.] #                                   Kpt weights
+   bands                               : No #     For doing band structure calculation
+ geopt:
+   method                              : none #   Geometry optimisation method
+   ncount_cluster_x                    : 1 #      Maximum number of force evaluations
+   frac_fluct                          : 1. #     Fraction of force fluctuations. Stop if fmax < forces_fluct*frac_fluct
+   forcemax                            : 0. #     Max forces criterion when stop
+   randdis                             : 0. #     Random displacement amplitude
+   betax                               : 4. #     Stepsize for the geometry optimization
+   beta_stretchx                       : 5e-1 #   Stepsize for steepest descent in stretching mode direction (only if in biomode)
+ md:
+   mdsteps                             : 0 #      Number of MD steps
+   print_frequency                     : 1 #      Printing frequency for energy.dat and Trajectory.xyz files
+   temperature                         : 300.d0 # Initial temperature in Kelvin
+   timestep                            : 20.d0 #  Time step for integration (in a.u.)
+   no_translation                      : No #     Logical input to set translational correction
+   thermostat                          : none #   Activates a thermostat for MD
+   wavefunction_extrapolation          : 0 #      Activates the wavefunction extrapolation for MD
+   restart_nose                        : No #     Restart Nose Hoover Chain information from md.restart
+   restart_pos                         : No #     Restart nuclear position information from md.restart
+   restart_vel                         : No #     Restart nuclear velocities information from md.restart
+ mix:
+   iscf                                : 0 #      Mixing parameters
+   itrpmax                             : 1 #      Maximum number of diagonalisation iterations
+   rpnrm_cv                            : 1.e-4 #  Stop criterion on the residue of potential or density
+   norbsempty                          : 0 #      No. of additional bands
+   tel                                 : 0. #     Electronic temperature
+   occopt                              : 1 #      Smearing method
+   alphamix                            : 0. #     Multiplying factors for the mixing
+   alphadiis                           : 2. #     Multiplying factors for the electronic DIIS
+ sic:
+   sic_approach                        : none #   SIC (self-interaction correction) method
+   sic_alpha                           : 0. #     SIC downscaling parameter
+ mode:
+   method                              : dft #    Run method of BigDFT call
+   add_coulomb_force                   : No #     Boolean to add coulomb force on top of any of above selected force
+ perf:
+   debug                               : No #     Debug option
+   profiling_depth                     : -1 #     Maximum level of the profiling for the tracking of the routines
+   fftcache                            : 8192 #   Cache size for the FFT
+   accel                               : NO #     Acceleration (hardware)
+   ocl_platform                        : ~ #      Chosen OCL platform
+   ocl_devices                         : ~ #      Chosen OCL devices
+   blas                                : No #     CUBLAS acceleration
+   projrad                             : 15. #    Radius of the projector as a function of the maxrad
+   exctxpar                            : OP2P #   Exact exchange parallelisation scheme
+   ig_diag                             : Yes #    Input guess (T=Direct, F=Iterative) diag. of Ham.
+   ig_norbp                            : 5 #      Input guess Orbitals per process for iterative diag.
+   ig_blocks: [300, 800] #                        Input guess Block sizes for orthonormalisation
+   ig_tol                              : 1.0e-4 # Input guess Tolerance criterion
+   methortho                           : 0 #      Orthogonalisation
+   rho_commun                          : DEF #    Density communication scheme (DBL, RSC, MIX)
+   unblock_comms                       : OFF #    Overlap Communications of fields (OFF,DEN,POT)
+   linear                              : OFF #    Linear Input Guess approach
+   tolsym                              : 1.0e-8 # Tolerance for symmetry detection
+   signaling                           : No #     Expose calculation results on Network
+   signaltimeout                       : 0 #      Time out on startup for signal connection (in seconds)
+   domain                              : ~ #      Domain to add to the hostname to find the IP
+   inguess_geopt                       : 0 #      Input guess to be used during the optimization
+   store_index                         : Yes #    Store indices or recalculate them for linear scaling
+   verbosity                           : 2 #      Verbosity of the output
+   psp_onfly                           : Yes #    Calculate pseudopotential projectors on the fly
+   multipole_preserving                : No #     (EXPERIMENTAL) Preserve the multipole moment of the ionic density
+   mp_isf                              : 16 #     (EXPERIMENTAL) Interpolating scaling function or lifted dual order for the multipole 
+    #                                              preserving
+   mixing_after_inputguess             : 1 #      Mixing step after linear input guess
+   iterative_orthogonalization         : No #     Iterative_orthogonalization for input guess orbitals
+   check_sumrho                        : 1 #      Enables linear sumrho check
+   check_overlap                       : 1 #      Enables linear overlap check
+   experimental_mode                   : No #     Activate the experimental mode in linear scaling
+   write_orbitals                      : 0 #      Linear scaling write KS orbitals for cubic restart (might take lot of disk space!)
+   explicit_locregcenters              : No #     Linear scaling explicitly specify localization centers
+   calculate_KS_residue                : Yes #    Linear scaling calculate Kohn-Sham residue
+   intermediate_forces                 : No #     Linear scaling calculate intermediate forces
+   kappa_conv                          : 0.1 #    Exit kappa for extended input guess (experimental mode)
+   calculate_gap                       : No #     Linear scaling calculate the HOMO LUMO gap
+   loewdin_charge_analysis             : No #     Linear scaling perform a Loewdin charge analysis at the end of the calculation
+   coeff_weight_analysis               : No #     Linear scaling perform a Loewdin charge analysis of the coefficients for fragment 
+    #                                              calculations
+   check_matrix_compression            : Yes #    Linear scaling perform a check of the matrix compression routines
+   correction_co_contra                : Yes #    Linear scaling correction covariant / contravariant gradient
+   FOE_restart                         : 0 #      Restart method to be used for the FOE method
+   imethod_overlap                     : 1 #      Method to calculate the overlap matrices (1=old, 2=new)
+   enable_matrix_taskgroups            : True #   Enable the matrix taskgroups
+   hamapp_radius_incr                  : 8 #      Radius enlargement for the Hamiltonian application (in grid points)
+   adjust_kernel_iterations            : True #   Enable the adaptive ajustment of the number of kernel iterations
+   adjust_kernel_threshold             : True #   Enable the adaptive ajustment of the kernel convergence threshold according to the 
+    #                                              support function convergence
+   wf_extent_analysis                  : False #  Perform an analysis of the extent of the support functions (and possibly KS orbitals)
+   foe_gap                             : False #  Use the FOE method to calculate the HOMO-LUMO gap at the end of a calculation
+ lin_general:
+   hybrid                              : No #     Activate the hybrid mode; if activated, only the low accuracy values will be relevant
+   nit: [100, 100] #                              Number of iteration with low/high accuracy
+   rpnrm_cv: [1.e-12, 1.e-12] #                   Convergence criterion for low/high accuracy
+   conf_damping                        : -0.5 #   How the confinement should be decreased, only relevant for hybrid mode; negative -> 
+    #                                              automatic
+   taylor_order                        : 0 #      Order of the Taylor approximation; 0 -> exact
+   max_inversion_error                 : 1.d0 #   Linear scaling maximal error of the Taylor approximations to calculate the inverse of 
+    #                                              the overlap matrix
+   output_wf                           : 0 #      Output basis functions; 0 no output, 1 formatted output, 2 Fortran bin, 3 ETSF
+   output_mat                          : 0 #      Output sparse matrices; 0 no output, 1 formatted sparse, 11 formatted dense, 21 
+    #                                              formatted both
+   output_coeff                        : 0 #      Output KS coefficients; 0 no output, 1 formatted output
+   output_fragments                    : 0 #      Output support functions, kernel and coeffs; 0 fragments and full system, 1 
+    #                                              fragments only, 2 full system only
+   kernel_restart_mode                 : 0 #      Method for restarting kernel; 0 kernel, 1 coefficients, 2 random, 3 diagonal, 4 
+    #                                              support function weights
+   kernel_restart_noise                : 0.0d0 #  Add random noise to kernel or coefficients when restarting
+   frag_num_neighbours                 : 0 #      Number of neighbours to output for each fragment
+   frag_neighbour_cutoff               : 12.0d0 # Number of neighbours to output for each fragment
+   cdft_lag_mult_init                  : 0.05d0 # CDFT initial value for Lagrange multiplier
+   cdft_conv_crit                      : 1.e-2 #  CDFT convergence threshold for the constrained charge
+   calc_dipole                         : No #     Calculate dipole
+   calc_quadrupole                     : No #     Calculate quadrupole
+   subspace_diag                       : No #     Diagonalization at the end
+   extra_states                        : 0 #      Number of extra states to include in support function and kernel optimization (dmin 
+    #                                              only), must be equal to norbsempty
+   calculate_onsite_overlap            : No #     Calculate the onsite overlap matrix (has only an effect if the matrices are all 
+    #                                              written to disk)
+   charge_multipoles                   : 0 #      Calculate the atom-centered multipole coefficients; 0 no, 1 old approach Loewdin, 2 
+    #                                              new approach Projector
+   support_function_multipoles         : False #  Calculate the multipole moments of the support functions
+   plot_locreg_grids                   : False #  Plot the scaling function and wavelets grid of each localization region
+   calculate_FOE_eigenvalues: [0, -1] #           First and last eigenvalue to be calculated using the FOE procedure
+   precision_FOE_eigenvalues           : 5.e-3 #  Decay length of the error function used to extract the eigenvalues (i.e. something like 
+    #                                              the resolution)
+ lin_basis:
+   nit: [4, 5] #                                  Maximal number of iterations in the optimization of the 
+    #                                              support functions
+   nit_ig                              : 50 #     maximal number of iterations to optimize the support functions in the extended input 
+    #                                              guess (experimental mode only)
+   idsx: [6, 6] #                                 DIIS history for optimization of the support functions 
+    #                                              (low/high accuracy); 0 -> SD
+   gnrm_cv: [1.e-2, 1.e-4] #                      Convergence criterion for the optimization of the support functions 
+    #                                              (low/high accuracy)
+   gnrm_ig                             : 1.e-3 #  Convergence criterion for the optimization of the support functions in the extended 
+    #                                              input guess (experimental mode only)
+   deltae_cv                           : 1.e-4 #  Total relative energy difference to stop the optimization ('experimental_mode' only)
+   gnrm_dyn                            : 1.e-4 #  Dynamic convergence criterion ('experimental_mode' only)
+   min_gnrm_for_dynamic                : 1.e-3 #  Minimal gnrm to active the dynamic gnrm criterion
+   alpha_diis                          : 1.0 #    Multiplicator for DIIS
+   alpha_sd                            : 1.0 #    Initial step size for SD
+   nstep_prec                          : 5 #      Number of iterations in the preconditioner
+   fix_basis                           : 1.e-10 # Fix the support functions if the density change is below this threshold
+   correction_orthoconstraint          : 1 #      Correction for the slight non-orthonormality in the orthoconstraint
+   orthogonalize_ao                    : Yes #    Orthogonalize the atomic orbitals used as input guess
+   reset_DIIS_history                  : No #     Reset the DIIS history when starting the loop which optimizes the support functions
+ lin_kernel:
+   nstep: [1, 1] #                                Number of steps taken when updating the coefficients via 
+    #                                              direct minimization for each iteration of 
+    #                                              the density kernel loop
+   nit: [5, 5] #                                  Number of iterations in the (self-consistent) 
+    #                                              optimization of the density kernel
+   idsx_coeff: [0, 0] #                           DIIS history for direct mininimization
+   idsx: [0, 0] #                                 Mixing method; 0 -> linear mixing, >=1 -> Pulay mixing
+   alphamix: [0.5, 0.5] #                         Mixing parameter (low/high accuracy)
+   gnrm_cv_coeff: [1.e-5, 1.e-5] #                Convergence criterion on the gradient for direct minimization
+   rpnrm_cv: [1.e-10, 1.e-10] #                   Convergence criterion (change in density/potential) for the kernel 
+    #                                              optimization
+   linear_method                       : DIAG #   Method to optimize the density kernel
+   mixing_method                       : DEN #    Quantity to be mixed
+   alpha_sd_coeff                      : 0.2 #    Initial step size for SD for direct minimization
+   alpha_fit_coeff                     : No #     Update the SD step size by fitting a quadratic polynomial
+   coeff_scaling_factor                : 1.0 #    Factor to scale the gradient in direct minimization
+   delta_pnrm                          : -1.0 #   Stop the kernel optimization if the density/potential difference has decreased by this 
+    #                                              factor (deactivated if -1.0)
+ lin_basis_params:
+   nbasis                              : 4 #      Number of support functions per atom
+   ao_confinement                      : 8.3e-3 # Prefactor for the input guess confining potential
+   confinement: [8.3e-3, 0.0] #                   Prefactor for the confining potential (low/high accuracy)
+   rloc: [7.0, 7.0] #                             Localization radius for the support functions
+   rloc_kernel                         : 9.0 #    Localization radius for the density kernel
+   rloc_kernel_foe                     : 14.0 #   Cutoff radius for the FOE matrix vector multiplications
+ psppar.N:
+   Pseudopotential type                : HGH-K
+   Atomic number                       : 7
+   No. of Electrons                    : 5
+   Pseudopotential XC                  : 1
+   Local Pseudo Potential (HGH convention):
+     Rloc                              : 0.28917923
+     Coefficients (c1 .. c4): [-12.23481988, 1.76640728, 0.0, 0.0]
+   NonLocal PSP Parameters:
+   - Channel (l)                       : 0
+     Rloc                              : 0.25660487
+     h_ij terms: [13.55224272, 0.0, 0.0, 0.0, 0.0, 0.0]
+   - Channel (l)                       : 1
+     Rloc                              : 0.27013369
+     h_ij terms: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+   Source                              : Hard-Coded
+   Radii of active regions (AU):
+     Coarse                            : 1.370256482166319
+     Fine                              : 0.25660487
+     Coarse PSP                        : 0.4502228166666666
+     Source                            : Hard-Coded
+ posinp:
+    #---------------------------------------------- Atomic positions (by default bohr units)
+   units                               : angstroem
+   positions:
+   - N: [0.0, 0.0, 0.0]
+   - N: [0.0, 0.0, 1.114989995956421]
+   properties:
+     format                            : xyz
+     source                            : N2_posinp.xyz
+  #--------------------------------------------------------------------------------------- |
+ Data Writing directory                : ../log/data-N2_rmult9/
+  #----------------------------------------------- Input Atomic System (file: N2_posinp.xyz)
+ Atomic System Properties:
+   Number of atomic types              :  1
+   Number of atoms                     :  2
+   Types of atoms                      :  [ N ]
+   Boundary Conditions                 : Free #Code: F
+   Number of Symmetries                :  0
+   Space group                         : disabled
+  #-------------------------- Geometry optimization Input Parameters (file: N2_rmult9.geopt)
+ Geometry Optimization Parameters:
+   Maximum steps                       :  1
+   Algorithm                           : none
+   Random atomic displacement          :  0.0E+00
+   Fluctuation in forces               :  1.0E+00
+   Maximum in forces                   :  0.0E+00
+   Steepest descent step               :  4.0E+00
+ Material acceleration                 :  No #iproc=0
+  #------------------------------------------------------------------------ Input parameters
+ DFT parameters:
+   eXchange Correlation:
+     XC ID                             :  &ixc  1
+     Exchange-Correlation reference    : "XC: Teter 93"
+     XC functional implementation      : ABINIT
+     Spin polarization                 :  No
+ Basis set definition:
+   Suggested Grid Spacings (a0)        :  [  0.40,  0.40,  0.40 ]
+   Coarse and Fine Radii Multipliers   :  [  9.0,  9.0 ]
+ Self-Consistent Cycle Parameters:
+   Wavefunction:
+     Gradient Norm Threshold           :  &gnrm_cv  1.0E-08
+     CG Steps for Preconditioner       :  6
+     DIIS History length               :  6
+     Max. Wfn Iterations               :  &itermax  50
+     Max. Subspace Diagonalizations    :  1
+     Input wavefunction policy         : INPUT_PSI_DISK_WVL # 2
+     Output wavefunction policy        : NONE # 0
+     Output grid policy                : NONE # 0
+     Virtual orbitals                  :  0
+     Number of plotted density orbitals:  0
+   Density/Potential:
+     Max. Iterations                   :  1
+ Post Optimization Parameters:
+   Finite-Size Effect estimation:
+     Scheduled                         :  No
+  #----------------------------------------------------------------------- System Properties
+ Properties of atoms in the system:
+ - Symbol                              : N #Type No.  01
+   No. of Electrons                    :  5
+   No. of Atoms                        :  2
+   Radii of active regions (AU):
+     Coarse                            :  1.37026
+     Fine                              :  0.25660
+     Coarse PSP                        :  0.45022
+     Source                            : Hard-Coded
+   Grid Spacing threshold (AU)         :  0.64
+   Pseudopotential type                : HGH-K
+   Local Pseudo Potential (HGH convention):
+     Rloc                              :  0.28918
+     Coefficients (c1 .. c4)           :  [ -12.23482,  1.76641,  0.00000,  0.00000 ]
+   NonLocal PSP Parameters:
+   - Channel (l)                       :  0
+     Rloc                              :  0.25660
+     h_ij matrix:
+     -  [  13.55224,  0.00000,  0.00000 ]
+     -  [  0.00000,  0.00000,  0.00000 ]
+     -  [  0.00000,  0.00000,  0.00000 ]
+   No. of projectors                   :  1
+   PSP XC                              : "XC: Teter 93"
+  #----------------------------------------------- Atom Positions (specified and grid units)
+ Atomic structure:
+   Units                               : angstroem
+   Positions:
+   - N: [ 6.455961973,  6.455961973,  6.427644186] # [  30.50,  30.50,  30.37 ] 0001
+   - N: [ 6.455961973,  6.455961973,  7.542634182] # [  30.50,  30.50,  35.63 ] 0002
+   Rigid Shift Applied (AU)            :  [  12.200,  12.200,  12.146 ]
+  #------------------------------------------------------------------------- Grid properties
+ Box Grid spacings                     :  [  0.4000,  0.4000,  0.4000 ]
+ Sizes of the simulation domain:
+   AU                                  :  [  24.400,  24.400,  26.400 ]
+   Angstroem                           :  [  12.912,  12.912,  13.970 ]
+   Grid Spacing Units                  :  [  61,  61,  66 ]
+   High resolution region boundaries (GU):
+     From                              :  [  25,  25,  25 ]
+     To                                :  [  36,  36,  41 ]
+ High Res. box is treated separately   :  Yes
+  #------------------------------------------------------------------- Kernel Initialization
+ Poisson Kernel Initialization:
+    #---------------------------------------------------------------------- Input parameters
+   kernel:
+     screening                         : 0 #      Mu screening parameter
+     isf_order                         : 16 #     Order of the Interpolating Scaling Function family
+     stress_tensor                     : Yes #    Triggers the calculation of the stress tensor
+   environment:
+     cavity                            : none #   Type of the cavity
+     fd_order                          : 16 #     Order of the Finite-difference derivatives for the GPS solver
+     itermax                           : 200 #    Maximum number of iterations of the GPS outer loop
+     minres                            : 1.e-8 #  Convergence threshold of the loop
+     pb_method                         : none #   Defines the method for the Poisson Boltzmann Equation
+   setup:
+     accel                             : none #   Material Acceleration
+     taskgroup_size                    : 0 #      Size of the taskgroups of the Poisson Solver
+     global_data                       : No #     Charge density and Electrostatic potential are given by global arrays
+     verbose                           : Yes #    Verbosity switch
+     output                            : none #   Quantities to be plotted after the main solver routine
+   MPI tasks                           :  8
+   OpenMP threads per MPI task         :  1
+ Poisson Kernel Creation:
+   Boundary Conditions                 : Free
+   Memory Requirements per MPI task:
+     Density (MB)                      :  4.10
+     Kernel (MB)                       :  4.33
+     Full Grid Arrays (MB)             :  29.11
+     Load Balancing of calculations:
+       Density:
+         MPI tasks 0- 7                : 100%
+       Kernel:
+         MPI tasks 0- 6                : 100%
+         MPI task 7                    :  67%
+       Complete LB per task            : 1/3 LB_density + 2/3 LB_kernel
+ Wavefunctions Descriptors, full simulation domain:
+   Coarse resolution grid:
+     No. of segments                   :  3314
+     No. of points                     :  138520
+   Fine resolution grid:
+     No. of segments                   :  170
+     No. of points                     :  1344
+  #---------------------------------------------------------------------- Occupation Numbers
+ Total Number of Electrons             :  10
+ Spin treatment                        : Averaged
+ Orbitals Repartition:
+   MPI tasks  0- 4                     :  1
+   MPI tasks  5- 7                     :  0
+ Total Number of Orbitals              :  5
+ Input Occupation Numbers:
+ - Occupation Numbers: {Orbitals No. 1-5:  2.0000}
+ Wavefunctions memory occupation for root MPI process:  1 MB 131 KB 704 B
+ NonLocal PSP Projectors Descriptors:
+   Creation strategy                   : On-the-fly
+   Total number of projectors          :  2
+   Total number of components          :  10000
+   Percent of zero components          :  14
+   Size of workspaces                  :  40016
+   Maximum size of masking arrays for a projector:  1290
+   Cumulative size of masking arrays   :  2580
+ Communication checks:
+   Transpositions                      :  Yes
+   Reverse transpositions              :  Yes
+  #-------------------------------------------------------- Estimation of Memory Consumption
+ Memory requirements for principal quantities (MiB.KiB):
+   Subspace Matrix                     : 0.1 #    (Number of Orbitals: 5)
+   Single orbital                      : 1.132 #  (Number of Components: 147928)
+   All (distributed) orbitals          : 3.396 #  (Number of Orbitals per MPI task: 1)
+   Wavefunction storage size           : 16.952 # (DIIS/SD workspaces included)
+   Nonlocal Pseudopotential Arrays     : 0.79
+   Full Uncompressed (ISF) grid        : 29.114
+   Workspaces storage size             : 2.648
+ Accumulated memory requirements during principal run stages (MiB.KiB):
+   Kernel calculation                  : 82.848
+   Density Construction                : 110.822
+   Poisson Solver                      : 70.598
+   Hamiltonian application             : 112.977
+   Orbitals Orthonormalization         : 112.978
+ Estimated Memory Peak (MB)            :  112
+ Ion-Ion interaction energy            :  1.18650663422787E+01
+  #---------------------------------------------------------------- Ionic Potential Creation
+ Total ionic charge                    : -10.000000000000
+ Poisson Solver:
+   BC                                  : Free
+   Box                                 :  [  153,  153,  163 ]
+   MPI tasks                           :  8
+ Interaction energy ions multipoles    :  0.0
+ Interaction energy multipoles multipoles:  0.0
+  #--------------------------------------------------------- Reading Wavefunctions from disk
+ Input Hamiltonian:
+   Need to reformat wavefunctions      :  No
+   Reading Waves Time:
+   -  {Process:  0, Timing:  [  5.6E-02,  5.500E-02 ]}
+  #------------------------------------------------------------------- Self-Consistent Cycle
+ Ground State Optimization:
+ - Hamiltonian Optimization: &itrp001
+   - Subspace Optimization: &itrep001-01
+       Wavefunctions Iterations:
+       -  { #---------------------------------------------------------------------- iter: 1
+ GPU acceleration:  No, Rho Commun: RED_SCT, Total electronic charge:  9.999999674847, 
+ Poisson Solver: {BC: Free, Box:  [  153,  153,  163 ], MPI tasks:  8}, 
+ Hamiltonian Applied:  Yes, Orthoconstraint:  Yes, Preconditioning:  Yes, 
+ Energies: {Ekin:  1.45665175331E+01, Epot: -2.18690749813E+01, Enl:  1.75224544202E+00, 
+              EH:  2.76809505305E+01,  EXC: -4.77498815468E+00, EvXC: -6.25477750111E+00}, 
+ iter:  1, EKS: -1.98864068479515232E+01, gnrm:  3.62E-09, 
+ DIIS weights: [ 1.00E+00,  1.00E+00], Orthogonalization Method:  0}
+       -  &FINAL001  { #----------------------------------------------------------- iter: 2
+ GPU acceleration:  No, Rho Commun: RED_SCT, Total electronic charge:  9.999999674847, 
+ Poisson Solver: {BC: Free, Box:  [  153,  153,  163 ], MPI tasks:  8}, 
+ Hamiltonian Applied:  Yes, 
+ iter:  2, EKS: -1.98864068479519851E+01, gnrm:  3.62E-09, D: -4.62E-13,  #FINAL
+ Energies: {Ekin:  1.45665175331E+01, Epot: -2.18690749812E+01, Enl:  1.75224544175E+00, 
+              EH:  2.76809505303E+01,  EXC: -4.77498815468E+00, EvXC: -6.25477750112E+00, 
+            Eion:  1.18650663423E+01}, 
+ }
+       Non-Hermiticity of Hamiltonian in the Subspace:  7.25E-30
+        #Eigenvalues and New Occupation Numbers
+       Orbitals: [
+ {e: -1.032540819378E+00, f:  2.0000},  # 00001
+ {e: -4.976447698203E-01, f:  2.0000},  # 00002
+ {e: -4.314826719850E-01, f:  2.0000},  # 00003
+ {e: -4.314826640216E-01, f:  2.0000},  # 00004
+ {e: -3.820050779724E-01, f:  2.0000}] # 00005
+ Last Iteration                        : *FINAL001
+  #---------------------------------------------------------------------- Forces Calculation
+ GPU acceleration                      :  No
+ Rho Commun                            : RED_SCT
+ Total electronic charge               :  9.999999674847
+ Poisson Solver:
+   BC                                  : Free
+   Box                                 :  [  153,  153,  163 ]
+   MPI tasks                           :  8
+ Multipole analysis origin             :  [  1.22E+01,  1.220000E+01,  1.320000E+01 ]
+ Electric Dipole Moment (AU):
+   P vector                            :  [ -7.711E-07, -7.7110E-07, -7.0829E-06 ]
+   norm(P)                             :  7.166308E-06
+ Electric Dipole Moment (Debye):
+   P vector                            :  [ -1.9599E-06, -1.9599E-06, -1.8003E-05 ]
+   norm(P)                             :  1.821494E-05
+ Quadrupole Moment (AU):
+   Q matrix:
+   -  [ 1.1027E+00, -3.8260E-08, -7.7902E-07]
+   -  [-3.8260E-08,  1.1027E+00, -7.7902E-07]
+   -  [-7.7902E-07, -7.7902E-07, -2.2055E+00]
+   trace                               : -2.96E-12
+ Calculate local forces                :  Yes
+ Calculate Non Local forces            :  Yes
+  #------------ Iterative subspace diagonalization of virtual orbitals (Direct Minimization)
+ Orbital restart:
+ #(10:16:50.206)  3% / [                         ] ( 1/32,  1.83E+05 it/s), ETA  0.0s
+ #(10:16:50.267)  6% - [>                        ] ( 2/32,  33. it/s), ETA  0.9s
+ #(10:16:50.325)  9% \ [=>                       ] ( 3/32,  25. it/s), ETA  1.2s
+ #(10:16:50.384) 12% | [==>                      ] ( 4/32,  22. it/s), ETA  1.2s
+ #(10:16:50.443) 15% / [==>                      ] ( 5/32,  21. it/s), ETA  1.3s
+ #(10:16:50.501) 18% - [===>                     ] ( 6/32,  20. it/s), ETA  1.3s
+ #(10:16:50.560) 21% \ [====>                    ] ( 7/32,  20. it/s), ETA  1.3s
+ #(10:16:50.618) 25% | [=====>                   ] ( 8/32,  19. it/s), ETA  1.2s
+ #(10:16:50.677) 28% / [======>                  ] ( 9/32,  19. it/s), ETA  1.2s
+ #(10:16:50.736) 31% - [======>                  ] ( 10/32,  19. it/s), ETA  1.2s
+ #(10:16:50.795) 34% \ [=======>                 ] ( 11/32,  19. it/s), ETA  1.1s
+ #(10:16:50.853) 37% | [========>                ] ( 12/32,  19. it/s), ETA  1.1s
+ #(10:16:50.911) 40% / [=========>               ] ( 13/32,  18. it/s), ETA  1.0s
+ #(10:16:50.978) 43% - [=========>               ] ( 14/32,  18. it/s), ETA  1.0s
+ #(10:16:51.063) 46% \ [==========>              ] ( 15/32,  17. it/s), ETA  1.0s
+ #(10:16:51.142) 50% | [===========>             ] ( 16/32,  17. it/s), ETA  0.9s
+ #(10:16:51.201) 53% / [============>            ] ( 17/32,  17. it/s), ETA  0.9s
+ #(10:16:51.284) 56% - [=============>           ] ( 18/32,  17. it/s), ETA  0.8s
+ #(10:16:51.342) 59% \ [=============>           ] ( 19/32,  17. it/s), ETA  0.8s
+ #(10:16:51.400) 62% | [==============>          ] ( 20/32,  17. it/s), ETA  0.7s
+ #(10:16:51.458) 65% / [===============>         ] ( 21/32,  17. it/s), ETA  0.7s
+ #(10:16:51.517) 68% - [================>        ] ( 22/32,  17. it/s), ETA  0.6s
+ #(10:16:51.573) 71% \ [================>        ] ( 23/32,  17. it/s), ETA  0.5s
+ #(10:16:51.631) 75% | [=================>       ] ( 24/32,  17. it/s), ETA  0.5s
+ #(10:16:51.690) 78% / [==================>      ] ( 25/32,  17. it/s), ETA  0.4s
+ #(10:16:51.748) 81% - [===================>     ] ( 26/32,  17. it/s), ETA  0.4s
+ #(10:16:51.807) 84% \ [====================>    ] ( 27/32,  17. it/s), ETA  0.3s
+ #(10:16:51.865) 87% | [====================>    ] ( 28/32,  17. it/s), ETA  0.2s
+ #(10:16:51.920) 90% / [=====================>   ] ( 29/32,  17. it/s), ETA  0.2s
+ #(10:16:51.978) 93% - [======================>  ] ( 30/32,  17. it/s), ETA  0.1s
+ #(10:16:52.036) 96% \ [=======================> ] ( 31/32,  17. it/s), ETA  0.1s
+ #(10:16:52.094)100% | [========================>] ( 32/32,  17. it/s), Tot  1.9s
+ Generation of input wavefunction data for atom: N
+ Electronic configuration: {
+ s: [ 2.00], 
+ p: [ 1.00,  1.00,  1.00]}
+ Wavelet conversion succeeded          :  Yes
+ Deviation from normalization          :  0.00E+00
+ Optimization of virtual orbitals:
+    #------------------------------------------------------------------------------- iter= 1
+ -  {Minimization iterations required:  1, 
+ Energies: {Ekin:  1.51223421780E+02, Epot: -1.85008764445E+01, Enl:  6.06928718448E-01}, 
+ iter:  1, EKS:  0.00000000000000000E+00, gnrm:  1.00E+10, 
+ }
+    #---------------------------------------------- End of Virtual Wavefunction Optimisation
+  #WARNING: No convergence within the allowed number of minimization steps
+ Non-Hermiticity of Hamiltonian in the Subspace:  8.55E-30
+ Complete list of energy eigenvalues:
+    #Kpt #0001  BZ coord. =  [  0.000000,  0.000000,  0.000000 ]
+ - e_occ                               : -1.03254081937788E+00 # 0001
+ - e_occ                               : -4.97644769820280E-01 # 0002
+ - e_occ                               : -4.31482671985005E-01 # 0003
+ - e_occ                               : -4.31482664021624E-01 # 0004
+ - e_occ                               : -3.82005077972365E-01 # 0005
+ - HOMO LUMO gap (AU, eV)              :  [  2.9411742284864E-01,  8.00334244304802E+00 ]
+ - e_vrt                               : -8.78876551237251E-02 # 0001
+ - e_vrt                               : -8.78876448610394E-02 # 0002
+ - e_vrt                               :  9.71490554134402E-03 # 0003
+ - e_vrt                               :  3.77220549330336E-02 # 0004
+ - e_vrt                               :  3.82542270461406E-02 # 0005
+ - e_vrt                               :  3.82563794730186E-02 # 0006
+ - e_vrt                               :  7.55510339906683E-02 # 0007
+ - e_vrt                               :  8.32703234806747E-02 # 0008
+ - e_vrt                               :  8.33810970719406E-02 # 0009
+ - e_vrt                               :  8.56064634598507E-02 # 0010
+ - e_vrt                               :  8.56089738499938E-02 # 0011
+ - e_vrt                               :  1.22567960808627E-01 # 0012
+ - e_vrt                               :  1.31280934168698E-01 # 0013
+ - e_vrt                               :  1.32109889850012E-01 # 0014
+ - e_vrt                               :  1.32115824079147E-01 # 0015
+ - e_vrt                               :  1.34932206323563E-01 # 0016
+ - e_vrt                               :  1.35162368278397E-01 # 0017
+ - e_vrt                               :  1.41689463353329E-01 # 0018
+ - e_vrt                               :  1.41689879057770E-01 # 0019
+ - e_vrt                               :  1.52863712404529E-01 # 0020
+ - e_vrt                               :  1.53653952041697E-01 # 0021
+ - e_vrt                               :  1.53725928103225E-01 # 0022
+ - e_vrt                               :  1.84046764568728E-01 # 0023
+ - e_vrt                               :  1.88595415872271E-01 # 0024
+ - e_vrt                               :  1.88599005231739E-01 # 0025
+ - e_vrt                               :  1.88967393217883E-01 # 0026
+ - e_vrt                               :  1.89367020971122E-01 # 0027
+ - e_vrt                               :  1.93519300280565E-01 # 0028
+ - e_vrt                               :  1.94368213674034E-01 # 0029
+ - e_vrt                               :  1.94368282252900E-01 # 0030
+ - e_vrt                               :  2.01160673731452E-01 # 0031
+ - e_vrt                               :  2.01465703253817E-01 # 0032
+ - e_vrt                               :  2.02019921703198E-01 # 0033
+ - e_vrt                               :  2.02350775660006E-01 # 0034
+ - e_vrt                               :  2.19652030857088E-01 # 0035
+ - e_vrt                               :  2.19656288435187E-01 # 0036
+ - e_vrt                               :  2.48989897442133E-01 # 0037
+ - e_vrt                               :  2.50188754565705E-01 # 0038
+ - e_vrt                               :  2.50192977147872E-01 # 0039
+ - e_vrt                               :  2.51754590283059E-01 # 0040
+ - e_vrt                               :  2.52132087448091E-01 # 0041
+ - e_vrt                               :  2.55398730889388E-01 # 0042
+ - e_vrt                               :  2.55399026504727E-01 # 0043
+ - e_vrt                               :  2.59676537638836E-01 # 0044
+ - e_vrt                               :  2.59800508147221E-01 # 0045
+ - e_vrt                               :  2.69047230862919E-01 # 0046
+ - e_vrt                               :  2.69047372627117E-01 # 0047
+ - e_vrt                               :  2.78992342705781E-01 # 0048
+ - e_vrt                               :  2.83032591322563E-01 # 0049
+ - e_vrt                               :  2.83039352359018E-01 # 0050
+ - e_vrt                               :  2.90479575301614E-01 # 0051
+ - e_vrt                               :  2.90949581435401E-01 # 0052
+ - e_vrt                               :  3.07867399760234E-01 # 0053
+ - e_vrt                               :  3.07869030603892E-01 # 0054
+ - e_vrt                               :  3.10803069824044E-01 # 0055
+ - e_vrt                               :  3.18014294010424E-01 # 0056
+ - e_vrt                               :  3.18652138215334E-01 # 0057
+ - e_vrt                               :  3.18655648897616E-01 # 0058
+ - e_vrt                               :  3.20083165495107E-01 # 0059
+ - e_vrt                               :  3.20443678628127E-01 # 0060
+ - e_vrt                               :  3.22749348389428E-01 # 0061
+ - e_vrt                               :  3.22750666449267E-01 # 0062
+ - e_vrt                               :  3.26915462172191E-01 # 0063
+ - e_vrt                               :  3.27036211222003E-01 # 0064
+ - e_vrt                               :  3.32119705770764E-01 # 0065
+ - e_vrt                               :  3.32120117990476E-01 # 0066
+ - e_vrt                               :  3.42615846891694E-01 # 0067
+ - e_vrt                               :  3.43418311771406E-01 # 0068
+ - e_vrt                               :  3.47156546768084E-01 # 0069
+ - e_vrt                               :  3.50175954412736E-01 # 0070
+ - e_vrt                               :  3.50451506792174E-01 # 0071
+ - e_vrt                               :  3.69929300706836E-01 # 0072
+ - e_vrt                               :  3.69951607866691E-01 # 0073
+ - e_vrt                               :  3.70671071562364E-01 # 0074
+ - e_vrt                               :  3.77989738393730E-01 # 0075
+ - e_vrt                               :  3.77992132382787E-01 # 0076
+ - e_vrt                               :  3.87768197605514E-01 # 0077
+ - e_vrt                               :  3.91293299487398E-01 # 0078
+ - e_vrt                               :  3.91295131193166E-01 # 0079
+ - e_vrt                               :  3.91440574802995E-01 # 0080
+ - e_vrt                               :  3.92196746802188E-01 # 0081
+ - e_vrt                               :  3.92446328903899E-01 # 0082
+ - e_vrt                               :  3.93669532681060E-01 # 0083
+ - e_vrt                               :  3.93674432845464E-01 # 0084
+ - e_vrt                               :  3.94707923941625E-01 # 0085
+ - e_vrt                               :  3.95162246125060E-01 # 0086
+ - e_vrt                               :  3.97347045239632E-01 # 0087
+ - e_vrt                               :  3.97359312825747E-01 # 0088
+ - e_vrt                               :  4.00572758520728E-01 # 0089
+ - e_vrt                               :  4.00652470047662E-01 # 0090
+ - e_vrt                               :  4.05692464519290E-01 # 0091
+ - e_vrt                               :  4.05704799363428E-01 # 0092
+ - e_vrt                               :  4.07690517606579E-01 # 0093
+ - e_vrt                               :  4.08447646041759E-01 # 0094
+ - e_vrt                               :  4.11474481148577E-01 # 0095
+ - e_vrt                               :  4.12036576658995E-01 # 0096
+ - e_vrt                               :  4.24301328790802E-01 # 0097
+ - e_vrt                               :  4.24313795570992E-01 # 0098
+ - e_vrt                               :  4.24495547569677E-01 # 0099
+ - e_vrt                               :  4.24664044540686E-01 # 0100
+ - e_vrt                               :  4.46425649559498E-01 # 0101
+ - e_vrt                               :  4.65064650725116E-01 # 0102
+ - e_vrt                               :  4.65085219445588E-01 # 0103
+ - e_vrt                               :  4.73866475796688E-01 # 0104
+ - e_vrt                               :  4.73906960807558E-01 # 0105
+ - e_vrt                               :  4.74773321162965E-01 # 0106
+ - e_vrt                               :  4.74987350538715E-01 # 0107
+ - e_vrt                               :  4.75048935801914E-01 # 0108
+ - e_vrt                               :  4.76295744655507E-01 # 0109
+ - e_vrt                               :  4.76813739179621E-01 # 0110
+ - e_vrt                               :  4.78443348044618E-01 # 0111
+ - e_vrt                               :  4.78508421567850E-01 # 0112
+ - e_vrt                               :  4.81088183079411E-01 # 0113
+ - e_vrt                               :  4.81453223702851E-01 # 0114
+ - e_vrt                               :  4.83500659627942E-01 # 0115
+ - e_vrt                               :  4.83851666692197E-01 # 0116
+ - e_vrt                               :  4.84158789358317E-01 # 0117
+ - e_vrt                               :  4.85725462263039E-01 # 0118
+ - e_vrt                               :  4.85847658923122E-01 # 0119
+ - e_vrt                               :  4.92120806734640E-01 # 0120
+ - e_vrt                               :  4.92137068696849E-01 # 0121
+ - e_vrt                               :  4.92146271100667E-01 # 0122
+ - e_vrt                               :  4.93966084431719E-01 # 0123
+ - e_vrt                               :  4.94278998845608E-01 # 0124
+ - e_vrt                               :  4.96351227835899E-01 # 0125
+ - e_vrt                               :  4.98711685379283E-01 # 0126
+ - e_vrt                               :  4.99415324929558E-01 # 0127
+ - e_vrt                               :  5.03682121498185E-01 # 0128
+ - e_vrt                               :  5.04277263828767E-01 # 0129
+ - e_vrt                               :  5.12086770033155E-01 # 0130
+ - e_vrt                               :  5.12214749635253E-01 # 0131
+ - e_vrt                               :  5.12254341472720E-01 # 0132
+ - e_vrt                               :  5.15248281340739E-01 # 0133
+ - e_vrt                               :  5.34359265419142E-01 # 0134
+ - e_vrt                               :  5.34507887609642E-01 # 0135
+ - e_vrt                               :  5.61463389188858E-01 # 0136
+ - e_vrt                               :  5.63395278314726E-01 # 0137
+ - e_vrt                               :  5.64622480750314E-01 # 0138
+ - e_vrt                               :  5.65500045459322E-01 # 0139
+ - e_vrt                               :  5.66003166816727E-01 # 0140
+ - e_vrt                               :  5.66843071886234E-01 # 0141
+ - e_vrt                               :  5.68992174843156E-01 # 0142
+ - e_vrt                               :  5.69066890750348E-01 # 0143
+ - e_vrt                               :  5.72168295229376E-01 # 0144
+ - e_vrt                               :  5.73316802328198E-01 # 0145
+ - e_vrt                               :  5.73970691362649E-01 # 0146
+ - e_vrt                               :  5.75110515369509E-01 # 0147
+ - e_vrt                               :  5.76013778775681E-01 # 0148
+ - e_vrt                               :  5.78222782968133E-01 # 0149
+ - e_vrt                               :  5.78310916665239E-01 # 0150
+ - e_vrt                               :  5.81003435605399E-01 # 0151
+ - e_vrt                               :  5.82287963158413E-01 # 0152
+ - e_vrt                               :  5.83687453621774E-01 # 0153
+ - e_vrt                               :  5.84987816559795E-01 # 0154
+ - e_vrt                               :  5.92130611962026E-01 # 0155
+ - e_vrt                               :  5.92805955399427E-01 # 0156
+ - e_vrt                               :  5.93863822804597E-01 # 0157
+ - e_vrt                               :  6.02900493618554E-01 # 0158
+ - e_vrt                               :  6.06040104016086E-01 # 0159
+ - e_vrt                               :  6.08143601431753E-01 # 0160
+ - e_vrt                               :  6.08883762069754E-01 # 0161
+ - e_vrt                               :  6.14509362616238E-01 # 0162
+ - e_vrt                               :  6.19250076462175E-01 # 0163
+ - e_vrt                               :  6.21283788395563E-01 # 0164
+ - e_vrt                               :  6.21997353683521E-01 # 0165
+ - e_vrt                               :  6.22937469979674E-01 # 0166
+ - e_vrt                               :  6.23358199350579E-01 # 0167
+ - e_vrt                               :  6.24394916278868E-01 # 0168
+ - e_vrt                               :  6.43876762721631E-01 # 0169
+ - e_vrt                               :  6.45144785801536E-01 # 0170
+ - e_vrt                               :  6.47121868510099E-01 # 0171
+ - e_vrt                               :  6.50743038807759E-01 # 0172
+ - e_vrt                               :  6.55729118071972E-01 # 0173
+ - e_vrt                               :  6.57040481835664E-01 # 0174
+ - e_vrt                               :  6.58058758055851E-01 # 0175
+ - e_vrt                               :  6.60069205593174E-01 # 0176
+ - e_vrt                               :  6.61129595187322E-01 # 0177
+ - e_vrt                               :  6.63393069603986E-01 # 0178
+ - e_vrt                               :  6.67168235672053E-01 # 0179
+ - e_vrt                               :  6.72265159236532E-01 # 0180
+ - e_vrt                               :  6.73033451114141E-01 # 0181
+ - e_vrt                               :  6.76810072653567E-01 # 0182
+ - e_vrt                               :  6.80176554548373E-01 # 0183
+ - e_vrt                               :  6.81921961933838E-01 # 0184
+ - e_vrt                               :  6.83633850228808E-01 # 0185
+ - e_vrt                               :  6.85004945275487E-01 # 0186
+ - e_vrt                               :  6.87817719897884E-01 # 0187
+ - e_vrt                               :  6.90430855593675E-01 # 0188
+ - e_vrt                               :  6.92637536636507E-01 # 0189
+ - e_vrt                               :  6.97460961753689E-01 # 0190
+ - e_vrt                               :  6.97940584773603E-01 # 0191
+ - e_vrt                               :  6.99858650441391E-01 # 0192
+ - e_vrt                               :  7.06689338531835E-01 # 0193
+ - e_vrt                               :  7.11914248877081E-01 # 0194
+ - e_vrt                               :  7.15812935952176E-01 # 0195
+ - e_vrt                               :  7.20083477738848E-01 # 0196
+ - e_vrt                               :  7.31253157073883E-01 # 0197
+ - e_vrt                               :  7.36384784069649E-01 # 0198
+ - e_vrt                               :  7.43635150322519E-01 # 0199
+ - e_vrt                               :  7.46818903010622E-01 # 0200
+ - e_vrt                               :  7.53457163423062E-01 # 0201
+ - e_vrt                               :  7.59008221955755E-01 # 0202
+ - e_vrt                               :  7.60102633107286E-01 # 0203
+ - e_vrt                               :  7.61431766538752E-01 # 0204
+ - e_vrt                               :  7.61887098252125E-01 # 0205
+ - e_vrt                               :  7.66444263098056E-01 # 0206
+ - e_vrt                               :  7.68940505102175E-01 # 0207
+ - e_vrt                               :  7.71492245808095E-01 # 0208
+ - e_vrt                               :  7.72097084948638E-01 # 0209
+ - e_vrt                               :  7.78740484858948E-01 # 0210
+ - e_vrt                               :  7.81369407102454E-01 # 0211
+ - e_vrt                               :  7.84526306991779E-01 # 0212
+ - e_vrt                               :  7.86516456565905E-01 # 0213
+ - e_vrt                               :  7.90294917094765E-01 # 0214
+ - e_vrt                               :  7.94313941592710E-01 # 0215
+ - e_vrt                               :  7.98786154410373E-01 # 0216
+ - e_vrt                               :  8.00686781018160E-01 # 0217
+ - e_vrt                               :  8.02793803963036E-01 # 0218
+ - e_vrt                               :  8.04521843115986E-01 # 0219
+ - e_vrt                               :  8.09179305198535E-01 # 0220
+ - e_vrt                               :  8.17827638942596E-01 # 0221
+ - e_vrt                               :  8.20750077887663E-01 # 0222
+ - e_vrt                               :  8.22528988322396E-01 # 0223
+ - e_vrt                               :  8.28301380607479E-01 # 0224
+ - e_vrt                               :  8.29808965496449E-01 # 0225
+ - e_vrt                               :  8.31462073582841E-01 # 0226
+ - e_vrt                               :  8.56753398588951E-01 # 0227
+ - e_vrt                               :  8.64135885903251E-01 # 0228
+ - e_vrt                               :  8.65518273616055E-01 # 0229
+ - e_vrt                               :  8.70636333131774E-01 # 0230
+ - e_vrt                               :  8.71850685950026E-01 # 0231
+ - e_vrt                               :  8.74375281844918E-01 # 0232
+ - e_vrt                               :  8.75814506267206E-01 # 0233
+ - e_vrt                               :  8.77646453478082E-01 # 0234
+ - e_vrt                               :  8.83678980211666E-01 # 0235
+ - e_vrt                               :  8.89075656846851E-01 # 0236
+ - e_vrt                               :  8.91050192812663E-01 # 0237
+ - e_vrt                               :  8.93896361301038E-01 # 0238
+ - e_vrt                               :  8.95843085187641E-01 # 0239
+ - e_vrt                               :  9.08562660132963E-01 # 0240
+ - e_vrt                               :  9.12203918162748E-01 # 0241
+ - e_vrt                               :  9.13746022032725E-01 # 0242
+ - e_vrt                               :  9.20973926183317E-01 # 0243
+ - e_vrt                               :  9.28258634622541E-01 # 0244
+ - e_vrt                               :  9.34409304183822E-01 # 0245
+ - e_vrt                               :  9.37783056282429E-01 # 0246
+ - e_vrt                               :  9.45316121842459E-01 # 0247
+ - e_vrt                               :  9.50081904283334E-01 # 0248
+ - e_vrt                               :  9.59093807771682E-01 # 0249
+ - e_vrt                               :  9.61389599467462E-01 # 0250
+ - e_vrt                               :  9.68988969855853E-01 # 0251
+ - e_vrt                               :  9.74403120682060E-01 # 0252
+ - e_vrt                               :  9.79196637744600E-01 # 0253
+ - e_vrt                               :  9.87401782430666E-01 # 0254
+ - e_vrt                               :  9.97923629268249E-01 # 0255
+ - e_vrt                               :  1.00658767683488E+00 # 0256
+ Need to reformat wavefunctions        :  No
+ Reading Waves Time:
+ -  {Process:  0, Timing:  [  5.2E-02,  1.006E+00 ]}
+ <psi_i|psi_j>:
+ -  [-.999992624256, -3.6678731166703837E-003, -1.7559487874508329E-016, 
+     2.666149638615E-09, -2.5738539096994972E-004]
+ -  [ 3.676783019922E-03, -.997787400653, -2.8524108006264900E-014,  1.096184793683E-06, 
+     -6.5957380051416881E-002]
+ -  [-2.4487540509877425E-016, -1.9829341473432299E-014,  0.999932579197, 
+      7.866047242161E-09,      -2.5358109834044471E-015]
+ -  [ 1.270232559198E-09, -1.0970439019418385E-006,  7.866047326109E-09, -.999932579137, 
+     -2.2340226611412733E-008]
+ -  [-2.5671796641313360E-005, -6.5947318938117339E-002,  9.733022811731E-16, 
+      4.822454320614E-08,       0.997719246237]
+ <D psi_i|D psi_j>:
+ -  [ 5.522970520537E-05, -8.8894602771765572E-007, -5.9547159934784543E-017, 
+      1.603194269596E-08,  1.066683262608E-05]
+ -  [-8.8894602771765572E-007,  1.117450087743E-04,  1.222621393580E-18, 
+     -3.0046359427084608E-011, -1.3775653254851867E-005]
+ -  [-5.9547159934784543E-017,  1.222621393580E-18,  1.348370608430E-04, 
+      3.368580370344E-18,      -4.6696350974615970E-017]
+ -  [ 1.603194269596E-08, -3.0046359427084608E-011,  3.368580370344E-18, 
+      1.348371836620E-04,  1.826498183911E-09]
+ -  [ 1.066683262608E-05, -1.3775653254851867E-005, -4.6696350974615970E-017, 
+      1.826498183911E-09,  2.059172510939E-04]
+ <hpsi_i|psi_j>:
+ -  [ 1.03253320362,  3.787228713229E-03,  3.381955838262E-16, -2.7525743332696806E-009, 
+      2.657609239989E-04]
+ -  [-1.8297318404423002E-003,  0.496543681328,  1.408615788686E-14, 
+     -5.4552374998428423E-007,  3.282334521157E-02]
+ -  [ 2.249482508400E-16,  8.530355818849E-15, -.431453581086, -3.3940630150117522E-009, 
+      9.258488025814E-16]
+ -  [-5.4815535762548200E-010,  4.733549522478E-07, -3.3940630812544775E-009, 
+      0.431453573095,           9.638991178756E-09]
+ -  [ 9.806757924419E-06,  2.519221071250E-02, -5.4684054257004486E-016, 
+     -1.8413614202993297E-008, -.381133818450]
+ <psiv_i|D psi_j>:
+ -  [-5.9822301426857311E-013, -2.2474234963964385E-009, -3.3444367602612966E-007, 
+     -3.4065608364896015E-004, -1.6174084230604836E-015,  5.602927146258E-07, 
+      2.312098553452E-05,       5.605342868254E-14,      -5.2970149707002461E-009, 
+      6.276834941701E-06,       1.470269724115E-13,       1.223288952344E-05, 
+     -8.2469257197012426E-005,  1.171471961871E-06,       7.303223536887E-13, 
+     -1.2224102053441800E-012,  2.813208065952E-08,      -2.2556571528480306E-012, 
+     -1.6228649771339760E-008,  4.568859014249E-04,      -2.4198376090023744E-013, 
+     -1.3651215699250479E-005, -3.4110960688575366E-005,  3.303142627689E-06, 
+      3.474757896402E-12,       1.072935903556E-14,       1.666060656213E-08, 
+      2.991040130393E-05,       1.177135708775E-12,       8.027887224309E-08, 
+     -8.5726189565627254E-012,  1.883176338158E-08,      -1.3595342777544812E-007, 
+      2.559617954303E-12,       8.173362052884E-12,       1.249206439586E-05, 
+      5.992254409122E-06,      -2.1098491214632333E-007, -5.8460786052989654E-011, 
+      6.515651144684E-10,       3.755190226502E-08,       1.029544022554E-08, 
+      1.183115547756E-09,      -1.6364721695966190E-006,  2.547876286138E-10, 
+     -3.9807873809210151E-010,  4.120956898875E-09,       5.789299653020E-05, 
+      1.172166286205E-06,      -3.8416927248870210E-011, -1.8395400962421686E-010, 
+     -2.1872223395227747E-007, -9.2850556929058245E-010,  1.888399222246E-08, 
+      2.320542503720E-05,       3.911434910308E-06,      -7.6713974281586901E-007, 
+     -1.0861286183094760E-009, -5.7983717619110470E-009, -5.9331413012555159E-009, 
+     -4.4189482286169063E-008, -1.3668048956014353E-008, -1.4714069708322691E-007, 
+     -1.1487144009047801E-008, -6.4443127157659765E-008,  1.479042807288E-08, 
+     -3.9860751429081108E-009, -1.7304570221720850E-010,  4.944977283443E-04, 
+      2.850980611674E-09,       5.686177833212E-06,       6.850851084666E-05, 
+      2.675511470071E-08,      -5.2559507488311856E-006, -1.2608047903998287E-005, 
+      2.864516266117E-06,       3.755360890621E-05,       1.513747023679E-07, 
+      2.255271959518E-08,      -3.9466800242027887E-008, -9.9569385279074847E-008, 
+      8.731169320102E-06,      -6.3917459861621237E-008,  2.267780355491E-09, 
+     -1.2750142115817336E-007, -2.3132111109408702E-008, -3.7086606314125759E-009, 
+      6.868730375228E-08,       3.873616912355E-06,      -7.5574764991945770E-008, 
+      2.556031332857E-08,      -1.8745495815425171E-008,  1.520755488945E-07, 
+     -7.9662729837013209E-008, -1.0900688058627517E-009,  1.941539451867E-09, 
+      4.951130769302E-07,      -1.1788406535724500E-008,  2.046711690481E-05, 
+     -4.7359823991749977E-009, -1.8907793930420484E-005,  1.090922893651E-06, 
+      1.913746296797E-07,       7.845457260374E-08,      -8.2126490655307571E-007, 
+     -2.8615730274381375E-007,  4.613858072825E-07,       2.093005394597E-07, 
+      1.119797956933E-07,       1.305084269569E-08,      -4.5648899441133606E-008, 
+      7.334067993859E-08,      -3.0183905743115240E-005,  1.818380640550E-07, 
+     -4.1255859531797348E-008,  1.699434935984E-08,       2.403505569100E-07, 
+      4.713702731400E-08,      -9.5581917146478035E-008,  1.449727384322E-08, 
+      8.192686756586E-07,      -3.4865198064470782E-007, -1.4568633902722764E-006, 
+     -1.2355557351874130E-007,  9.656270324680E-07,       2.146754607161E-08, 
+      4.381026020633E-07,       9.675117364516E-08,       3.442899693203E-07, 
+      1.916437355569E-07,      -7.1068028926813739E-010, -1.7227702025151041E-007, 
+     -3.1485681783891392E-007, -4.7286916316495621E-009, -1.0753141621710594E-007, 
+      4.093249654098E-05,      -1.2593878508317105E-006, -5.8219741723802215E-008, 
+      3.659903734032E-05,      -1.4516374483914841E-006, -1.1887183349472466E-006, 
+     -3.8293052528347195E-006, -8.5091473069920719E-006,  7.871542549869E-05, 
+      1.566048503023E-06,      -1.5523602690506257E-004, -1.3306283003070803E-005, 
+      4.385873222044E-04,      -3.3017508572753081E-007,  1.127099408855E-07, 
+     -2.0106201520305064E-006, -5.6807064240026157E-006, -2.1441316571569907E-006, 
+     -1.2568004587692420E-006,  8.853062053349E-07,       2.313975058748E-06, 
+      1.612477270928E-06,       2.339184083732E-07,      -1.8965858726761042E-008, 
+     -4.1566377931737370E-006,  4.218944131663E-07,      -3.5906290256679466E-006, 
+      2.426890093751E-05,       1.123651043817E-05,       1.148738750093E-05, 
+     -1.7131806898395369E-005, -9.5989668615120000E-007, -3.2253628136129642E-005, 
+      5.873191357481E-06,      -4.3507103094491144E-006, -2.9138301308998285E-005, 
+     -5.8586278668901273E-005,  1.292957862119E-04,      -2.5469584372797202E-005, 
+     -5.1824884034434080E-005,  2.115557628273E-06,      -1.9144182213843986E-006, 
+     -2.4953944920145328E-006, -2.1654002421653551E-006, -1.0839446614599555E-007, 
+      3.051299028516E-06,       6.431473627427E-06,       2.812056539555E-07, 
+     -1.0041532181961141E-006,  8.747805765476E-07,      -3.9824748314169836E-006, 
+      8.909296733604E-06,      -1.0483311557716923E-005,  8.432207926266E-06, 
+      1.865389709136E-06,       2.275963735782E-05,       8.740349690200E-06, 
+     -6.3769553143699107E-006,  4.147389783595E-07,      -5.8674656019321666E-008, 
+      1.201564003417E-06,       1.031264619170E-06,      -6.5322860520045383E-006, 
+     -5.2357188869452471E-006, -3.5825729362596062E-006, -7.8867292611678989E-005, 
+     -2.5092738720230992E-005,  2.372205802228E-05,       9.117094943387E-06, 
+     -1.7833800173303507E-006,  7.362979150261E-06,      -4.2793819320936651E-006, 
+     -3.9994538257361446E-006, -7.8021397881263520E-007,  1.171377451991E-05, 
+      4.411360666978E-07,       4.180736920789E-06,       1.310311151707E-06, 
+      2.776169704376E-05,       2.815827880417E-06,      -3.7901225249999414E-006, 
+      1.208463621199E-06,       1.335491026104E-05,      -4.0609803014346856E-006, 
+     -4.6965496380934500E-005, -2.0010880902742410E-005,  6.916189054614E-05, 
+      3.133614805017E-04,      -3.3123415405738136E-005, -4.7324472424336782E-005, 
+     -1.5755050993988419E-006, -2.1205343470909587E-006, -1.5023754872410253E-005, 
+     -9.3805476300637803E-006,  3.992920789568E-06,      -2.6251247066167228E-005, 
+      1.383198306031E-05,      -6.8141026402023841E-006, -6.5555533238727340E-007, 
+     -1.4473542423838144E-005,  1.507740353163E-05,      -9.6232628994309162E-006, 
+      5.418463442012E-06,       1.268196280401E-05,       9.608525001919E-06, 
+      1.190692266287E-05,      -5.1855506509514402E-006,  1.264994445039E-06, 
+      8.258223912662E-06,      -5.5100921296093188E-006, -5.6976665232485596E-006, 
+     -2.3025885436195203E-005,  1.467945409233E-05,       1.440807616120E-05, 
+     -1.7554194196041563E-005,  1.127671965617E-04,       3.637052450660E-05, 
+     -1.1146999315776848E-004,  1.191645312382E-06,       7.363431186763E-05, 
+     -2.6956723507648013E-005]
+ -  [-3.2580489180647635E-012,  2.242827454021E-08, -3.0041222243491184E-003, 
+      7.625819556601E-04,       2.115448572763E-13, -4.0766508121249858E-005, 
+     -2.6382278281324549E-003, -4.8730427212133897E-013,  3.673130037313E-08, 
+     -1.0862729008086977E-005, -5.5562848658995720E-013,  2.093655029282E-03, 
+     -1.7038574019988967E-004, -5.5478264400758720E-005, -6.2459871172633414E-012, 
+      5.538208235611E-12,      -6.6643233869624515E-008,  5.118795251266E-12, 
+     -1.4697185094467248E-006, -4.7910169244414012E-004,  1.268117537409E-12, 
+      1.434888245804E-04,       3.075831683491E-03,  2.544130799050E-06, 
+      4.394456501106E-12,       3.092055879815E-12, -3.5047528748951379E-006, 
+     -2.7920864220106218E-003,  1.639464930085E-11, -3.2084848135024814E-007, 
+     -1.8236489749933384E-011,  2.840123584118E-07,  2.239823077266E-06, 
+      5.148139800232E-11,       4.013633033619E-13, -1.8966207718370469E-005, 
+      6.976104606472E-05,       1.527243635445E-05, -5.1885539367294491E-010, 
+     -4.2300513158269863E-010, -1.3252015876425487E-009, -9.3699083842314081E-007, 
+      9.580475567255E-10,       2.993781426728E-06,  1.382869179633E-09, 
+      1.539324275187E-09,      -1.1599792880012901E-007,  2.576083095266E-04, 
+     -7.8299585916819677E-005, -4.4388356910325216E-010,  6.500805910659E-10, 
+      7.408446964561E-08,       8.876263605448E-10,  9.933179519539E-07, 
+      9.675767644578E-04,       1.930929126312E-04,  1.266880924999E-06, 
+      5.731148475569E-11,      -1.1723306388825594E-009, -1.7720959901492952E-007, 
+      7.205696726030E-08,      -2.1586401263471972E-008,  1.529549937547E-05, 
+     -2.7526198414719058E-008,  1.498366042912E-09,  2.061605550246E-08, 
+      1.417134427210E-08,      -1.8107013442177303E-008,  5.503126352544E-05, 
+      8.349539908242E-09,       2.014588082839E-05, -2.5917697142520311E-003, 
+     -6.1825552198008434E-007,  2.130085795150E-04,  5.393404120510E-06, 
+     -1.1990041406164520E-006, -2.0943074319581382E-003, -4.2186576354462920E-007, 
+      2.895555534643E-07,       3.908925349484E-08,  1.140864250245E-05, 
+     -7.4419137361291256E-006,  1.194575469663E-06, -4.8429586102392517E-008, 
+     -3.7699293038291641E-007, -6.0982591365237043E-008,  2.025557707279E-07, 
+      2.317015465394E-07,      -5.1813546696964498E-006, -2.1947315569571787E-007, 
+     -4.7905684384187921E-007,  3.496782460338E-07, -3.1393153187162231E-007, 
+     -4.2292809766570709E-007, -1.4058330353105061E-007,  1.707426584090E-08, 
+     -6.0244990230582391E-008, -8.0606137412539186E-008, -2.9434978473299512E-005, 
+     -9.0446393070566379E-008,  1.570390338553E-04, -5.9441188251208007E-005, 
+     -4.2229107666568090E-006, -1.7398931849141903E-006,  2.988079995935E-05, 
+      9.078660122765E-08,      -7.3252651912594822E-007, -7.4653573142160611E-008, 
+     -2.0332122015741807E-006, -1.9284680249963321E-007,  7.511217107717E-08, 
+      3.271868470038E-07,       6.234632776809E-05, -1.2193318845221660E-005, 
+     -2.8161897400124521E-006,  3.373552718180E-06, -3.4079210898376654E-006, 
+      9.810351898146E-08,       7.988620082627E-07, -6.9915042459823328E-007, 
+     -5.6874123100379294E-005,  9.120260284870E-06, -8.3670345847430861E-007, 
+      7.910438104566E-07,      -8.1778565968016690E-006,  2.256867839720E-07, 
+     -3.0421856661272808E-006,  3.301041927948E-07, -3.7845885552814536E-007, 
+      2.536236227768E-06,       1.101771611444E-07,  7.091535298771E-07, 
+      6.040783677400E-06,       6.633233771763E-08, -2.7942790516643788E-007, 
+     -8.2898471139841311E-007,  1.559208416203E-05,  1.998636095771E-07, 
+     -2.3469354003290637E-004,  6.084923442811E-06,  6.202657324128E-06, 
+     -1.4586152743631747E-006, -2.6525616660520090E-006,  1.319279736118E-04, 
+     -1.1273827243201211E-006, -3.7698194187473058E-005, -1.4887013753775660E-006, 
+      1.222978608133E-04,       2.252006962801E-07,  4.720291640622E-08, 
+      7.631226097851E-06,      -6.9782049513413748E-006, -2.1055893459388882E-006, 
+      3.896670123415E-07,      -1.7507293621727277E-005,  3.510938078985E-06, 
+     -2.1099171883448889E-005,  4.243173654571E-07,  6.201039697265E-06, 
+      5.334980726022E-05,      -8.1702088694975082E-006,  4.062709240727E-05, 
+     -6.3993875292696757E-004, -6.0013346034491035E-005, -1.0606594502352888E-004, 
+     -2.0089020064355587E-004, -2.0584154900270086E-006,  8.842402342460E-04, 
+     -4.6749384705590174E-005, -9.1558362555235406E-005, -1.6515766319295309E-003, 
+      2.908359065197E-04,      -5.8948202235063068E-004,  1.686499994719E-04, 
+      3.209409503141E-04,      -1.5062843486769213E-005,  9.077665891529E-06, 
+      1.735980548496E-05,      -3.2202303897777068E-006, -1.1635689402039456E-005, 
+     -2.0849338801850303E-006, -4.3613411590379181E-005,  3.738651854877E-05, 
+      3.118384567891E-05,       6.007616788599E-06,  1.980123702078E-05, 
+     -8.4446516942415832E-006,  3.454190060349E-05, -3.6671049494821715E-005, 
+      8.921766665627E-06,      -2.1799576774100613E-005, -7.3113029339580464E-005, 
+      2.538640646571E-05,      -3.5124721588118323E-005,  5.135130786476E-05, 
+     -1.1026481305748883E-005, -1.2984921796638203E-005,  6.441485620315E-06, 
+      3.374019870317E-07,       6.920968184222E-06, -3.6719193448872967E-005, 
+     -2.4128868803488811E-006,  9.209503371680E-06,  3.030208170746E-06, 
+     -3.6255704479283080E-006,  2.258621931807E-05,  5.670444622165E-06, 
+      4.059860517045E-06,       1.486252317670E-05,  1.302543487456E-05, 
+      6.117083990158E-06,      -4.6843407671321002E-006,  1.407021340267E-05, 
+      2.073050795634E-05,       5.290749664672E-06,  1.075463755116E-05, 
+     -7.1533906330529999E-006, -8.0366690132802186E-006,  1.593636484149E-06, 
+     -1.6746526766615498E-005,  1.869415171671E-06,  2.149601340334E-05, 
+      9.278281775203E-05,      -4.1790965399442304E-005, -4.0279427299515058E-005, 
+     -1.3400649463163269E-005, -4.1499220246241726E-005,  1.878583974443E-05, 
+     -2.4569005376187459E-005, -1.0859174358075858E-005,  2.607520285854E-05, 
+     -8.9915846987555784E-005, -5.6961849614415841E-005,  1.742799906501E-05, 
+     -7.9953961750867840E-005,  5.380541993171E-05, -9.9862460179742037E-006, 
+     -7.0155301576893756E-006,  6.236015766254E-05, -6.5470854709961371E-005, 
+      2.900304492250E-05,       1.083905506971E-04,  5.692280714306E-05, 
+      2.837978238882E-04,       1.214852471329E-04, -1.6162375527156416E-004, 
+      1.744440233798E-04,      -3.2529536664040783E-004,  1.597763150573E-05, 
+     -2.4555410933210125E-004,  8.120614110137E-05,  2.079266745531E-04, 
+     -3.3944022972324888E-004, -3.5113532197220414E-004, -4.6360325669335444E-004, 
+      1.936425210742E-04]
+ -  [ 1.090345703044E-02, -3.0947535729481663E-009, -2.9544795497366168E-012, 
+     -9.5080342931612785E-012, -1.3135567897169039E-004,  7.545892223584E-13, 
+     -2.9361464472309022E-011,                       2.333762351582E-06, 
+     -5.2958162418607728E-013,                       4.214714277894E-11, 
+     -1.4696785246985109E-003,                      -1.2249580604690394E-010, 
+     -3.7508200425047226E-012,                      -4.2122762918883546E-011, 
+      1.408042845705E-04,  3.523258285310E-05,      -5.9599934782903451E-013, 
+      6.644388584921E-07, -2.8394012312873112E-011,  1.973764461062E-12, 
+      4.196745287922E-05, -3.7772974555673401E-012, -1.4197814462730413E-010, 
+     -3.4444993623229997E-011,                      -3.3076946906569760E-004, 
+      5.322870547382E-06, -1.1784290326866641E-011, -8.6827686482908320E-011, 
+      1.694191119941E-05,  2.342205986220E-11,       1.079870722499E-06, 
+     -9.0363622129701476E-011,                       1.189634009715E-10, 
+      3.327433847314E-10,  2.378631586979E-03,      -1.3715588981700786E-012, 
+      2.265272730730E-10,  1.883541771061E-10,       4.167358584453E-05, 
+      1.030460768116E-05,  1.020029309085E-10,       2.720513822876E-10, 
+     -2.8719179975373072E-006,                      -1.8037835802853194E-010, 
+      1.203000122459E-07,  5.290985423154E-07,       1.006406804635E-10, 
+     -3.0341942315355709E-010,                      -1.1642491836201196E-009, 
+      1.943456875509E-04, -6.3210603689609329E-005, -1.1540987076733922E-010, 
+      4.389227991903E-07,  1.014112530976E-09,      -5.9528128552652142E-011, 
+      3.498837701067E-10, -1.2665604663919549E-007,  4.698568708254E-05, 
+     -2.1657033195515609E-007,                      -4.9221878485540722E-011, 
+      3.469241726833E-08,  5.356310923197E-06,       8.096353539575E-10, 
+      1.768044900152E-08,  8.837037775658E-09,       8.660589460322E-06, 
+     -4.0850029847651830E-007,                      -3.3154455277867057E-009, 
+     -6.2600076230026093E-009,                       4.837093529414E-05, 
+     -6.3623483897345293E-009,                       2.548332146477E-09, 
+     -8.1061272310538649E-006,                      -2.5536577392883553E-009, 
+     -8.4278945878190641E-005,                      -3.7129207589892273E-004, 
+      7.690574653627E-09, -5.5684542123897491E-006, -2.1947790731643868E-005, 
+      1.319670834114E-06,  4.134736100279E-08,       3.720305615842E-08, 
+     -6.1437851805258592E-008,                      -4.3622880822354585E-006, 
+      1.788473929689E-06,  3.621012625786E-08,       6.773621624243E-08, 
+      1.118398450139E-06, -5.8028701817652389E-008, -2.5782660255385413E-007, 
+      6.923498588408E-08,  7.976993642222E-07,      -1.7786650019092191E-007, 
+     -2.1042786683236661E-006,                       7.372186231638E-07, 
+      6.281226106935E-08, -1.4288188643874145E-006,  1.192946484791E-05, 
+     -1.1059802571055534E-006,                       2.064494467999E-03, 
+      1.525899516099E-07, -7.0182104487704093E-006,  1.153842637687E-04, 
+     -4.0416420366573643E-005,                      -1.6129928421200946E-006, 
+     -3.7600289079106904E-007,                      -2.6619657533213235E-006, 
+     -4.2595190404681965E-005,                       3.850457288745E-07, 
+     -7.0912211035474552E-008,                       4.848869981480E-08, 
+      1.038267756969E-06, -4.4638140226316441E-008,  2.773538646722E-07, 
+     -2.8638190290648818E-006,                      -2.0191716691428142E-007, 
+      1.059930337655E-05,  1.647262688419E-08,       1.027831348589E-05, 
+     -4.0425661942378562E-006,                       1.730647071955E-05, 
+      1.110335690752E-04, -3.4595698437510640E-008, -4.2051118294923822E-007, 
+      1.812163109537E-06, -2.7573870477661398E-007, -6.4257736955361256E-006, 
+     -7.0497692403187289E-005,                       1.003954719367E-06, 
+      2.367959997259E-07, -4.7452830788055407E-008,  1.553455190814E-06, 
+     -1.6895339553702806E-006,                      -5.4893411537092934E-008, 
+      1.652245495917E-06, -8.0006618470046548E-008, -1.2100170582270037E-007, 
+      1.362369970081E-08, -7.1482754066340189E-008, -5.7880741805678869E-006, 
+      6.109523481483E-07, -2.2041086867368185E-005,  7.410656782494E-06, 
+     -8.9173455930552476E-007,                      -1.0170287164639862E-006, 
+      6.165428387353E-07, -1.5790098418893189E-005, -4.7703972785210970E-007, 
+     -9.5579265269641934E-008,                       1.744183291097E-07, 
+      1.469963256991E-05, -1.6344410026026998E-005, -7.0004178939043893E-007, 
+     -7.0249843814779210E-007,                       1.446246408439E-06, 
+      2.773657832430E-06, -2.8036938479477535E-005, -2.0685972441796740E-006, 
+     -2.2692093548824929E-005,                       4.208958185311E-07, 
+      3.719388391447E-06,  1.224202819753E-04,      -1.0188222414133949E-005, 
+      2.128917503288E-05,  4.173064934640E-05,       3.590513523476E-05, 
+      3.970500867370E-06, -7.3286985462998093E-006, -9.2193239740472391E-005, 
+      3.023603768689E-05, -2.5115786172654408E-005,  2.839100505566E-04, 
+      1.046617166615E-04, -1.1174177399257329E-004, -1.7583766540456367E-004, 
+     -1.3773571964365180E-005,                      -1.0447615691731608E-004, 
+      1.016353622837E-05, -1.0629518785265654E-004,  1.370638334409E-05, 
+      4.220905637613E-05, -1.7352436574119665E-005,  1.436672681024E-04, 
+     -5.5862378935775229E-004,                      -3.0486707508151404E-004, 
+     -9.7439156001049101E-005,                      -8.9594616160947700E-004, 
+      4.121205157949E-04, -1.1655894112646950E-004, -1.6922601217976230E-005, 
+      6.953494812134E-05, -1.8763480553470060E-005,  2.621690637769E-04, 
+     -1.7479550877487531E-004,                      -1.2140733283454395E-004, 
+     -5.2233329065222078E-005,                       4.312172189096E-04, 
+      9.666748983441E-05,  1.240631535190E-05,      -1.4977233031123900E-004, 
+      1.963654744374E-05,  2.498035167349E-06,       3.560038351479E-05, 
+      1.155764615817E-05, -4.2638942946000938E-006, -1.1072629193409293E-005, 
+     -1.9143059948244207E-005,                      -2.9922657980372030E-005, 
+      4.152162690357E-05,  2.539102658032E-05,      -4.7735422546607766E-005, 
+      1.321333017322E-05, -4.5744954832930137E-005, -8.8694996841892886E-007, 
+      1.510825894548E-05, -1.2684925434000454E-005,  9.484978965677E-06, 
+      3.242993675196E-05,  2.863051272530E-05,      -6.1156934636929478E-006, 
+     -6.4318357487956278E-006,                       4.800218835267E-06, 
+      2.201100851014E-05, -4.1881194214871318E-007, -1.9661862842501658E-006, 
+     -2.9228125210299813E-005,                      -6.4951174974650771E-006, 
+     -4.2662820752093692E-006,                      -7.9039167606788627E-006, 
+      5.273659557884E-06,  5.382629611554E-06,      -3.9899946699961810E-006, 
+     -2.6912613096281926E-005,                      -2.6688295096676491E-006, 
+     -4.9443482231038779E-007,                       1.351048716433E-05, 
+     -5.0536580081560757E-006,                       3.411689609511E-06, 
+     -2.9364197399480095E-006,                      -2.9931272450908441E-006, 
+      1.754326428480E-06,  2.537430921234E-07,      -6.4326781205017320E-006, 
+      5.469952864121E-06, -1.1039518991627066E-006,  1.016029466218E-05, 
+     -1.7644267560103253E-005,                       1.821266716044E-06, 
+      1.051460324790E-05, -3.3126476644169210E-006,  1.379646778007E-06, 
+     -1.6221793001436258E-005,                      -1.7781301108241717E-006, 
+     -3.4767866657242019E-006,                      -1.2250666954070498E-005, 
+     -2.4254308067578909E-005]
+ -  [-3.0981344467031709E-009, -1.0903462756371341E-002,  9.427332590612E-07, 
+     -5.6205659636904330E-006, -3.4338837447440064E-012, -1.3133634667974957E-004, 
+      8.467716892940E-07,       9.400938414255E-14,       2.386973013496E-06, 
+     -1.4693900946374427E-003, -3.7788561613418604E-011, -1.4467930685077930E-006, 
+      1.790721993299E-05,      -1.4095272669398918E-004,  6.700742460567E-12, 
+     -1.6159240325123753E-012, -3.5461459700501072E-005, -5.2878295664011670E-012, 
+     -5.6904815676649638E-007,  5.945435480553E-05,      -8.2832047564275742E-014, 
+      3.999035703286E-05,      -3.2484392356900814E-006, -3.3055904039939462E-004, 
+     -7.0520740820687109E-012,  4.827932773196E-12,       4.057880335165E-06, 
+      5.644206587896E-06,      -1.1061753300382712E-012, -1.7505688432865527E-005, 
+      8.435261191502E-12,       1.012651171040E-06,      -2.9908924691662642E-008, 
+      4.630416710207E-12,       4.057783376684E-11,      -2.3772087885386463E-003, 
+     -1.5352693358394250E-005,  4.175965103387E-05,      -5.0940629084555603E-010, 
+      1.198425253416E-09,      -1.0194277398619530E-005, -3.0050942587161930E-006, 
+     -1.4076279989190096E-009, -5.4508640520408243E-007, -3.9530470970978426E-010, 
+     -1.4573081556906279E-009, -5.1695198831831307E-007, -4.7549573037058250E-005, 
+     -1.9453150636878657E-004,  4.688714719203E-10,       1.471787489615E-09, 
+      6.376050263474E-05,      -9.5596669717186260E-010,  5.028224707665E-07, 
+      5.178255906740E-06,       8.164063438841E-07,       4.716348490956E-05, 
+      9.610685833493E-08,      -2.1198883869803075E-008,  1.380315058018E-07, 
+     -5.0433858083146525E-006,  5.475373098720E-08,      -6.2156942405541899E-008, 
+     -2.1821618937035292E-008, -8.8793199644478990E-006,  4.173951218195E-09, 
+     -4.8796822377742363E-008,  6.298042563693E-09,       9.419290696896E-05, 
+      3.056021297976E-09,      -4.7551003140322806E-005,  1.645062166084E-05, 
+      5.601763695807E-08,      -9.7426645857579290E-006,  3.673069007304E-04, 
+     -8.3502237296435486E-005,  7.728446315783E-06,      -2.1130047405806168E-005, 
+      5.332020857575E-06,      -1.2964164766761144E-007, -1.5037950029643413E-006, 
+      3.175567106883E-06,      -3.7472135265243698E-006, -5.3900844703548654E-010, 
+      1.095616879559E-07,       2.359406250069E-06,      -3.2062896246668019E-008, 
+      4.543344427791E-07,       3.827918627129E-07,      -6.5792446862803047E-008, 
+     -8.4428877945873141E-007, -6.8542911486221557E-008, -9.3206177775093249E-008, 
+     -9.0796860473412734E-008, -4.3845413714148561E-008,  4.396499688006E-07, 
+     -4.9210925866802034E-005, -5.0716513274768069E-006, -2.0524855981226011E-003, 
+     -1.0542516280766574E-006, -2.0187135239323851E-004, -1.1635192311237365E-004, 
+     -6.8584959226308429E-006, -1.6809928440920466E-007, -6.7394577707379812E-007, 
+      3.988128635017E-05,      -4.4823108431423834E-005,  2.335481293342E-06, 
+      9.442693748020E-07,      -7.8237549739533174E-007,  1.541699191176E-06, 
+      7.509643030384E-07,      -3.9154102196704188E-005,  1.534481697239E-07, 
+      1.892946665449E-06,       7.510974162317E-06,       1.430706550664E-06, 
+     -1.2188075748631122E-005, -1.3253917148748155E-007, -1.4738772120966061E-006, 
+     -1.1257776178503359E-004,  1.705910955411E-05,       5.981077480829E-07, 
+     -8.6127953632202838E-007,  6.536942446745E-06,      -3.5579533417513014E-006, 
+      2.686743083377E-06,      -1.3781679551598437E-006, -7.0705235448543645E-005, 
+      3.232972686181E-07,       1.360709538158E-06,      -6.1562989417573170E-007, 
+     -3.3582751699120170E-006,  9.512035716106E-07,      -3.4572074559546586E-007, 
+      2.004822394107E-06,       3.852780887410E-06,       1.296288836873E-06, 
+     -4.5685413223703729E-006,  2.201795125852E-06,      -8.6835764060096913E-007, 
+     -2.7694045015404123E-006,  3.737509922818E-07,       3.831148991774E-06, 
+     -1.6630686973548700E-007,  2.523564831539E-05,      -1.7519778897837402E-006, 
+      3.694273902409E-05,      -5.1767169473686123E-008,  4.024065533824E-07, 
+     -4.6605050260703545E-006, -1.2807089575430524E-006,  9.955424230322E-06, 
+     -9.4889737442368539E-008, -2.4713201861398076E-008, -7.0790205768489727E-007, 
+      4.409181289751E-06,      -8.0751153755876337E-006,  5.184326064329E-06, 
+      1.990589715311E-05,      -1.2774777411055510E-006, -3.5400587811990150E-005, 
+     -5.5990823618353868E-005, -8.2304236306021575E-005, -1.4902499006829199E-005, 
+      2.033323311926E-04,       4.441171201391E-06,      -2.3172555708034237E-006, 
+      2.110958931304E-05,      -1.3190237272509231E-005, -6.3114247636276603E-005, 
+     -6.5104633047825795E-005,  1.576327633820E-04,       6.181618724423E-06, 
+     -9.7542753871033831E-005, -4.6399136435298546E-007, -3.6652436127472279E-005, 
+      1.395829050747E-06,      -3.2169271665488563E-005, -1.2858214864932088E-005, 
+      1.790300364286E-05,      -2.4000499540177528E-005,  3.624230153119E-07, 
+      3.345537661070E-06,       8.801846168296E-06,       8.407046311216E-06, 
+     -2.8837621410947278E-005,  9.973557423960E-06,      -1.1976335340106782E-004, 
+     -5.4659721238529773E-004, -1.2774702855031851E-003,  1.316157284079E-04, 
+      4.359703105716E-05,      -7.5130421632246878E-005,  1.438224614108E-04, 
+     -7.0838928739351390E-005, -1.7475391703406003E-005,  4.425907795665E-05, 
+      8.670049465557E-05,      -3.3074247506745502E-005, -7.5441599321786702E-006, 
+      1.061562167258E-05,       2.283252254452E-05,      -3.8882413620644865E-006, 
+      9.915620816818E-06,       5.717800149401E-06,       7.952247471536E-06, 
+      8.915889893105E-06,       4.799175516137E-05,      -1.1347595705409461E-005, 
+     -3.5948525428728123E-005, -1.1295123054057415E-005,  2.984050796458E-05, 
+      1.331879661305E-05,      -6.0920460421577796E-006,  2.371110749463E-06, 
+     -1.9017710002213551E-005,  1.162976335177E-05,       1.345074265817E-05, 
+      1.171585986486E-05,       7.141992538857E-06,       4.203981946061E-06, 
+     -1.3937677052847542E-005,  5.609121491751E-06,       2.073413179383E-05, 
+      1.234741147253E-05,       7.783201241267E-06,      -1.0110594126925876E-006, 
+     -1.9401234268887708E-006, -3.2800266954101163E-006,  6.389456001993E-06, 
+      2.093289066663E-05,      -8.2863114587935246E-006,  1.060701052317E-05, 
+     -2.2096858753391233E-005,  2.906856551467E-05,      -3.2486306485691590E-005, 
+      3.419482174119E-05,       3.440237840955E-05,       3.085202595640E-05, 
+      2.775809374388E-05,      -5.4880533211403114E-005,  5.818834988675E-05, 
+      2.421629711312E-05,      -2.4953217962218014E-005, -1.7801884101961905E-005, 
+      1.495318823737E-04,       7.699674600236E-05,      -1.0614414811203812E-004, 
+      1.690480691005E-04,       2.048618489724E-04,      -8.5874274576938617E-005, 
+      1.148928584266E-04,      -9.9222516971246471E-005, -6.1538176312318104E-006, 
+      1.217471240598E-04]
+ -  [ 7.159735620827E-12, -4.1726875107809056E-007,  2.745474796757E-04, 
+     -9.6251550989645170E-003, -1.4176948663949772E-013,  1.864450903650E-05, 
+      5.222689421822E-04, -3.0669541748904947E-013, -1.2142502070462504E-007, 
+      1.512406381350E-04, -7.2739734293400873E-013,  1.684019103700E-04, 
+      1.163737229104E-04,  4.402637424694E-06,      -5.6333512039993729E-012, 
+      6.515677063103E-12,  1.108270840936E-06,       5.298435903855E-12, 
+     -2.5161101346648337E-007,                       8.245820688111E-03, 
+      1.335434533274E-12, -2.4918395783548171E-004, -1.9957149054721695E-004, 
+      7.704565691633E-06, -2.3499438031875271E-011,  2.406353951177E-11, 
+      1.458815427569E-07,  2.641452733947E-04,       2.271014879278E-12, 
+      1.428612043510E-06,  3.432957857296E-11,       2.115428510261E-07, 
+     -1.1443027911332233E-006,                      -3.6817154198152751E-012, 
+     -5.3392231863966483E-011,                       2.377085931502E-04, 
+     -6.1678831990180649E-004,                       2.668143363976E-06, 
+      2.305065918058E-10, -4.6735485286971150E-009,  4.435564808061E-07, 
+     -3.5061946336194486E-008,                      -6.4766628298003834E-009, 
+     -3.8065760440149688E-005,                      -2.7950323511241442E-009, 
+     -2.6499651154123346E-009,                       3.487022738246E-08, 
+     -2.0386054468700121E-003,                      -1.0600562346315361E-005, 
+      6.640684221302E-10,  2.615676262584E-09,      -7.4637691429270925E-007, 
+      5.420580884060E-09,  1.134612211364E-07,       1.191648972071E-04, 
+     -9.0922268397714137E-007,                      -1.6691870556683619E-005, 
+     -1.4419502775426939E-008,                       3.114403535775E-08, 
+      7.942253285648E-09, -1.0561880645362172E-006,  2.053038352308E-08, 
+      1.629282371865E-06,  3.737044075298E-08,      -5.4645899478486823E-007, 
+     -3.3279403209743459E-008,                       1.823070512028E-08, 
+     -1.3672778353057369E-009,                       5.217075847858E-03, 
+     -2.8030624592219715E-009,                       3.691309023232E-05, 
+      2.500293942709E-04, -2.5074629916044277E-008, -1.8475642773332608E-005, 
+     -5.4171284354102683E-005,                       1.247021435611E-05, 
+      1.579488768426E-04,  1.707955416091E-06,      -7.7299271830009456E-007, 
+      4.029026339815E-07,  2.794915599140E-07,       1.158785052976E-04, 
+     -8.3100087125752306E-008,                       1.499331919654E-08, 
+      5.844289223201E-07, -3.2674828854560073E-007, -3.2145421002165433E-009, 
+     -1.4527433514500810E-007,                       4.187657972394E-05, 
+      6.901274768077E-07,  4.698952664321E-09,      -1.3412692990052909E-007, 
+      1.135350126123E-06,  2.053928407838E-07,      -1.5481103520277767E-008, 
+     -1.2532618386620792E-007,                       9.349998059242E-06, 
+      1.559253341754E-06,  3.896775104836E-04,       5.671462614499E-07, 
+     -1.9135415902659966E-003,                      -5.2005371991026277E-006, 
+     -6.2791595172705275E-007,                      -2.0274865832999778E-007, 
+     -3.0875355747199028E-006,                      -2.0818164377408747E-006, 
+      6.574137766928E-06, -1.4361542421451314E-006,  9.890659891838E-07, 
+     -1.2987143611213541E-007,                      -6.5112560652976080E-007, 
+      8.967701794375E-07, -8.5279151675183651E-004,  2.864202818796E-06, 
+      3.411972988554E-06,  4.804535811625E-07,       1.647817220984E-06, 
+     -6.5449699923774326E-007,                      -1.2410426549320234E-006, 
+     -2.9592942230000531E-008,                      -2.7421029905454346E-006, 
+      1.263296836844E-06,  4.933244507627E-06,      -9.3476571063783873E-007, 
+      6.007051877354E-06, -2.0910511108547751E-007,  4.594407240388E-06, 
+     -1.3033173412105050E-006,                       7.154104342192E-07, 
+     -3.8220430014320432E-007,                       2.366897255866E-07, 
+     -4.9308906117491306E-007,                      -4.7022399733795873E-006, 
+      3.492928540829E-07,  4.296455340781E-07,       2.131369382547E-04, 
+     -1.0469944531713057E-005,                      -2.8782427388482007E-007, 
+      2.544160989642E-04, -7.7005416767149443E-006, -6.9675629164731481E-006, 
+     -1.6759936173701884E-005,                      -3.8685215864865567E-005, 
+      3.750803783972E-04,  7.051618946337E-06,      -7.0160935712057428E-004, 
+     -6.3434131800818241E-005,                       1.955901303402E-03, 
+     -7.2652582624113877E-007,                       3.506597078217E-07, 
+     -9.3539527625288705E-006,                      -2.3382862538352226E-005, 
+     -9.9373012392410932E-006,                      -4.0272588539621076E-006, 
+      3.399431548973E-07,  9.569690057555E-06,       1.104688640934E-05, 
+     -1.6490764341814013E-007,                       1.480261668156E-05, 
+     -4.3980822113122488E-006,                      -9.2902044741918906E-007, 
+     -2.1705179946633620E-005,                      -2.3284887247472448E-005, 
+      4.408245955658E-05,  5.046593576877E-05,      -7.6765967727670175E-005, 
+     -4.3954524369388441E-006,                       1.192694196039E-05, 
+      4.784112005470E-05, -5.1520757757192722E-005, -4.6697925679053010E-004, 
+     -3.9603486506794390E-004,                       7.245004603110E-04, 
+     -1.2757089547443329E-004,                      -2.5767872293183951E-004, 
+      5.902480209310E-06,  1.157331043292E-05,      -1.3618015893349957E-005, 
+      1.008165585650E-05,  2.374255380023E-05,      -4.4738412264140345E-006, 
+      4.451375309068E-05, -1.4897698682687135E-005, -3.1930737669797670E-005, 
+     -8.5322895409375522E-006,                      -2.2687032477930916E-005, 
+      1.527413969057E-05, -3.5664635890341416E-005,  5.548665381405E-05, 
+      3.054186858482E-05,  1.546047404899E-04,       4.061285122012E-05, 
+     -2.3561502489831147E-005,                       3.923060361596E-06, 
+      7.210870009942E-06, -1.4494599625819730E-005,  7.180047457055E-06, 
+      4.268368374616E-05,  4.975259138543E-06,       1.835451919518E-05, 
+      8.890009674322E-05,  4.029278754040E-05,      -4.3625483457891535E-005, 
+     -2.2213445576345584E-005,                      -2.6835794635262623E-005, 
+      3.371016049431E-06, -6.0532075304411533E-007, -6.7340693047556839E-006, 
+     -1.2028511304351540E-005,                      -7.9691714193281385E-006, 
+      4.876346423992E-06, -1.0529426689687554E-005,  7.404827266423E-06, 
+     -1.6518662454073740E-005,                      -1.2606633884234295E-006, 
+      1.748142820435E-05, -7.7232794386535642E-006,  5.518247095658E-06, 
+      8.028756189488E-06,  3.723377044747E-05,       2.129544999140E-05, 
+     -3.7240923269162026E-005,                      -2.0296415724850364E-004, 
+      3.844672505978E-06,  2.024003498436E-05,       1.021555091119E-05, 
+      4.434183816150E-06,  3.866580427955E-05,      -2.9984912921364226E-006, 
+      2.652809620244E-06,  3.715791542390E-05,      -1.2570298339042649E-005, 
+     -3.8533415956053515E-005,                       1.354953107574E-06, 
+      7.384800515317E-06,  4.826007426272E-05,      -4.5188148328390127E-005, 
+      3.150791219718E-05,  5.884070257069E-05,       4.345038678946E-05, 
+      3.679413314889E-05, -9.3702210156535293E-006,  3.588015041484E-05, 
+      1.204192253179E-04,  1.063948383371E-05,      -6.3913086334694503E-005, 
+     -3.2292033808548417E-005,                       8.858843922347E-06, 
+      4.765342457094E-05, -6.8296751071720860E-005,  5.748990237789E-04, 
+      1.837403385937E-04, -5.9087009505145213E-004, -9.9180505759721466E-005, 
+      3.031021705415E-04, -1.8279753348794146E-004]
+ <h2psi_i|psi_j>:
+ -  [-1.06613268010, -3.9104682386268616E-003, -4.2243225097305878E-016, 
+      2.842086464774E-09, -2.7440900234856208E-004]
+ -  [ 9.105564800210E-04, -.247102366000, -6.8880347297162514E-015,  2.714817775309E-07, 
+     -1.6334366070914937E-002]
+ -  [-9.9990096508595760E-018, -3.6828411982795475E-015,  0.186164744008, 
+      1.464479358807E-09,      -4.1567402304319105E-016]
+ -  [ 2.364958556307E-10, -2.0424472435795413E-007,  1.464479385227E-09, -.186164737124, 
+     -4.1590767569599819E-009]
+ -  [-3.7462305024216214E-006, -9.6235524175155851E-003,  2.827004652229E-16, 
+      7.031311591602E-09,       0.145595054033]
+ <psiv_i|hpsi_j>:
+ -  [-9.5075171551744132E-013,  2.402812498428E-10, -3.2401952545211589E-009, 
+     -1.2850222667839956E-005,  6.982182110388E-15,  2.145233482421E-08, 
+      1.746808181336E-06,       4.717374703907E-14, -4.4242346879212911E-010, 
+      5.373304751853E-07,       1.363427951208E-13,  1.499341994844E-06, 
+     -1.0826647620252219E-005,  1.547536460533E-07,  9.218818600030E-13, 
+     -1.4255078037958931E-012,  3.801683286589E-09, -2.6231175049762859E-012, 
+     -2.3016556318476571E-009,  6.984121588815E-05, -3.5137834742574277E-013, 
+     -2.0985708836782896E-006, -6.2780085157756022E-006,  6.229541121160E-07, 
+      4.643584322252E-12,      -1.2641530473963801E-012,  3.153239945119E-09, 
+      5.788222525007E-06,       2.555384574044E-13,  1.560496190464E-08, 
+     -1.0400320259372887E-011,  3.785010552324E-09, -2.7453050168584541E-008, 
+      5.156012382818E-12,       1.092070602088E-11,  2.743950254253E-06, 
+      1.492021025812E-06,      -5.2772002147354297E-008, -9.9808256273536444E-011, 
+      8.360527524332E-10,       9.472695391815E-09,  2.642065098148E-09, 
+      1.290713100128E-09,      -4.2494665523854459E-007,  4.160966191360E-10, 
+     -3.0410726917517601E-010,  1.104218284300E-09,  1.615177138810E-05, 
+      3.317697938802E-07,      -2.7616952739689825E-011, -2.2375381584686370E-010, 
+     -6.3670681064237333E-008, -1.2755112944012895E-009,  5.788145875796E-09, 
+      7.212191146607E-06,       1.243851429946E-06, -2.4452398044618377E-007, 
+     -4.1926089024270382E-009, -8.2982789066097195E-009, -2.2766027862410882E-009, 
+     -1.4115972549152730E-008, -1.0431897342171796E-008, -4.8431593514442257E-008, 
+     -1.2444010830196353E-008, -2.1051148873762765E-008,  1.370499649943E-08, 
+     -6.6546179715007176E-009,  2.496123370401E-10,  1.716682709372E-04, 
+      2.429049120653E-09,       1.992198077276E-06,  2.534288430654E-05, 
+      2.376973514411E-08,      -1.9465545256791555E-006, -4.7681884203857289E-006, 
+      1.068568124126E-06,       1.456112482384E-05,  6.686923534345E-08, 
+      5.306251947406E-08,      -6.7626881691175092E-008, -3.4293210506311160E-008, 
+      3.426324744144E-06,      -2.1648959746723171E-008, -3.3841391360390355E-009, 
+     -1.5208844975882690E-007, -1.0708317988337552E-008, -5.1940499740533586E-009, 
+      8.516297594221E-08,       1.551248918845E-06, -8.3065105150931405E-008, 
+      1.949861708412E-08,       6.493015620354E-09,  5.149264204817E-08, 
+     -9.4330683324337466E-008, -2.6689800542903328E-009,  6.177448112975E-09, 
+      2.111484517258E-07,      -5.8545430454731303E-008,  8.687156615895E-06, 
+     -2.7401552753333467E-008, -8.4421923949875536E-006,  5.147421968910E-07, 
+      1.459238106772E-07,       8.753312025867E-08, -3.7131214373896155E-007, 
+     -1.4171322623532676E-007,  2.182806799140E-07,  2.736985597895E-07, 
+      9.056753347134E-08,       1.208268447106E-08, -2.8839634967824674E-008, 
+      4.159902332551E-08,      -1.4532076090184920E-005,  1.023971166022E-07, 
+     -2.4549940701262443E-007,  4.159502582828E-08,  1.211185947478E-07, 
+      1.994975835571E-08,      -4.5120994569698203E-008,  1.100611127660E-08, 
+      3.931982975653E-07,      -3.0813530131637465E-007, -7.1180165495978063E-007, 
+     -5.7932474183967620E-008,  4.984371127024E-07,  2.933004983406E-08, 
+      1.352157433415E-07,       1.786001604583E-07,  1.656048662262E-07, 
+      9.180461478132E-08,      -1.2133530706168022E-008, -1.5133593431388481E-007, 
+      3.203790906799E-08,      -2.2722694457678106E-008, -1.8189977306993777E-007, 
+      2.304406048971E-05,      -6.9409812935838911E-007, -3.6214742215981412E-008, 
+      2.070765764068E-05,      -9.4021778167418987E-007, -7.4158038903794086E-007, 
+     -2.0203573878316685E-006, -4.9841267122290197E-006,  4.507924338959E-05, 
+      9.217961433169E-07,      -8.9066388759593762E-005, -7.5392557957147694E-006, 
+      2.526662455159E-04,      -2.4831039693712468E-007,  7.239028351555E-08, 
+     -1.3064883158869229E-006, -3.7373161088672738E-006, -1.1527940812469307E-006, 
+     -9.1827943745247411E-007,  5.302440487368E-07,  1.221091047298E-06, 
+      1.015487548877E-06,       2.909908550485E-07, -5.0968668879569043E-007, 
+     -2.5327626761167104E-006,  2.428243244020E-07, -2.1631370803236322E-006, 
+      1.524942677312E-05,       6.564692576934E-06,  6.954348897071E-06, 
+     -1.0830683841730190E-005, -5.5362657806917638E-007, -2.0149647305858759E-005, 
+      3.457724795830E-06,      -2.6467834744311476E-006, -1.8960537987279645E-005, 
+     -3.7137301843268296E-005,  8.506008178670E-05, -1.6878226473993625E-005, 
+     -3.4601078235582492E-005,  1.492058201936E-06, -1.6903990391510014E-006, 
+     -1.7075680768341369E-006, -1.6958584420932574E-006, -4.6973097155333543E-007, 
+      2.383997948418E-06,       4.392322390151E-06, -2.3114408775549510E-007, 
+     -1.4760454293350798E-007,  7.868671917791E-07, -2.6293744917897190E-006, 
+      6.832439254064E-06,      -7.6281556832435884E-006,  5.929068773555E-06, 
+      1.135721312619E-06,       1.608771876167E-05,  6.419008839559E-06, 
+     -4.7037290292465193E-006,  3.423917509034E-07, -5.4462325656245965E-010, 
+      7.747657736412E-07,       1.341867219768E-06, -3.8394886767761281E-006, 
+     -3.5526126238914635E-006, -2.3801018715281500E-006, -5.9806405333998390E-005, 
+     -1.9067536125216205E-005,  1.810932602202E-05,  6.810401121372E-06, 
+     -1.8247165647911303E-006,  5.800811172582E-06, -3.2647897192243830E-006, 
+     -3.4152694359856168E-006, -8.9928283041824410E-007,  9.136107361735E-06, 
+      5.407013027068E-07,       3.376031638473E-06,  9.650956322760E-07, 
+      2.231868741831E-05,       2.364557296772E-06, -2.8143409941662147E-006, 
+      1.050274086713E-06,       1.132535702986E-05, -3.2269430297954449E-006, 
+     -3.8445997101797242E-005, -1.6350899419315360E-005,  5.697537232012E-05, 
+      2.576346947960E-04,      -2.7155553345390504E-005, -3.9093679875642079E-005, 
+     -1.1689685867276931E-006, -1.0088275095515418E-006, -1.2808206507999640E-005, 
+     -8.1745803520115293E-006,  3.773668193942E-06, -2.2889516521599401E-005, 
+      1.262544436203E-05,      -6.4549546174170079E-006, -3.7738293499026506E-007, 
+     -1.2594920477852775E-005,  1.374503741876E-05, -9.4430135679525112E-006, 
+      5.710041352791E-06,       1.183557695172E-05,  9.480760184570E-06, 
+      1.131435430331E-05,      -5.4994633863314308E-006,  1.338423982664E-06, 
+      7.047937080378E-06,      -5.6496179867496257E-006, -5.4368659920610260E-006, 
+     -2.2710087214991449E-005,  1.528910032194E-05,  1.414735098772E-05, 
+     -1.8132664725179890E-005,  1.109336426513E-04,  3.594085934852E-05, 
+     -1.1012990607325698E-004,  2.739019257944E-06,  7.277009424224E-05, 
+     -2.5601676323184906E-005]
+ -  [-1.7409637649305204E-012, -3.5550036925204515E-009, -2.9184699507527691E-005, 
+      2.876614886161E-05,       1.602256152174E-13, -1.5595774691963159E-006, 
+     -1.9932085120057802E-004, -4.3029226096090998E-013,  3.061191843281E-09, 
+     -9.2961222581688169E-007, -4.8284622397929664E-013,  2.566150000007E-04, 
+     -2.2368369857845237E-005, -7.3292041315975605E-006, -6.4959902697680534E-012, 
+      5.876577522449E-12,      -8.9995826638945180E-009,  6.090867802290E-12, 
+     -2.0822815195094009E-007, -7.3237283639516107E-005,  1.672351368990E-12, 
+      2.205795821561E-05,       5.660969566233E-04,       4.799023148694E-07, 
+      5.906844354665E-13,       7.085742798104E-12,      -6.6366881832412178E-007, 
+     -5.4032254580415131E-004,  1.439979146561E-11,      -6.2345658560303769E-008, 
+     -8.7321543897450363E-012,  5.725362984780E-08,       4.524424346620E-07, 
+      4.710815455083E-11,      -8.5304955795214996E-012, -4.1655313622795906E-006, 
+      1.736965373581E-05,       3.820969394199E-06,      -3.9114948944036418E-010, 
+     -1.0647975586465726E-009, -3.3387661219608851E-010, -2.3934530354982109E-007, 
+      2.923144885670E-10,       7.775158905364E-07,       8.698988198198E-10, 
+      1.261679036024E-09,      -3.1179480546000897E-008,  7.187081735097E-05, 
+     -2.2161085027344391E-005, -4.5344085766333527E-010,  5.768334491764E-10, 
+      2.154221519045E-08,       2.192008254608E-09,       3.057326939782E-07, 
+      3.007250723300E-04,       6.140648884486E-05,       4.034382083355E-07, 
+      1.460945776513E-08,       7.010583526274E-09,      -5.6608333829735611E-008, 
+      2.326101012200E-08,      -3.0366505923019533E-008,  5.000425679700E-06, 
+     -1.9053964791298962E-008,  1.091740612454E-10,       2.081609080074E-08, 
+      2.687012137122E-08,      -5.8900976722474236E-009,  1.910579079799E-05, 
+      7.951537563615E-09,       7.060049677612E-06,      -9.5877303639225423E-004, 
+     -2.6227567614387646E-007,  7.895735062400E-05,       2.045493011105E-06, 
+     -3.9198404625586129E-007, -8.1210409364211372E-004, -1.6819178526608321E-007, 
+      1.129005358432E-07,       1.155620160511E-07,       4.474461912653E-06, 
+     -2.9337741115862683E-006,  4.658603438934E-07,       1.414607731066E-08, 
+     -2.0884682097007690E-007, -2.4072796687445066E-008,  7.347403599644E-08, 
+      1.909746050211E-07,      -2.0732537014175735E-006, -2.1940530559051679E-007, 
+     -2.0528624599321087E-007,  2.910028090673E-07,      -1.1958219332991740E-007, 
+     -2.9843260896345264E-007, -1.0312955879073393E-007,  4.996782288648E-09, 
+     -1.7434551102077326E-008, -3.1093532482214424E-008, -1.2496537468245335E-005, 
+     -1.4202332927054900E-008,  7.012938611964E-05,      -2.7696515667090124E-005, 
+     -2.2568738856219470E-006, -1.0037168709836397E-006,  1.413554023941E-05, 
+      5.093928086263E-08,      -3.5824794749563009E-007, -4.0323035245038245E-007, 
+     -1.8359524923794944E-006, -8.6432285380254945E-008,  4.921067151285E-08, 
+      4.992182699144E-07,       2.997877642001E-05,      -5.8604529645613856E-006, 
+     -1.6157967479424334E-006,  1.611193432793E-06,      -2.4708413718909223E-006, 
+      3.774637108021E-08,       4.642519438899E-07,      -3.2844728511985220E-007, 
+     -2.8000587534795368E-005,  4.659336761983E-06,      -3.8761851477456878E-007, 
+      4.949162653907E-07,      -5.6863196413599023E-006,  1.365164290014E-07, 
+     -1.6494943843401644E-006,  2.662016965275E-08,      -2.1294108483402386E-007, 
+      1.301980223580E-06,      -3.6843252839864503E-008,  5.208177560356E-07, 
+      4.038311284377E-06,       1.358624869164E-07,       3.759474367388E-09, 
+     -6.9619683038690426E-007,  8.759745878895E-06,       1.622738280013E-07, 
+     -1.3277163798591698E-004,  2.466035766562E-06,       3.836852340857E-06, 
+     -8.9960577132044072E-007, -1.1514755898575719E-006,  7.532515220764E-05, 
+     -8.2162942044552439E-007, -2.1682037170962353E-005, -1.0344214292476092E-006, 
+      7.041404080527E-05,       4.067517079536E-07,       3.614039046115E-08, 
+      5.136230672134E-06,      -4.2807976192349895E-006, -1.6579516304949333E-006, 
+      6.743305538805E-07,      -1.0520519288401871E-005,  2.516591410264E-06, 
+     -1.3425104567790287E-005, -3.6706492234476683E-007,  4.032512838985E-06, 
+      3.264846782729E-05,      -4.6421418389808281E-006,  2.592102414425E-05, 
+     -3.9606330349179083E-004, -3.7524267643618472E-005, -6.7857214398590052E-005, 
+     -1.2525283610461682E-004, -1.6453918395192550E-006,  5.524329799303E-04, 
+     -3.0982629075652798E-005, -5.8507291032458889E-005, -1.0687199848579956E-003, 
+      1.922695940375E-04,      -3.8625323454468275E-004,  1.108888019099E-04, 
+      2.105866370724E-04,      -9.9080522380412232E-006,  6.426223708317E-06, 
+      1.147227083580E-05,      -2.2043712576237405E-006, -6.8766569032948689E-006, 
+     -1.5749835786275503E-006, -2.8266070247455060E-005,  2.450082059115E-05, 
+      2.055808827535E-05,       3.845647965423E-06,       1.274637036509E-05, 
+     -5.4470474698898740E-006,  2.239754946379E-05,      -2.3550094145619865E-005, 
+      5.904214274908E-06,      -1.5068696966774278E-005, -4.7990023896275617E-005, 
+      1.633997515529E-05,      -2.5453274057599499E-005,  3.784065049187E-05, 
+     -8.9629172182468023E-006, -9.9796378067291101E-006,  7.998406804617E-06, 
+     -8.7830679945308503E-008,  8.013290513169E-06,      -3.0159812096524448E-005, 
+     -1.8028148279043894E-006,  6.272506618230E-06,       2.096773591783E-06, 
+     -5.9609448604930457E-006,  2.221490241364E-05,       5.138891042648E-06, 
+      1.639430138583E-06,       9.653775322973E-06,       1.203446028419E-05, 
+      7.258987190348E-06,      -4.9754175484574177E-006,  1.452002473521E-05, 
+      2.116448541085E-05,       6.671538119554E-06,       9.288859625200E-06, 
+     -6.2164823225506821E-006, -8.1545796366411312E-006,  8.484389923042E-07, 
+     -1.6221439927510022E-005,  2.837437383763E-06,       1.710186418924E-05, 
+      7.467969136921E-05,      -4.0901449567003504E-005, -3.8138772502238996E-005, 
+     -1.1221312643150253E-005, -4.2847651751127831E-005,  1.742288316412E-05, 
+     -2.4777647624125033E-005, -1.1041219586568809E-005,  2.463422367634E-05, 
+     -8.7654624104833295E-005, -5.5023914154819949E-005,  1.638930257578E-05, 
+     -7.3963475235125364E-005,  5.274149487020E-05,      -9.4121897091501740E-006, 
+     -7.2651468417158759E-006,  6.014082296817E-05,      -6.6733719946028168E-005, 
+      2.796283388617E-05,       1.058668733450E-04,       5.440900015808E-05, 
+      2.766019584618E-04,       1.185432572738E-04,      -1.6210876389094551E-004, 
+      1.705534993126E-04,      -3.2260002925483221E-004,  1.837469576931E-05, 
+     -2.3441669601620332E-004,  7.206645821706E-05,       1.987789174806E-04, 
+     -3.3102935622311832E-004, -3.4551304440710515E-004, -4.5982600677661051E-004, 
+      1.931600180852E-04]
+ -  [-9.5828046550548718E-004,  2.757090703280E-10, -1.9868924485289680E-012, 
+     -6.9154966583946653E-012, -5.0248788952267365E-006, -1.2813083330040704E-012, 
+     -2.0232837866056286E-011,  1.943211233918E-07, -1.8788607009188191E-013, 
+      6.245294876411E-12,      -1.2581790082106126E-004, -8.7861199733882053E-011, 
+     -3.3853419165988299E-012, -3.3333556716958680E-011,  1.860249505081E-05, 
+      4.754011685775E-06,      -8.4402858237676154E-013,  9.414059534921E-08, 
+     -2.1734298241848920E-011,  1.235270880810E-11,  6.448435480401E-06, 
+     -1.9946457425888036E-012, -1.0929118086878617E-010, -2.8516819231735451E-011, 
+     -6.2382836551153368E-005,  1.005839457058E-06, -8.9515872538363690E-012, 
+     -6.4438040488353984E-011,  3.292924248031E-06,  1.832800852919E-11, 
+      2.172191711965E-07,      -6.5654737234962374E-011,  8.631266128340E-11, 
+      1.763367337060E-10,       5.224716748715E-04, -2.3311686091144652E-011, 
+      1.754506069509E-10,       1.162709180204E-10,  1.042544192767E-05, 
+      2.595561625738E-06,       7.169506217956E-11,  1.097688480859E-10, 
+     -7.3769340342308919E-007, -1.5168727282443173E-010,  3.286338751443E-08, 
+      1.469468728551E-07,       7.831576224200E-11, -2.4670358007709055E-010, 
+     -9.1099553400263972E-010,  5.500759332952E-05, -1.8361080153437160E-005, 
+     -8.3260846161408233E-011,  1.348544180978E-07,  7.246961788686E-10, 
+      1.610390872878E-10,       2.313127008951E-10, -4.1140101221065758E-008, 
+      1.487837976125E-05,      -1.0932728495278949E-007, -5.0545017959502739E-011, 
+      1.090786472957E-08,       1.845087652099E-06,  7.166251442572E-10, 
+      2.245151820995E-08,       2.402185067931E-09,  2.796039368506E-06, 
+     -2.2425024333109220E-007, -2.2103178746945053E-009, -4.5615789768247480E-009, 
+      1.693389672915E-05,      -4.1896590884122074E-009,  1.872297893221E-09, 
+     -2.9072997931403090E-006, -3.1242800152135640E-009, -3.1844679980749281E-005, 
+     -1.4047086255970093E-004,  7.558610268307E-09, -2.1890192058583008E-006, 
+     -8.6801500218775213E-006,  2.090746848293E-07,  2.260239556676E-08, 
+      2.085120754800E-08,      -2.8521223292606932E-008, -1.8102537304586115E-006, 
+      6.218127395079E-07,       2.427167045444E-08,  4.262058737544E-08, 
+      7.296882351675E-07,      -3.8175467263204222E-008, -2.5934976179966409E-007, 
+      1.512661166941E-08,       6.739778838649E-07, -9.5120085041850268E-008, 
+     -1.2392336614347642E-006,  4.741198718620E-07,  2.885017808240E-08, 
+     -6.2447034055041820E-007,  4.934687371918E-06, -4.5832255205994239E-007, 
+      8.766180886460E-04,       1.164413667155E-07, -3.2992671089648396E-006, 
+      5.341816755341E-05,      -1.8760157650311794E-005, -7.2894818274906469E-007, 
+     -1.7634474388675085E-007, -1.2683992533002361E-006, -2.0026418487780373E-005, 
+      2.070485484080E-07,      -5.3608539005498470E-008,  3.255246092304E-08, 
+      2.363341759593E-07,      -2.9737888493690733E-008,  2.068378330229E-07, 
+     -1.5941002949914403E-006, -1.3516400708204571E-007,  5.731953063597E-06, 
+     -8.9554782254978556E-009,  4.692244126426E-06, -1.9914719705893080E-006, 
+      8.474629438666E-06,       5.438414060789E-05,  1.345911440688E-09, 
+     -1.8054628545407942E-007,  6.299218110931E-07, -1.7956926847041569E-007, 
+     -4.1154051332092446E-006, -3.5533333398035227E-005,  4.309940971052E-07, 
+      1.529097789153E-07,      -9.0837783635523304E-008,  9.842563596685E-07, 
+     -4.7341309528624309E-007, -7.5810293850263682E-008,  1.223894044198E-06, 
+     -2.8498255786558123E-008, -8.2924309468363974E-008, -3.9470705335010992E-009, 
+     -4.8960333099070535E-008, -4.0191788416632295E-006,  4.344448002504E-07, 
+     -1.5253523036291156E-005,  5.149319823736E-06, -5.7125609123986703E-007, 
+     -6.4935634654321569E-007,  2.937418148170E-07, -7.7566790575448255E-006, 
+     -2.6392679675378344E-007, -4.8302985967641285E-008,  1.042308354228E-07, 
+      9.426744198037E-06,      -9.7425949062181216E-006, -6.7203559500512977E-007, 
+     -2.2833254711171307E-007,  1.128033195272E-06,  2.163951784244E-06, 
+     -2.3876965297945675E-005, -8.0109036435069454E-007, -1.3633552595183245E-005, 
+      5.235234852998E-07,       3.038192736929E-06,  7.542097426630E-05, 
+     -4.3891861270700568E-006,  1.047793551896E-05,  2.195549844641E-05, 
+      2.170921694858E-05,       2.329946148612E-06, -4.3740278356508739E-006, 
+     -6.2639087237825655E-005,  2.064684590536E-05, -1.7221690011889901E-005, 
+      1.947628575718E-04,       7.183325484644E-05, -7.6844455762468738E-005, 
+     -1.2069528860054199E-004, -9.6720811115327040E-006, -7.1687237170819191E-005, 
+      7.016258332435E-06,      -7.2969879345374713E-005,  9.922195054754E-06, 
+      2.904075386374E-05,      -1.1194193211904336E-005,  9.917768455510E-05, 
+     -3.8903236743392799E-004, -2.1242331140456814E-004, -6.8597312177475379E-005, 
+     -6.2355160961127636E-004,  2.862263848937E-04, -7.9874676360346380E-005, 
+     -1.2062995539650250E-005,  4.854422484010E-05, -1.1181387619308911E-005, 
+      1.828883382550E-04,      -1.2231241369022635E-004, -8.4236061884858035E-005, 
+     -3.7168992376311518E-005,  3.018128623449E-04,  6.946645469465E-05, 
+      8.801372168401E-06,      -1.0378890572927679E-004,  1.251019422936E-05, 
+      1.822681624304E-06,       2.448620417212E-05,  7.983161282919E-06, 
+     -4.2562997815322884E-006, -6.7164952858959903E-006, -1.3836582993411611E-005, 
+     -2.0932471939094990E-005,  2.816857102369E-05,  1.841313497629E-05, 
+     -3.3241985485051462E-005,  9.110569985390E-06, -3.1212836620039385E-005, 
+      3.643932813234E-07,       1.092045695514E-05, -8.7730899382986761E-006, 
+      6.659183836435E-06,       2.308414205732E-05,  2.008583701918E-05, 
+     -4.4449027638924360E-006, -4.0451771505065233E-006,  3.868547165478E-06, 
+      1.529364900747E-05,      -1.6864208751757315E-006, -1.8228250399446311E-006, 
+     -1.9810577811801649E-005, -3.7105216502220182E-006, -3.8175721930977340E-006, 
+     -5.7751822049931364E-006,  3.392892066528E-06,  3.559322759092E-06, 
+     -1.9399668112662547E-006, -1.8795752055184023E-005, -1.2972442068336131E-006, 
+     -7.2124674099953499E-007,  9.498611019413E-06, -3.3337648173340206E-006, 
+      1.658023613171E-06,      -3.0845215797208059E-006, -3.1888564244861219E-006, 
+      2.163429735134E-06,      -3.3545241886275175E-007, -7.0061600392537070E-006, 
+      3.683005885918E-06,       2.518408607093E-06,  9.611156690785E-06, 
+     -1.5123497793392577E-005,  7.030201927410E-07,  1.064520744266E-05, 
+     -1.5751368785725338E-006,  7.697554560116E-07, -1.0824984518847947E-005, 
+     -2.4689736598679452E-006, -5.2416794781536599E-006, -1.0877465392035305E-005, 
+     -2.1298878322546555E-005]
+ -  [ 2.730845842193E-10,  9.582805898986E-04,  9.125367851428E-09, 
+     -2.1202985995956111E-007, -2.3344713503262236E-013, -5.0244276092511336E-006, 
+      6.396117031758E-08,  1.063912017042E-14,  1.990087872492E-07, 
+     -1.2578947141744443E-004,                 -3.3002402399907517E-012, 
+     -1.7733544295072800E-007,                  2.350879266494E-06, 
+     -1.8621271724779745E-005,                  3.578190776869E-12, 
+     -2.6426137340820351E-012,                 -4.7930603036864215E-006, 
+     -6.3937488215976430E-012,                 -8.0631923383154072E-008, 
+      9.088425299043E-06, -1.1360088473565604E-012,  6.147528009591E-06, 
+     -5.9788187086391210E-007,                 -6.2341976144690298E-005, 
+     -8.6991982831108837E-014,                  2.920376624813E-12,  7.684410467260E-07, 
+      1.092229119894E-06, -1.3599309219850046E-013,      -3.4025535223879784E-006, 
+      3.185500670071E-12,  2.039608845479E-07, -6.0175169036152106E-009, 
+      1.278264450397E-11,  1.431532851786E-11, -5.2216915370639425E-004, 
+     -3.8226526064784111E-006,                  1.044780650557E-05, 
+     -6.1656714907536592E-010,                  1.517443719893E-09, 
+     -2.5703094145716865E-006,                 -7.6747731942016927E-007, 
+     -1.0399922922118470E-009,                 -1.4152980009062822E-007, 
+     -9.6053907996644801E-011,                 -1.7945667151614693E-009, 
+     -1.3908597761253137E-007,                 -1.3265951683527979E-005, 
+     -5.5058873741272232E-005,                  4.784051741895E-10,  1.630131902416E-09, 
+      1.855110422072E-05, -1.6941882700747700E-009,       1.549330936052E-07, 
+      1.609248944437E-06,  2.597603746506E-07,  1.502863129301E-05,  2.642692907212E-09, 
+     -2.4896200962875871E-008,                  4.384538898622E-08, 
+     -1.6274119370272239E-006,                  3.371873505011E-08, 
+     -2.1115966249330909E-008,                 -2.7271284195048134E-008, 
+     -2.9486068699494615E-006,                  2.269895748876E-10, 
+     -4.9833796348262066E-008,                  2.208209945294E-09,  3.269942037194E-05, 
+      3.204086309963E-09, -1.6665373596632272E-005,       6.086309370380E-06, 
+      6.118911714317E-08, -3.6091229508703699E-006,       1.388444489423E-04, 
+     -3.1599228394177804E-005,                  2.996123475152E-06, 
+     -8.2596675969967440E-006,                  2.121039246287E-06, 
+     -1.2562960849744800E-007,                 -5.7685813051322476E-007, 
+      1.245350419997E-06, -1.4813442015371267E-006,      -6.2830554320762204E-008, 
+      2.065716391190E-08,  9.381294292038E-07, -1.6755627722740674E-008, 
+      4.574881474271E-07,  1.487374555070E-07, -2.2456331829171440E-008, 
+     -3.2312380954686035E-007,                  2.947677168650E-08, 
+     -5.5920082469003380E-008,                 -1.7669111166446514E-007, 
+     -9.5771001768181957E-008,                  1.848636326600E-07, 
+     -2.0872140292704658E-005,                 -2.1739346866758640E-006, 
+     -8.7126278122811977E-004,                 -4.5316371420062191E-007, 
+     -9.0139755443884029E-005,                 -5.4099862913322555E-005, 
+     -3.2037863426153876E-006,                 -1.9468927198905216E-007, 
+     -3.3147609099135847E-007,                  1.892252613866E-05, 
+     -2.1323899685609797E-005,                  1.111885748789E-06,  8.362715182950E-07, 
+     -3.8598549022036227E-007,                  7.484583874905E-07,  7.048971291748E-07, 
+     -1.8828739472458286E-005,                  6.246734451647E-08,  1.430755272112E-06, 
+      3.691571225856E-06,  9.567063723300E-07, -5.9386504095444359E-006, 
+      1.370011346944E-07, -7.0352279772574770E-007,      -5.5437225324955069E-005, 
+      8.210666893628E-06,  2.415203767999E-07, -4.2616060671286364E-007, 
+      4.280459081193E-06, -1.8790039839253249E-006,       1.394704291166E-06, 
+     -5.5476414895702371E-007,                 -3.5641349605626126E-005, 
+      2.058731842194E-07,  7.427076464663E-07, -5.8917652545853078E-007, 
+     -2.3775754808597104E-006,                  6.036397164342E-07, 
+     -6.4021200461376193E-007,                  1.238356593725E-06,  2.096481685647E-06, 
+      7.072877162630E-07, -2.5658697969508406E-006,       8.372828902657E-07, 
+     -5.4155350160306525E-007,                 -1.7140393850492626E-006, 
+      2.361785451619E-07,  2.271788825866E-06, -1.5780776016269108E-007, 
+      1.456747281793E-05, -1.5104118571424295E-006,       2.141460882601E-05, 
+     -3.8324521163199139E-008,                  2.306011387821E-07, 
+     -3.0194993189191848E-006,                 -1.5552935884899190E-006, 
+      6.182969310883E-06, -2.9254246457585624E-007,      -3.4962766643097396E-008, 
+     -7.3971401219881673E-007,                  3.080190814403E-06, 
+     -4.4537754929916876E-006,                  3.369460317813E-06,  1.210432599905E-05, 
+     -8.3878294251638313E-007,                 -2.3273787710333138E-005, 
+     -3.4974903635020768E-005,                 -5.0774155821698818E-005, 
+     -7.8069061263752806E-006,                  1.269296005288E-04,  2.934262417918E-06, 
+     -1.6188622369721936E-006,                  1.315954517578E-05, 
+     -8.3832310500365700E-006,                 -4.0698163862355361E-005, 
+     -4.1381949915206013E-005,                  1.035966307330E-04,  3.503509076535E-06, 
+     -6.4910463534501649E-005,                 -6.3697777172809760E-008, 
+     -2.5263007431115543E-005,                  9.649772117102E-07, 
+     -2.2043059329864608E-005,                 -9.3992302641147376E-006, 
+      1.271489952010E-05, -1.7561534212506185E-005,       1.034808911710E-06, 
+      3.224140569451E-06,  6.455693815937E-06,  6.675224046614E-06, 
+     -2.0154807274240982E-005,                  8.201912887894E-06, 
+     -8.4523303792427822E-005,                 -3.8124357148261044E-004, 
+     -8.9230893685552422E-004,                  8.858508371630E-05,  3.170092994613E-05, 
+     -5.3563464164120512E-005,                  1.019249917640E-04, 
+     -4.9261560370110342E-005,                 -1.3100860053133874E-005, 
+      3.245072703879E-05,  6.456965188496E-05, -2.3645475934151012E-005, 
+     -5.4009636257995391E-006,                  8.942190122353E-06,  1.729845048740E-05, 
+     -4.1044543578982020E-006,                  7.233077554348E-06,  4.101476695053E-06, 
+      6.422434685499E-06,  6.886789457870E-06,  3.660207377309E-05, 
+     -9.4514555811303852E-006,                 -2.7587883881389096E-005, 
+     -8.4720595492333655E-006,                  2.303643069423E-05,  9.102941095151E-06, 
+     -3.9086363651717163E-006,                  2.809406915905E-06, 
+     -1.5050859044623860E-005,                  9.900376522079E-06,  1.097309372331E-05, 
+      9.150478595432E-06,  6.302011882730E-06,  3.495417159320E-06, 
+     -1.1468680241384264E-005,                  6.255438674511E-06,  1.869202935599E-05, 
+      9.586239304224E-06,  6.181107651616E-06, -1.6893158090087491E-006, 
+     -2.0817341987489123E-007,                 -3.1401145295715366E-006, 
+      9.016607942132E-06,  1.918640250641E-05, -1.0687625673397099E-005, 
+      8.416563818641E-06, -2.2895015439735851E-005,       2.845601361287E-05, 
+     -3.1396612964977193E-005,                  3.460844635270E-05,  3.265891843901E-05, 
+      3.137660281324E-05,  2.985341919764E-05, -5.4563712000961538E-005, 
+      5.951741177611E-05,  2.362270828805E-05, -2.4548456529706098E-005, 
+     -1.6925860041934444E-005,                  1.484323003492E-04,  7.553098133357E-05, 
+     -1.0740851699999655E-004,                  1.764404050829E-04,  2.080305393886E-04, 
+     -9.0447001498063890E-005,                  1.204555704587E-04, 
+     -1.0045017888651343E-004,                 -1.1440603294168459E-005, 
+      1.294468577764E-04]
+ -  [ 6.587338696572E-12,  3.552571723848E-08,  2.667289566735E-06, 
+     -3.6308063982884442E-004, -1.2124310344759082E-013,  7.132445670817E-07, 
+      3.945793729387E-05, -3.7450595467662662E-013, -1.0122194804235713E-008, 
+      1.294738774539E-05, -8.1995655653709781E-013,       2.064067912014E-05, 
+      1.527770099259E-05,  5.816568195457E-07, -5.5176893581893689E-012, 
+      6.300785902139E-12,  1.498020969279E-07,  4.774015743543E-12, 
+     -3.5639553200480774E-008,                  1.260486866062E-03,  9.181900540182E-13, 
+     -3.8305988944189052E-005,                 -3.6730451722968502E-005, 
+      1.453112928902E-06, -2.0525217769439170E-011,       2.088897730531E-11, 
+      2.763478807958E-08,  5.111726994690E-05,  2.789316009205E-12,  2.776764130631E-07, 
+      2.865660326764E-11,  4.266215921550E-08, -2.3122651150968485E-007, 
+      3.854234016785E-12, -4.7472274294088970E-011,       5.221453073125E-05, 
+     -1.5357415904863111E-004,                  6.674633516907E-07,  9.631321400952E-11, 
+     -4.2672419521956563E-009,                  1.118263173247E-07, 
+     -9.0119270789765064E-009,                 -6.3219036236176188E-009, 
+     -9.8847166843239905E-006,                 -2.4063066576435537E-009, 
+     -2.1116517794663638E-009,                  9.430929573825E-09, 
+     -5.6875549641749110E-004,                 -3.0002621444985642E-006, 
+      6.403190431935E-10,  2.785420549593E-09, -2.1698191585672506E-007, 
+      4.621264062624E-09,  3.509355329448E-08,  3.703658664023E-05, 
+     -2.8866387406854647E-007,                 -5.3185639389881779E-006, 
+     -3.6513346271545543E-009,                  2.272760997357E-08,  4.182984023600E-09, 
+     -3.4128333109866304E-007,                  2.935818162312E-08,  5.332306164907E-07, 
+      2.997176785542E-08, -1.8320143950983255E-007,      -3.7444006268355731E-008, 
+      1.207950866558E-08, -1.4571942003404974E-009,       1.811141172416E-03, 
+     -4.8819582154459372E-009,                  1.293753336033E-05,  9.249364902494E-05, 
+     -3.6979760864721623E-008,                 -6.8524815395431659E-006, 
+     -2.0454536031930395E-005,                  4.757735496285E-06,  6.125307368431E-05, 
+      6.462441421022E-07, -4.5362730849556483E-007,       2.680525172674E-07, 
+      1.047599620120E-07,  4.548010833996E-05, -4.8176463294169122E-008, 
+     -3.1204469999170044E-008,                  4.878918977925E-07, 
+     -1.2078460777791224E-007,                  1.411759705028E-08, 
+     -7.1297827002604112E-008,                  1.677055495525E-05,  6.591688925886E-07, 
+     -1.0257459866980237E-008,                 -7.3922012872187347E-008, 
+      4.778209473510E-07,  6.002600188186E-08, -1.0445525675703392E-008, 
+     -6.6190467361243921E-008,                  3.953449672292E-06,  9.693589310351E-07, 
+      1.654320026744E-04,  3.871351380215E-07, -8.5426035696376358E-004, 
+     -2.4263292673532885E-006,                 -4.8822587075492751E-007, 
+     -1.6894407044583047E-007,                 -1.4886712467068625E-006, 
+     -9.9092955359179467E-007,                  3.142816431878E-06, 
+     -8.4978103746431512E-007,                  8.788216626898E-07, 
+     -1.1927640498197522E-007,                 -2.7002586504406845E-007, 
+      5.902072752850E-07, -4.1019324021679583E-004,       1.317358715811E-06, 
+      1.967448867586E-06,  1.845395909126E-07,  5.893575429381E-07, 
+     -3.0413892996624961E-007,                 -9.1116124329935984E-007, 
+     -1.6516813269390277E-008,                 -1.3078307140701536E-006, 
+      9.647791166449E-07,  2.353881148532E-06, -6.6217477405029985E-007, 
+      3.270966393003E-06, -1.1905641958474856E-007,       2.966595066248E-06, 
+     -9.7278522747641613E-007,                  3.873979098037E-07, 
+     -1.8930147700552731E-007,                  1.412893713899E-07, 
+     -3.9005293739542859E-007,                 -2.9211000536309107E-006, 
+      2.486002433129E-07,  1.974071893850E-07,  1.196535102726E-04, 
+     -5.9364593878278951E-006,                 -1.3799911208403758E-007, 
+      1.438299335261E-04, -4.3263936121006384E-006,      -3.9003671777473658E-006, 
+     -8.7552471010967084E-006,                 -2.2162014272251945E-005, 
+      2.145619004194E-04,  3.947366249339E-06, -4.0275475044436394E-004, 
+     -3.7055877220038955E-005,                  1.126667655767E-03, 
+     -2.2181725866974860E-007,                  2.104799846582E-07, 
+     -6.3412271128449802E-006,                 -1.4071911366528261E-005, 
+     -5.9031920200679032E-006,                 -2.3930155445718843E-006, 
+     -3.3722722227805105E-008,                  5.504698569100E-06,  8.344232226980E-06, 
+     -2.1684580683223816E-007,                  1.046110934137E-05, 
+     -2.5896690015795184E-006,                 -6.2037239663791009E-007, 
+     -1.5227647395088498E-005,                 -1.5206058684357263E-005, 
+      2.858729477408E-05,  3.350587271655E-05, -4.7410061347907421E-005, 
+     -2.8271624487541803E-006,                  7.335286208299E-06,  3.247627807560E-05, 
+     -3.3799846081923272E-005,                 -3.0157397972146988E-004, 
+     -2.6402926988770815E-004,                  4.731147496221E-04, 
+     -8.3145687094403283E-005,                 -1.6645935241935204E-004, 
+      3.628200971088E-06,  9.320919615280E-06, -8.9796610396769729E-006, 
+      8.610369308424E-06,  1.760461965534E-05, -4.7455181356634241E-006, 
+      2.898574497303E-05, -7.8333712493708764E-006,      -2.2643252148672523E-005, 
+     -5.7916808903748128E-006,                 -1.4988613508151209E-005, 
+      8.405419277340E-06, -2.1575769969626004E-005,       3.750222857827E-05, 
+      2.227268696127E-05,  1.067203449869E-04,  2.407948419713E-05, 
+     -1.3750830272962457E-005,                  3.870116882109E-06,  2.009788670134E-06, 
+     -8.5610821546202258E-006,                  4.489954326489E-06,  3.385200550478E-05, 
+      3.197635611143E-06,  1.370436679698E-05,  6.684777271859E-05,  3.010017782112E-05, 
+     -3.3554390135257905E-005,                 -1.9622695749826549E-005, 
+     -1.9932178678325863E-005,                  4.745293747167E-07, 
+     -1.3211953092111356E-006,                 -7.0169304091024319E-006, 
+     -8.9303435838522508E-006,                 -6.9484809515089132E-006, 
+      2.398546362962E-06, -8.8242071288624919E-006,       5.030522839583E-06, 
+     -1.4492126024908075E-005,                 -1.1429393066192986E-006, 
+      1.546439855033E-05, -7.1567156158241893E-006,       6.715653321588E-06, 
+      8.693879762873E-06,  3.287459640738E-05,  1.909914976530E-05, 
+     -3.0348411159927856E-005,                 -1.6777020672690548E-004, 
+      1.569435521263E-06,  1.519745685417E-05,  8.315356590294E-06,  4.065232037100E-06, 
+      3.510781795147E-05, -4.5430094174141416E-006,       2.659337871663E-06, 
+      3.373480490038E-05, -1.1071810781584248E-005,      -3.8244671599390055E-005, 
+      3.410572980907E-07,  6.163931819519E-06,  4.996799017580E-05, 
+     -4.3651283671135924E-005,                  3.038647104329E-05,  5.862122930826E-05, 
+      4.339279914947E-05,  3.681757045806E-05, -9.8167307245757093E-006, 
+      3.416619001520E-05,  1.177354134079E-04,  1.068689992363E-05, 
+     -6.1990825938587740E-005,                 -3.4136424430342834E-005, 
+      8.179190958356E-06,  4.870303241251E-05, -6.3684646928995232E-005, 
+      5.655926691859E-04,  1.790565674201E-04, -5.8022388196397380E-004, 
+     -9.6225235111318497E-005,                  3.033726954591E-04, 
+     -1.8864725140333853E-004]
+ <psiv_i|h2psi_j>:
+ -  [-1.0843676175373781E-012, -6.0848423816820462E-011, -4.1501059696007897E-011, 
+     -4.8476165745389143E-007,  1.033861490069E-14,  8.013621143110E-10, 
+      1.319794895824E-07,       3.784790680506E-14,      -3.6934093439950949E-011, 
+      4.600653342706E-08,       1.215849736577E-13,       1.837749639942E-07, 
+     -1.4213287410321320E-006,  2.044442941364E-08,       1.043298819110E-12, 
+     -1.5475929823149920E-012,  5.134693014819E-10,      -2.9462611845404858E-012, 
+     -3.2892709006201795E-010,  1.067621360470E-05,      -4.3001281801782875E-013, 
+     -3.2258563535421624E-007, -1.1554539752066140E-006,  1.174856797044E-07, 
+      5.366137640389E-12,      -2.0795221052581929E-012,  5.942849606772E-10, 
+      1.120127147081E-06,      -6.9664955372383263E-013,  3.034628119851E-09, 
+     -1.1657026851291238E-011,  7.544196819625E-10,      -5.5330877733304386E-009, 
+      7.375772658011E-12,       1.275617952401E-11,       6.027393252895E-07, 
+      3.714846405915E-07,      -1.3185953505603454E-008, -1.3043789384121431E-010, 
+      9.531429739545E-10,       2.394450754407E-09,       6.884042646525E-10, 
+      1.336461438697E-09,      -1.1034191636627312E-007,  5.242068628136E-10, 
+     -2.8219132655857272E-010,  2.923628399848E-10,       4.506184164238E-06, 
+      9.391043595838E-08,      -9.2198811092917787E-012, -2.5337169405727438E-010, 
+     -1.8563225438761910E-008, -1.5428594405023234E-009,  1.754220540427E-09, 
+      2.241463184583E-06,       3.955240795338E-07,      -7.8008547160761459E-008, 
+     -6.8736207235285924E-009, -1.0136777043499739E-008, -1.1410658014252599E-009, 
+     -4.4125233607073210E-009, -7.9104089194600450E-009, -1.6173170600548507E-008, 
+     -1.2842535398681850E-008, -6.6089574650313031E-009,  1.272707964477E-08, 
+     -8.8955316521373730E-009,  3.848625691473E-10,       5.959606941749E-05, 
+      2.125907987223E-09,       6.976395624672E-07,       9.374639904311E-06, 
+      2.545532332662E-08,      -7.1983346114614740E-007, -1.8051117877182348E-006, 
+      3.856505572900E-07,       5.645350071127E-06,       3.379121838647E-08, 
+      6.584480423963E-08,      -8.7007049212033243E-008, -8.5847762058239258E-009, 
+      1.344934906305E-06,      -4.5319790160090885E-009, -5.1775908021745672E-009, 
+     -1.6941601020931322E-007, -5.6460656300623160E-009, -6.2682239590305240E-009, 
+      9.956765533120E-08,       6.208644904048E-07,      -8.4889182757885971E-008, 
+      1.703771064257E-08,       2.632303247338E-08,       9.936305551496E-09, 
+     -1.0173157439712453E-007, -4.0284944757542512E-009,  8.013438136460E-09, 
+      8.965907801565E-08,      -8.4555770535101529E-008,  3.686381922575E-06, 
+     -4.0299043783538265E-008, -3.7703668412331711E-006,  2.490900837979E-07, 
+      1.222066564375E-07,       1.072278928790E-07,      -1.5586303495313400E-007, 
+     -7.3699004871781151E-008,  1.022914493330E-07,       3.218232456679E-07, 
+      8.672268158647E-08,       1.182034291691E-08,      -2.0980173222062871E-008, 
+      2.716408132892E-08,      -7.0017370108477500E-006,  6.437782733129E-08, 
+     -3.7845818980158900E-007,  5.447740963344E-08,       5.352223603462E-08, 
+      6.219272408699E-09,      -2.7205179860576897E-008,  1.026806774266E-08, 
+      1.830401065357E-07,      -2.9483062383929248E-007, -3.4338818782596946E-007, 
+     -1.4631655829090183E-008,  2.134276996612E-07,       3.749427312495E-08, 
+     -4.7906051371932292E-008,  2.353103040562E-07,       7.252437859777E-08, 
+      3.756164188446E-08,      -2.1755759785576520E-008, -1.4407355057176818E-007, 
+      2.488751311059E-07,      -3.6181535459965552E-008, -2.4013208289538080E-007, 
+      1.300777241250E-05,      -3.7540371477305517E-007, -2.4665515305906576E-008, 
+      1.172121245425E-05,      -6.5929159823273162E-007, -4.9416174071640859E-007, 
+     -9.5442395390913199E-007, -3.0008303068799687E-006,  2.583931752435E-05, 
+      5.537814376518E-07,      -5.1084251462120353E-005, -4.2353647232330486E-006, 
+      1.455784777115E-04,      -2.0814858182442292E-007,  4.761358527587E-08, 
+     -8.8081687844261879E-007, -2.6864584860789227E-006, -5.6648257945047776E-007, 
+     -7.4396993323239840E-007,  3.187976981788E-07,       5.538134086216E-07, 
+      5.978507490002E-07,       3.513369193249E-07,      -7.9573122805395182E-007, 
+     -1.5401239734292288E-006,  1.303240084365E-07,      -1.2311199431577588E-006, 
+      9.659151830611E-06,       3.708560393955E-06,       4.153058582081E-06, 
+     -6.8851102446284500E-006, -2.9037053836786187E-007, -1.2605847231438106E-005, 
+      1.926050148517E-06,      -1.5551917153282916E-006, -1.2367818188008110E-005, 
+     -2.3341136196172384E-005,  5.599919277738E-05,      -1.1207762894838471E-005, 
+     -2.3178974330816695E-005,  1.053344510117E-06,      -1.4957279185121934E-006, 
+     -1.1946045607591844E-006, -1.3127556405538850E-006, -6.1655750645973271E-007, 
+      1.850175186762E-06,       3.006518951715E-06,      -5.2710477730346170E-007, 
+      2.834771235289E-07,       6.973207098749E-07,      -1.7078343456685503E-006, 
+      5.270577499440E-06,      -5.5786410983989543E-006,  4.217842003128E-06, 
+      6.577587616068E-07,       1.140355854693E-05,       4.761146583866E-06, 
+     -3.4864467457481290E-006,  3.388726182427E-07,       1.740313002299E-09, 
+      4.745622118788E-07,       1.416356739032E-06,      -1.7884855953858250E-006, 
+     -2.3445751597244539E-006, -1.4409181549948229E-006, -4.5425386868540946E-005, 
+     -1.4473322705144403E-005,  1.386020077782E-05,       4.982852706796E-06, 
+     -1.8123161288498085E-006,  4.548074065834E-06,      -2.5358523727274964E-006, 
+     -2.9239033848656766E-006, -9.9018561793915994E-007,  7.108795915229E-06, 
+      5.584233740644E-07,       2.745624693451E-06,       6.843526508514E-07, 
+      1.796990181694E-05,       1.947569613020E-06,      -1.9808666971458165E-006, 
+      8.709441715733E-07,       9.762645057698E-06,      -2.4982209898665709E-006, 
+     -3.1405186441085228E-005, -1.3353870407092712E-005,  4.696995023890E-05, 
+      2.117790091659E-04,      -2.2305160077369302E-005, -3.2337797953861745E-005, 
+     -7.8165376628550925E-007, -6.0635695156263543E-008, -1.0818227598416410E-005, 
+     -7.1686647244902415E-006,  3.589631204832E-06,      -1.9987922111556739E-005, 
+      1.160531785000E-05,      -6.2447755396529788E-006, -1.2635780623197544E-007, 
+     -1.0915520507340982E-005,  1.268056160381E-05,      -9.3661562043681961E-006, 
+      5.987155492597E-06,       1.117101319421E-05,       9.465928270069E-06, 
+      1.079883430037E-05,      -5.8764226322914506E-006,  1.354073190537E-06, 
+      5.946930394251E-06,      -5.8356310387747775E-006, -5.2178380467985509E-006, 
+     -2.2621355478130343E-005,  1.600504642862E-05,       1.393767771028E-05, 
+     -1.8867862673984599E-005,  1.092321997054E-04,       3.558487279447E-05, 
+     -1.0895334476004484E-004,  4.380551401660E-06,       7.183316771123E-05, 
+     -2.4048735812831923E-005]
+ -  [-6.0091826134342665E-013,  1.108899126242E-09, -2.8356159818939059E-007, 
+      1.085123996706E-06,       1.306493479065E-13, -5.9668962885189873E-008, 
+     -1.5058894837182302E-005, -4.0620015803164638E-013,  2.550651625571E-10, 
+     -7.9732684526840764E-008, -4.4600932326838629E-013,  3.145284284679E-05, 
+     -2.9365367185937228E-006, -9.6823928824037620E-007, -6.8804528420474350E-012, 
+      6.423069762857E-12,      -1.2175318310871260E-009,  7.325890463062E-12, 
+     -2.9487789208688571E-008, -1.1195374928739778E-005,  2.104417403446E-12, 
+      3.390893131783E-06,       1.041884086174E-04,  9.047711837605E-08, 
+     -2.5024152477745556E-012,  1.061512311758E-11, -1.2565968285272738E-007, 
+     -1.0456277474264499E-004,  1.277651382874E-11, -1.2105705585355199E-008, 
+     -1.2400780056446225E-012,  1.157505842696E-08,  9.134875072927E-08, 
+      4.613048477758E-11,      -1.6306164066592539E-011, -9.1519376056581881E-007, 
+      4.324766049009E-06,       9.559314110439E-07, -3.0299525710502695E-010, 
+     -1.6045730700639512E-009, -9.1303932919862587E-011, -6.1177458458388515E-008, 
+     -2.6581926653349086E-010,  2.019888862111E-07,  4.710704276991E-10, 
+      1.132189094097E-09,      -8.3554718001546291E-009,  2.005163359010E-05, 
+     -6.2720514618269630E-006, -4.7095220684832031E-010,  4.844311994512E-10, 
+      6.282299979453E-09,       3.331603905698E-09,  9.404831219017E-08, 
+      9.346571581696E-05,       1.952834635541E-05,  1.284060144465E-07, 
+      2.906475496924E-08,       1.436639361674E-08, -1.7801976045328957E-008, 
+      7.470881439348E-09,      -3.9369623266252548E-008,  1.634952035689E-06, 
+     -1.2124497090178657E-008, -5.6283910432907601E-010,  2.196132447052E-08, 
+      3.928420573968E-08,      -1.6018036486282809E-009,  6.633933240108E-06, 
+      7.858124678468E-09,       2.474430575198E-06, -3.5467939605952637E-004, 
+     -1.4062353737849171E-007,  2.926787363142E-05,  7.818702410077E-07, 
+     -6.4762492875918140E-008, -3.1490593377829566E-004, -7.3647203843039868E-008, 
+      2.169861468787E-08,       1.805795669274E-07,  1.752337556852E-06, 
+     -1.1673686727126358E-006,  1.773363091021E-07,  6.117122355046E-08, 
+     -1.0891952088838184E-007, -9.4800537843178171E-009,  2.027183661250E-08, 
+      1.671743157703E-07,      -8.2772817962955785E-007, -2.3553135553957988E-007, 
+     -1.0004597999647997E-007,  2.585728279695E-07, -3.3652027201664074E-008, 
+     -2.1730819237632497E-007, -7.9158253214979309E-008, -2.4387806062358755E-009, 
+      2.886663396765E-09,      -8.1637288145749744E-009, -5.3077882156531424E-006, 
+      3.794913118810E-08,       3.133436365510E-05, -1.2941223379920772E-005, 
+     -1.3509604405406619E-006, -6.6990448297176711E-007,  6.663383325056E-06, 
+      3.708018225422E-08,      -1.7660435224159565E-007, -6.1840629689866368E-007, 
+     -1.7813990776219197E-006, -3.3535987429255727E-008,  3.935517076365E-08, 
+      6.505499412452E-07,       1.440668845512E-05, -2.8150103173825491E-006, 
+     -8.3903593499014175E-007,  7.408005351017E-07, -1.9161466233849015E-006, 
+      9.081980826492E-09,       2.490749537095E-07, -1.4760518810439157E-007, 
+     -1.3793006724400532E-005,  2.489895370987E-06, -1.5959423901377200E-007, 
+      2.690316343097E-07,      -4.1217016999308504E-006,  7.952941666800E-08, 
+     -7.2990952602258013E-007, -1.7954013141533215E-007, -1.1640401640614258E-007, 
+      6.771867653711E-07,      -1.0746295230004289E-007,  4.039031048143E-07, 
+      2.787306323990E-06,       1.909086337556E-07,  2.003410428988E-07, 
+     -6.3482895726850452E-007,  4.902286077940E-06,  1.465099165371E-07, 
+     -7.5137229280749520E-005,  3.720981337285E-07,  2.512145864170E-06, 
+     -5.4252643272974731E-007, -2.8462219667935371E-007,  4.292860609974E-05, 
+     -6.5862760507783429E-007, -1.2480879991960095E-005, -9.5273502379867572E-007, 
+      4.052268635772E-05,       5.288985423996E-07,  2.980442699714E-08, 
+      3.560300618408E-06,      -2.7003325323194543E-006, -1.4203234909489971E-006, 
+      8.656602418513E-07,      -6.4194333554881797E-006,  1.931393971340E-06, 
+     -8.6139819230175528E-006, -9.1366986717313766E-007,  2.879457001554E-06, 
+      2.007188322817E-05,      -2.4948505645647917E-006,  1.658707641598E-05, 
+     -2.4509930007240804E-004, -2.3502232469839168E-005, -4.3895779626087835E-005, 
+     -7.8119630255808184E-005, -1.4540693953803587E-006,  3.452459698569E-04, 
+     -2.0722839488701742E-005, -3.7213469227039837E-005, -6.9155025329329907E-004, 
+      1.278227534939E-04,      -2.5302954184009243E-004,  7.287768714362E-05, 
+      1.380518534774E-04,      -6.5129003296197136E-006,  4.670615337516E-06, 
+      7.605066231591E-06,      -1.5228088519736568E-006, -3.7589304715058225E-006, 
+     -1.2153496005749003E-006, -1.8079453741242957E-005,  1.594401685107E-05, 
+      1.347292418031E-05,       2.384143521978E-06,  7.998226678793E-06, 
+     -3.4709818987776267E-006,  1.431689836772E-05, -1.4696803465648044E-005, 
+      3.888530887510E-06,      -1.0455930474840414E-005, -3.0965868094457320E-005, 
+      1.018287289040E-05,      -1.8444924711459120E-005,  2.791858264708E-05, 
+     -7.2345661666835552E-006, -7.9564761123514379E-006,  8.982033665834E-06, 
+     -3.9410960617036170E-007,  8.812889582755E-06, -2.5196722655259046E-005, 
+     -1.4295203655928762E-006,  3.916161021263E-06,  1.361840567905E-06, 
+     -7.5976548414575639E-006,  2.179061414188E-05,  4.901427940492E-06, 
+     -3.9431921651102262E-007,  5.690512569566E-06,  1.118471719828E-05, 
+      8.176803337438E-06,      -5.3444625434049940E-006,  1.490462344755E-05, 
+      2.126220067685E-05,       7.836256153355E-06,  8.087031859705E-06, 
+     -5.4752162021600052E-006, -8.2977899537593276E-006,  3.950829312778E-07, 
+     -1.5747106887670627E-005,  3.724685197941E-06,  1.352632962819E-05, 
+      5.967054664663E-05,      -4.0192855513481343E-005, -3.6545547408765313E-005, 
+     -9.7461958237962090E-006, -4.4229842898306938E-005,  1.622592131286E-05, 
+     -2.5086629932264022E-005, -1.1187896088734424E-005,  2.373090680711E-05, 
+     -8.6321885405067286E-005, -5.3380105524987410E-005,  1.550791341471E-05, 
+     -6.8979300639971514E-005,  5.211242820735E-05, -8.7261145159810323E-006, 
+     -7.5330537329376386E-006,  5.835819423636E-05, -6.8317235585214453E-005, 
+      2.730262907305E-05,       1.037085879369E-04,  5.222180137210E-05, 
+      2.702519007406E-04,       1.161522646338E-04, -1.6291739467183802E-004, 
+      1.671736292969E-04,      -3.2079156783439318E-004,  2.070804769996E-05, 
+     -2.2356771466347384E-004,  6.296897863146E-05,  1.898055664433E-04, 
+     -3.2241762107545829E-004, -3.3965868872311809E-004, -4.5563176104016292E-004, 
+      1.918890827040E-04]
+ -  [ 8.422153310900E-05, -2.1289862894102545E-011, -1.3753756570060102E-012, 
+     -5.0234003155097406E-012, -1.9223622604565629E-007, -4.4202732275694503E-013, 
+     -1.3697226655033732E-011,                       1.618619723528E-08, 
+      3.548503586239E-14,  2.394363041500E-12,      -1.0771041409881081E-005, 
+     -6.5569282039254061E-011,                      -3.9632116532868048E-012, 
+     -2.6548953583186098E-011,                       2.457683903059E-06, 
+      6.414616940821E-07, -6.2659473692560502E-013,  1.333687092937E-08, 
+     -1.8249986225683402E-011,                       2.093840095611E-11, 
+      9.908397567513E-07, -1.3941058009541460E-012, -8.9658655405056888E-011, 
+     -2.2982953723245782E-011,                      -1.1765299402600863E-005, 
+      1.900493241124E-07, -7.2212414609714067E-012, -5.1287754255959894E-011, 
+      6.400023857269E-07,  1.330132744544E-11,       4.371936603655E-08, 
+     -5.0418065108601660E-011,                       6.649195346296E-11, 
+      1.171137447240E-10,  1.147618473663E-04,      -2.4423102148970522E-011, 
+      1.443155342441E-10,  8.287548939349E-11,       2.607640996263E-06, 
+      6.545286893830E-07,  5.238743155268E-11,       5.793839998325E-11, 
+     -1.9155888882397241E-007,                      -1.3865836338227178E-010, 
+      9.765132177198E-09,  4.315995483281E-08,       5.662053216439E-11, 
+     -2.1372463565569907E-010,                      -7.1441072555552586E-010, 
+      1.556935972254E-05, -5.3335320614536497E-006, -7.0880761350101181E-011, 
+      4.143388420291E-08,  5.246871742012E-10,       3.240577245123E-10, 
+      1.188318852184E-10, -1.3687232966200242E-008,  4.674650513126E-06, 
+     -6.4036699743553446E-008,                      -9.0972512870060259E-011, 
+      3.282393320198E-09,  6.809828046700E-07,       6.521097354191E-10, 
+      2.326307223605E-08,  4.360189826197E-10,       8.684151045766E-07, 
+     -1.3632818442338310E-007,                      -1.4765123710365726E-009, 
+     -3.3357934498966409E-009,                       5.926127733594E-06, 
+     -2.8076602540832475E-009,                       1.529222610148E-09, 
+     -1.0105510324635468E-006,                      -3.1932486425247770E-009, 
+     -1.2028431592427460E-005,                      -5.3185315321527217E-005, 
+      6.893189275196E-09, -8.6628951707397949E-007, -3.4754136068938665E-006, 
+     -1.3997238094726628E-007,                       1.153489304883E-08, 
+      1.159427097355E-08, -1.3908485738545557E-008, -7.5377692993505740E-007, 
+      1.780984310907E-07,  1.685949836810E-08,       2.520092469022E-08, 
+      5.210166518753E-07, -2.6078227977671428E-008, -2.3160306734593656E-007, 
+     -8.2373048381469766E-009,                       5.543084636892E-07, 
+     -5.1345492630964265E-008,                      -7.9563085576676500E-007, 
+      3.460737793085E-07,  1.284844758651E-08,      -2.8028986638857633E-007, 
+      2.008805303699E-06, -1.8840156222400921E-007,  3.721972309744E-04, 
+      9.319961269193E-08, -1.5664024001018381E-006,  2.463942270213E-05, 
+     -8.6061653176774402E-006,                      -3.2412248352576471E-007, 
+     -7.8654881798727403E-008,                      -6.0290427948332604E-007, 
+     -9.3393915748644793E-006,                       1.127383612466E-07, 
+     -4.1183375472478435E-008,                       2.475935298210E-08, 
+     -9.4030994032391236E-008,                      -2.1452377256994101E-008, 
+      1.541461903610E-07, -9.4534902806651120E-007, -1.0252820364140320E-007, 
+      3.236699628059E-06, -1.8586669538161268E-008,  2.033802651383E-06, 
+     -9.8242941016130373E-007,                       4.137939968744E-06, 
+      2.658505300848E-05,  1.966326479578E-08,      -7.4120826215238493E-008, 
+      1.446992867923E-07, -1.2650146162412318E-007, -2.7293066368918937E-006, 
+     -1.7922390012512217E-005,                       1.615584755933E-07, 
+      1.044260668617E-07, -9.8658622641637240E-008,  6.587976934855E-07, 
+      8.090908990233E-08, -7.7310705275900930E-008,  9.310176091465E-07, 
+     -8.0065098330276471E-009,                      -5.8053914083492703E-008, 
+     -1.1747986162106472E-008,                      -3.9777196645566051E-008, 
+     -2.8865399785345822E-006,                       3.241945016867E-07, 
+     -1.0758648972091162E-005,                       3.648162262057E-06, 
+     -3.8052659003787772E-007,                      -4.2902181912970625E-007, 
+      1.154088372519E-07, -3.3933865717604688E-006, -1.4945296762982339E-007, 
+     -2.0750624562346349E-008,                       6.102939649596E-08, 
+      6.124513255229E-06, -5.9090560835927536E-006, -6.1267966570598619E-007, 
+      1.082302825808E-08,  8.711321129526E-07,       1.687472864070E-06, 
+     -1.9722119627266872E-005,                      -1.4417042950171923E-007, 
+     -8.0621559586014258E-006,                       5.193167775697E-07, 
+      2.423946821600E-06,  4.643822338874E-05,      -1.2931772863951957E-006, 
+      4.489207747014E-06,  1.073078404895E-05,       1.306047538391E-05, 
+      1.332156597371E-06, -2.6011335922759924E-006, -4.2811990161234926E-005, 
+      1.417632709955E-05, -1.1886633342972564E-005,  1.342530592941E-04, 
+      4.952437953757E-05, -5.3086360263994350E-005, -8.3173181382987377E-005, 
+     -6.8265189637469002E-006,                      -4.9354546364761853E-005, 
+      4.868988684004E-06, -5.0245091330782486E-005,  7.204538543839E-06, 
+      2.002452896524E-05, -7.1990662006721651E-006,  6.861261136217E-05, 
+     -2.7140184663663591E-004,                      -1.4827071657581153E-004, 
+     -4.8379224712091903E-005,                      -4.3447747727832966E-004, 
+      1.989792098856E-04, -5.4757641519634186E-005, -8.5797741370253035E-006, 
+      3.388196119367E-05, -6.4952277271327491E-006,  1.275098060994E-04, 
+     -8.5470729450719696E-005,                      -5.8364720979108865E-005, 
+     -2.6365554631937148E-005,                       2.105442250337E-04, 
+      4.976732959154E-05,  6.223108639426E-06,      -7.1530686282515396E-005, 
+      7.789189451254E-06,  1.332817608108E-06,       1.672211841418E-05, 
+      5.490345749558E-06, -3.9142884708355877E-006, -3.8920845264822992E-006, 
+     -9.9417611939101687E-006,                      -1.4522648376035906E-005, 
+      1.892967754556E-05,  1.326540167216E-05,      -2.2928690471321145E-005, 
+      6.208892505064E-06, -2.1012640387020479E-005,  9.667039555321E-07, 
+      7.779876846646E-06, -5.9870804220979587E-006,  4.657952375282E-06, 
+      1.627470088344E-05,  1.396233090164E-05,      -3.2726337741177322E-006, 
+     -2.3942416491632221E-006,                       3.121194420553E-06, 
+      1.046209698907E-05, -2.3471284126919210E-006, -1.6582469049329987E-006, 
+     -1.3209945968354947E-005,                      -1.9366389176871655E-006, 
+     -3.4336033765197064E-006,                      -4.2246526353817101E-006, 
+      1.836288700231E-06,  2.262567992723E-06,      -4.5827044589818078E-007, 
+     -1.2658652994849626E-005,                      -3.3007522915975323E-007, 
+     -8.7198524938491087E-007,                       6.621672334376E-06, 
+     -2.0588744138625448E-006,                       2.761440257193E-07, 
+     -3.1089550388698579E-006,                      -3.4809910836641257E-006, 
+      2.406168828418E-06, -7.1660225875951706E-007, -7.5472668160517296E-006, 
+      2.226250207094E-06,  5.262863890426E-06,       9.264137094597E-06, 
+     -1.3228797115297924E-005,                      -1.7663006194121181E-007, 
+      1.076261430370E-05, -3.7984759493571625E-007,  2.914893373429E-07, 
+     -6.7694744339786509E-006,                      -2.8598250954146474E-006, 
+     -6.6236965241967525E-006,                      -9.7909716466358979E-006, 
+     -1.9219537692214551E-005]
+ -  [-2.3638438360990226E-011, -8.4221425900296576E-005,  1.036919129492E-10, 
+     -8.0008795180877860E-009, -1.1616776567214659E-013, -1.9222919803597166E-007, 
+      4.821687957894E-09,      -2.1536245147199719E-014,  1.660177290602E-08, 
+     -1.0768313562023110E-005, -3.9050835969943179E-013, -2.1781381472226434E-008, 
+      3.086204615322E-07,      -2.4600616216462895E-006,  3.539794516084E-12, 
+     -3.1143066173176473E-012, -6.4784097552009353E-007, -7.7441417481383318E-012, 
+     -1.1430721176373818E-008,  1.389279091866E-06,      -1.4943307951846636E-012, 
+      9.450394957301E-07,      -1.1007646681783316E-007, -1.1757396341361684E-005, 
+      2.631464249668E-12,       1.528071410572E-12,       1.455032463939E-07, 
+      2.113450263384E-07,      -1.8669656569924812E-012, -6.6134864631594539E-007, 
+     -1.2760754106780201E-012,  4.108999497018E-08,      -1.1887246894861455E-009, 
+      1.997826648360E-11,       1.134108225829E-11,      -1.1469762120934132E-004, 
+     -9.5178397003352897E-007,  2.613933983626E-06,      -7.5025022081874680E-010, 
+      1.870604279321E-09,      -6.4805717542793541E-007, -1.9599139137926251E-007, 
+     -8.5902237251161214E-010, -3.6723306801763327E-008,  1.354457271777E-10, 
+     -2.1813349889012304E-009, -3.7422417188712330E-008, -3.7010179911165962E-006, 
+     -1.5583546045300125E-005,  5.530501454214E-10,       1.853066377217E-09, 
+      5.397429962878E-06,      -2.4277042775200602E-009,  4.781910146976E-08, 
+      4.998650558601E-07,       8.276253808116E-08,       4.788731243167E-06, 
+     -3.3451238573194517E-008, -2.9366412332401787E-008,  1.352292195128E-08, 
+     -5.2485404955755977E-007,  2.942024491651E-08,      -7.8480433681344972E-009, 
+     -3.3355688476021244E-008, -9.7870942279413333E-007,  2.170283329970E-10, 
+     -5.3525749629023622E-008,  7.269202861695E-10,       1.135149802417E-05, 
+      3.545820661475E-09,      -5.8416881277871470E-006,  2.252007557678E-06, 
+      6.700048472937E-08,      -1.3349398920580133E-006,  5.248580790720E-05, 
+     -1.1999576751850060E-005,  1.160615293348E-06,      -3.2189181947308687E-006, 
+      8.917159539497E-07,      -1.3804766572775186E-007, -2.1074480184403248E-007, 
+      4.882978727070E-07,      -5.8884636651214157E-007, -1.0418331346095758E-007, 
+     -4.9623555681199906E-008,  3.768928161272E-07,      -1.2204505259988505E-008, 
+      4.984694254290E-07,       5.480463183943E-08,       4.482426103453E-09, 
+     -1.0778002176410281E-007,  1.036969220792E-07,      -4.4364551343498753E-008, 
+     -2.5744990662629346E-007, -1.3393825928158560E-007,  8.136034714166E-08, 
+     -8.8476394745287549E-006, -9.4045951340679829E-007, -3.6983979017469852E-004, 
+     -2.2124291596380705E-007, -4.0263275775613951E-005, -2.5144270750733846E-005, 
+     -1.5142169331378344E-006, -2.3136332789777157E-007, -1.6654728447626546E-007, 
+      8.970625005159E-06,      -1.0167649654816473E-005,  5.500100154984E-07, 
+      7.953020206556E-07,      -1.9817674349735518E-007,  3.681852442089E-07, 
+      7.008420501727E-07,      -9.0498690954709247E-006,  1.705327264958E-08, 
+      1.144883699545E-06,       1.849212881469E-06,       6.622269796373E-07, 
+     -2.9075275577167106E-006,  3.653666835719E-07,      -3.2312952527257751E-007, 
+     -2.7317537563703413E-005,  3.840006774665E-06,       5.978881529120E-08, 
+     -1.4760035017363103E-007,  2.999505094666E-06,      -1.0404802451985723E-006, 
+      6.073382290537E-07,      -9.6946153267270975E-008, -1.7967343844191048E-005, 
+      1.345407816119E-07,       4.131409070138E-07,      -6.0214629686131301E-007, 
+     -1.7387992553981348E-006,  4.236684372132E-07,      -8.9102150145500194E-007, 
+      8.117776600657E-07,       1.110472273573E-06,       3.720296634668E-07, 
+     -1.4405412300668672E-006, -1.4838114383916573E-007, -3.4089256520605137E-007, 
+     -1.0248550999783493E-006,  1.235181076666E-07,       1.381138084265E-06, 
+     -1.6240338534837472E-007,  8.450977721939E-06,      -1.3720651459203081E-006, 
+      1.248173927170E-05,      -3.1280162195905861E-008,  1.286172483185E-07, 
+     -1.8802767674065891E-006, -1.8448254222600203E-006,  4.008874135472E-06, 
+     -4.3397293866965861E-007, -3.9943302776373657E-008, -7.8530822826858537E-007, 
+      2.285859334861E-06,      -2.2202214046122097E-006,  2.127042700619E-06, 
+      7.358997887562E-06,      -5.8800051059743232E-007, -1.5497025922090108E-005, 
+     -2.1942553811184840E-005, -3.1144155952760348E-005, -3.6006236479519445E-006, 
+      7.936901435902E-05,       2.058659296243E-06,      -1.1777595860343088E-006, 
+      8.051035377755E-06,      -5.2628808409803602E-006, -2.6136585237697125E-005, 
+     -2.6065866098238838E-005,  6.806661426450E-05,       1.912417148255E-06, 
+     -4.3323514214606922E-005,  1.696074036322E-07,      -1.7585332366613942E-005, 
+      6.258733349637E-07,      -1.5035707676186580E-005, -6.8877014196578874E-006, 
+      9.110019557837E-06,      -1.2976209696723140E-005,  1.331278968524E-06, 
+      2.947338645099E-06,       4.792724076447E-06,       5.410360844322E-06, 
+     -1.4066089271969371E-005,  6.770364830348E-06,      -5.9699148490786804E-005, 
+     -2.6595732242705894E-004, -6.2340495767824458E-004,  5.916257330175E-05, 
+      2.308025729529E-05,      -3.8042840671417773E-005,  7.202587082666E-05, 
+     -3.3988740988615607E-005, -9.8223426129741937E-006,  2.413847866463E-05, 
+      4.822070180039E-05,      -1.6650709852376544E-005, -3.7921630925990914E-006, 
+      7.645868190761E-06,       1.312706053179E-05,      -4.2490340337198963E-006, 
+      5.372707178446E-06,       2.666491384435E-06,       5.199932584025E-06, 
+      5.289972820445E-06,       2.807353084163E-05,      -8.0126494678160249E-006, 
+     -2.1210044920298772E-005, -6.2539917545517150E-006,  1.762762085264E-05, 
+      5.627631839734E-06,      -2.5849937456678680E-006,  3.100296630799E-06, 
+     -1.2079839659627530E-005,  8.859765195323E-06,       9.211215033462E-06, 
+      7.174461774832E-06,       5.459457973524E-06,       3.010634476217E-06, 
+     -9.2228563315972670E-006,  7.047624976759E-06,       1.742500461848E-05, 
+      7.414394353147E-06,       4.925699825899E-06,      -2.1714933749693278E-006, 
+      1.290601747308E-06,      -2.9094868244749131E-006,  1.144058196240E-05, 
+      1.787342847375E-05,      -1.3004654856859439E-005,  6.532585988582E-06, 
+     -2.3877897690538768E-005,  2.812108021182E-05,      -3.0849519199330070E-005, 
+      3.527237308483E-05,       3.151540946449E-05,       3.238336152893E-05, 
+      3.212827035423E-05,      -5.4653111800032631E-005,  6.141889542496E-05, 
+      2.318304194440E-05,      -2.4414533021187653E-005, -1.6246887297040482E-005, 
+      1.481528148621E-04,       7.447885862865E-05,      -1.0929214764810778E-004, 
+      1.846469484190E-04,       2.117640134869E-04,      -9.5650385609160319E-005, 
+      1.266589689312E-04,      -1.0217409904035362E-004, -1.7002907992486440E-005, 
+      1.379415824750E-04]
+ -  [ 7.420995288511E-12, -2.6798074284141335E-009,  2.588123165738E-08, 
+     -1.3696155422860019E-005, -1.1539160672444614E-013,  2.729684082471E-08, 
+      2.981074992338E-06, -5.0110093076935827E-013, -8.4301652841412716E-010, 
+      1.108295116824E-06, -1.0406091339640842E-012,  2.529923373216E-06, 
+      2.005665810238E-06,  7.686264027591E-08,      -6.5373068261403229E-012, 
+      7.377182045988E-12,  2.024768130673E-08,       5.020965495586E-12, 
+     -5.0328975887583739E-009,                       1.926827180015E-04, 
+      8.155598829466E-13, -5.8886190250951418E-006, -6.7600728902569504E-006, 
+      2.740423913757E-07, -2.2056087438751017E-011,  2.084951567909E-11, 
+      5.247260654384E-09,  9.892244662153E-06,       4.058916676952E-12, 
+      5.396915089717E-08,  2.821955564597E-11,       8.640239660660E-09, 
+     -4.6774948773596346E-008,                       6.970589566144E-12, 
+     -5.0118694869309916E-011,                       1.146912557373E-05, 
+     -3.8238447088169772E-005,                       1.669042333278E-07, 
+      4.002088597519E-11, -4.5789679296783393E-009,  2.818429534694E-08, 
+     -2.3625703260201570E-009,                      -7.1877972286847107E-009, 
+     -2.5667378177117412E-006,                      -2.4955847376016351E-009, 
+     -1.8258795399353194E-009,                       2.598577080709E-09, 
+     -1.5867825498010538E-004,                      -8.4913638149480678E-007, 
+      7.033162351749E-10,  3.288860225263E-09,      -6.2913272227433994E-008, 
+      4.601242434829E-09,  1.102422547592E-08,       1.151077572820E-05, 
+     -9.1213679989144997E-008,                      -1.6944740250259384E-006, 
+     -1.0518642435846535E-008,                       1.878757865893E-08, 
+      3.241871475048E-09, -1.1065267202994590E-007,  4.821497113274E-08, 
+      1.750270380828E-07,  3.020785958676E-08,      -6.2810720084740123E-008, 
+     -5.0873656525973108E-008,                       1.496837446555E-09, 
+     -1.8656560925870749E-009,                       6.287478297101E-04, 
+     -6.9117959723408840E-009,                       4.535195524968E-06, 
+      3.421647985508E-05, -3.7206763987800834E-008, -2.5449444915775533E-006, 
+     -7.7047319326732255E-006,                       1.836439467130E-06, 
+      2.375869817793E-05,  2.283506828909E-07,      -3.5617576024077105E-007, 
+      2.060187921660E-07,  3.657998519666E-08,       1.785576648330E-05, 
+     -3.7137539953720076E-008,                      -6.6387753720231112E-008, 
+      4.978125412141E-07, -3.7062268829579288E-008,  2.621877491712E-08, 
+     -2.1782227736715752E-008,                       6.712330724023E-06, 
+      7.349540822239E-07, -1.5957313453026664E-008, -4.1102626935907787E-008, 
+      2.083937332382E-07, -3.2870493521538452E-008,  5.764432361440E-09, 
+     -4.3515243150043480E-008,                       1.658650702862E-06, 
+      7.742339908495E-07,  7.024532444209E-05,       3.295907039958E-07, 
+     -3.8136880745147047E-004,                      -1.1382862577645694E-006, 
+     -4.5302539973478929E-007,                      -1.2539540953198780E-007, 
+     -7.2742861021668313E-007,                      -4.7483865369036607E-007, 
+      1.519713758733E-06, -5.6592853753302325E-007,  8.706376838938E-07, 
+     -1.2871743827963022E-007,                      -7.8514377052438779E-008, 
+      4.376867205254E-07, -1.9724756390819152E-004,  5.688341260605E-07, 
+      1.178776148827E-06,  3.901561946377E-08,      -6.1214024568137280E-008, 
+     -1.2939866163515766E-007,                      -7.9685989893186081E-007, 
+     -1.4802846611020801E-008,                      -5.9034717492592635E-007, 
+      8.861885143509E-07,  1.062279439954E-06,      -5.2692100663297687E-007, 
+      1.577083399310E-06, -6.8168585863944248E-008,  2.034827149707E-06, 
+     -8.5355205344744473E-007,                       2.123706482776E-07, 
+     -9.1388271888064918E-008,                       9.788865594539E-08, 
+     -3.0707711109871033E-007,                      -1.8891613454579661E-006, 
+      1.943742016595E-07,  9.845938264586E-08,       6.714938583284E-05, 
+     -3.3844243036052880E-006,                      -4.3941857196257092E-008, 
+      8.128626031427E-05, -2.3922535416173027E-006, -2.1389943621213644E-006, 
+     -4.1362530100447523E-006,                      -1.2751010979495920E-005, 
+      1.227017885849E-04,  2.155565133727E-06,      -2.3124424767809036E-004, 
+     -2.1915788470172639E-005,                       6.490107795189E-04, 
+      1.134222674213E-07,  1.347315733803E-07,      -4.5948253424600882E-006, 
+     -8.7130377093013944E-006,                      -3.6001164925524524E-006, 
+     -1.4082793693287455E-006,                      -2.8014971911189116E-007, 
+      3.131977242445E-06,  6.703818584873E-06,      -2.8329152251910018E-007, 
+      7.952231076137E-06, -1.4621288738768417E-006, -3.9179974537759228E-007, 
+     -1.1232576168461427E-005,                      -1.0229324380584391E-005, 
+      1.905820407340E-05,  2.288579632292E-05,      -2.9104172369357839E-005, 
+     -1.8578775949445862E-006,                       4.493243572399E-06, 
+      2.266632708267E-05, -2.2372483974688717E-005, -1.9446750653126608E-004, 
+     -1.7855007952851260E-004,                       3.080975860054E-04, 
+     -5.3848633799393329E-005,                      -1.0608371323405102E-004, 
+      2.071773151675E-06,  8.098619299078E-06,      -5.9090389435971413E-006, 
+      7.904632156980E-06,  1.386145855826E-05,      -5.2031352946284677E-006, 
+      1.858788314881E-05, -2.8968704514989869E-006, -1.6715492925520298E-005, 
+     -3.9910010684006335E-006,                      -9.8023744618852180E-006, 
+      3.429596625487E-06, -1.1738795470112889E-005,  2.527740478222E-05, 
+      1.655559695895E-05,  7.323068207634E-05,       1.264037344402E-05, 
+     -6.7760286904985184E-006,                       3.913905869542E-06, 
+     -1.8109279943779372E-006,                      -4.2605109661384987E-006, 
+      2.317808909289E-06,  2.786580335678E-05,       1.795748237098E-06, 
+      1.048622945342E-05,  5.008004626102E-05,       2.240134927828E-05, 
+     -2.5957620200488360E-005,                      -1.7941104635974107E-005, 
+     -1.4841848558082842E-005,                      -1.6891951872270432E-006, 
+     -2.1011100626657336E-006,                      -7.3594169571270971E-006, 
+     -6.6358074857555712E-006,                      -6.1734073988350618E-006, 
+      3.920055717396E-07, -7.5514433502198425E-006,  3.328644214353E-06, 
+     -1.2731223970938635E-005,                      -1.0545336937469992E-006, 
+      1.405853165044E-05, -6.8934301598204697E-006,  7.897485120233E-06, 
+      9.316333441908E-06,  2.953482746385E-05,       1.743602529578E-05, 
+     -2.4650558575527157E-005,                      -1.3881310484771108E-004, 
+     -6.6519518393147112E-007,                       1.081253075271E-05, 
+      6.953348489174E-06,  3.720395277935E-06,       3.222207233823E-05, 
+     -6.0696871801667251E-006,                       2.730375861596E-06, 
+      3.063501056024E-05, -9.6314978302727090E-006, -3.8451911883902333E-005, 
+     -6.3999800504520792E-007,                       5.287839078506E-06, 
+      5.208662959128E-05, -4.2640215575727061E-005,  2.942244311595E-05, 
+      5.917151373649E-05,  4.384014789494E-05,       3.689277128337E-05, 
+     -1.0036688611734356E-005,                       3.256705254133E-05, 
+      1.164069197869E-04,  1.087961090175E-05,      -6.0426272126120669E-005, 
+     -3.6151792335692418E-005,                       7.378643794070E-06, 
+      4.992896157924E-05, -5.8798621754340059E-005,  5.572114726539E-04, 
+      1.744059727805E-04, -5.6983820268357286E-004, -9.3924642354577194E-005, 
+      3.041203610583E-04, -1.9489088341620290E-004]
+  #-------------------------------- Warnings obtained during the run, check their relevance!
+ WARNINGS:
+ - No convergence within the allowed number of minimization steps
+  #-------------------------------------------------------------------- Timing for root process
+ Timings for root process:
+   CPU time (s)                        :  39.12
+   Elapsed time (s)                    :  45.71
+ BigDFT infocode                       :  0
+ Average noise forces: {x: -1.56261709E-06, y: -1.56261710E-06, z: -1.00679576E-06, 
+                    total:  2.42841143E-06}
+ Clean forces norm (Ha/Bohr): {maxval:  5.800634424813E-02, fnrm2:  6.729471946066E-03}
+ Raw forces norm (Ha/Bohr): {maxval:  5.800705618270E-02, fnrm2:  6.729471951968E-03}
+  #------------------------------------------------------------------------------ Atomic Forces
+ Atomic Forces (Ha/Bohr):
+ -  {N: [ 6.617444900424E-24,  6.617444900424E-24,  5.800634424813E-02]} # 0001
+ -  {N: [-6.617444900424E-24, -6.617444900424E-24, -5.800634424813E-02]} # 0002
+ Energy (Hartree)                      : -1.98864068479519851E+01
+ Force Norm (Hartree/Bohr)             :  8.20333587393916319E-02
+ Memory Consumption Report:
+   Tot. No. of Allocations             :  958
+   Tot. No. of Deallocations           :  958
+   Remaining Memory (B)                :  0
+   Memory occupation:
+     Peak Value (MB)                   :  682.902
+     for the array                     : w%x_f3
+     in the routine                    : LocalHamiltonianApplication
+     Memory Peak of process            : 283.544 MB
+ Walltime since initialization         :  00:00:45.933634451
+ Max No. of dictionaries used          :  4690 #( 1162 still in use)
+ Number of dictionary folders allocated:  1
