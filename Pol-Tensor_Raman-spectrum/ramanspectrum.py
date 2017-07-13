@@ -33,7 +33,14 @@ HA_TO_CMM1 = 219474.6313705
 class RamanSpectrumCalc(BigDFTCalc):
     """
     This class allows one to initialize and run a Raman spectrum 
-    calculation with BigDFT. 
+    calculation with BigDFT. The main quantities computed are 
+    the phonon energies, the intensity of the peaks, and the 
+    depolarization ratio.
+
+    See http://dx.doi.org/10.1063/1.470783 and 
+    https://link.aps.org/doi/10.1103/PhysRevB.54.7830 for more 
+    details on how to obtain these quantities from a set of 
+    calculations.
     """
 
     def __init__(self, input_yaml, posinp, alpha_x=1./64., \
