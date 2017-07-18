@@ -33,7 +33,14 @@ HA_TO_CMM1 = 219474.6313705
 class RamanSpectrumCalc(BigDFTCalc):
     """
     This class allows one to initialize and run a Raman spectrum 
-    calculation with BigDFT. 
+    calculation with BigDFT. The main quantities computed are 
+    the phonon energies, the intensity of the peaks, and the 
+    depolarization ratio.
+
+    See http://dx.doi.org/10.1063/1.470783 and 
+    https://link.aps.org/doi/10.1103/PhysRevB.54.7830 for more 
+    details on how to obtain these quantities from a set of 
+    calculations.
     """
 
     def __init__(self, input_yaml, posinp, alpha_x=1./64., \
@@ -248,11 +255,12 @@ class RamanSpectrumCalc(BigDFTCalc):
                                    6.*(pt[0][1]**2+pt[0][2]**2+pt[1][2]**2))
                 self.betas_sq.append(beta_sq)
                 # From the two previous quantities, it is possible to 
-                # compute the intensity and the depolarization ratio 
-                # of the normal mode
-                self.intensities.append(45*alpha**2 + 7*beta_sq)
-#                conversion = B_TO_ANG**4 / EMU_TO_AMU
-#                self.intensities.append((45*alpha**2 + 7*beta_sq) * conversion)
+                # compute the intensity (converted from atomic units 
+                # to Ang^4.amu^-1) and the depolarization ratio 
+                # of the normal mode.
+#                self.intensities.append(45*alpha**2 + 7*beta_sq)
+                conversion = B_TO_ANG**4 / EMU_TO_AMU
+                self.intensities.append((45*alpha**2 + 7*beta_sq) * conversion)
                 self.depol_ratios.append(3*beta_sq / (45*alpha**2 + 4*beta_sq))
        
     
@@ -405,26 +413,31 @@ class RamanSpectrumCalc(BigDFTCalc):
         """
         Method computing the derivative of the polarizability tensor 
         along all the atom displacements. 
+
         All the elements of the derivative of the polarizability 
         tensor along one displacement direction are represented by a 
         line of the returned array. There are 3 * n_at such lines 
-        (because there are 3 displacements per atom).
-        This representation allows for a simpler evaluation of these 
+        (because there are 3 displacements per atom). This 
+        representation allows for a simpler evaluation of these 
         derivatives along the normal modes.
+        
+        Note that each element is also weighted by the inverse of the 
+        square root of the atom that is moved.
         
         :returns: Derivatives of the polarizability tensor
         :rtype: 2D np.array of dimension (3*n_at) * 9
         """
         deriv_pol_tensors = []
         # Loop over the atoms
-        for atom_dir in self.atom_dirs:
+        for i_at, atom_dir in enumerate(self.atom_dirs):
             # Loop over the displacement directions
             for i, coord in enumerate(COORDS):
                 # Get the delta of the polarizability tensors 
-                # corresponding to the two atomic discplacements along 
+                # corresponding to the two atomic displacements along 
                 # the current direction
+                m = MASS_ATOMS[self.posinp.atoms[i_at]['Type']]
                 pts = [self.pol_tensors[atom_dir][coord][j] for j in range(2)]
-                delta_pol_tensor = pts[0] - pts[1]
+                delta_pol_tensor = (pts[0] - pts[1]) / np.sqrt(m*AMU_TO_EMU)
                 # Norm of the atom displacement in that direction (in 
                 # bohr)
                 delta_x = 2 * self.displacements[i]
