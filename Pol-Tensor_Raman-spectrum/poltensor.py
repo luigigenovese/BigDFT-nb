@@ -1,5 +1,5 @@
 """
-File containing the class allowing allowing to compute the 
+File containing the class allowing allowing to compute the
 polarizability tensor of a molecule with BigDFT.
 """
 
@@ -13,34 +13,34 @@ import numpy as np
 
 class PolTensorCalc(BigDFTCalc):
     """
-    This class allows to run all the calculations required to get the 
+    This class allows to run all the calculations required to get the
     polarizability tensor for a given geometry of a system.
     """
 
-    def __init__(self, input_yaml, posinp, ef_amplitudes=[1.E-4]*3, \
+    def __init__(self, input_yaml, posinp, ef_amplitudes=[1.E-4]*3,
                  prefix=None, run_folder=None, ref_calc=None):
         """
-        Method initializing a polarizability tensor calculation. It 
-        inherits from the BigDFT class. To get the polarizability 
-        tensor, electric fields in the directions x, y and z are 
-        applied. The elements of the tensor are defined as the 
-        coefficients between the change of the dipole (in one 
-        direction) and the amplitude of the perturbative electric 
+        Method initializing a polarizability tensor calculation. It
+        inherits from the BigDFT class. To get the polarizability
+        tensor, electric fields in the directions x, y and z are
+        applied. The elements of the tensor are defined as the
+        coefficients between the change of the dipole (in one
+        direction) and the amplitude of the perturbative electric
         field applied (in another direction).
 
-        The amplitudes of the electric fields along the three space 
+        The amplitudes of the electric fields along the three space
         coordinates are therefore important parameters, specified by
         ef_amplitudes.
 
-        :param input_yaml: Reference input file for all the 
+        :param input_yaml: Reference input file for all the
                            calculations.
-        :type input_yaml: inputfile.Input 
+        :type input_yaml: inputfile.Input
         :param posinp: Reference geometry for all the calculations.
         :type posinp: posinp.Posinp
-        :param ef_amplitudes: Amplitudes of the electric field to 
+        :param ef_amplitudes: Amplitudes of the electric field to
                               apply along each direction.
         :type ef_amplitudes: list of length 3
-        :param prefix: Prefix of the BigDFT calculation (optional, 
+        :param prefix: Prefix of the BigDFT calculation (optional,
                        default value set to None).
         :type prefix: str
         :param run_folder: Folder where to run the calculation
@@ -49,8 +49,8 @@ class PolTensorCalc(BigDFTCalc):
         :type ref_calc: bigdft.BigDFTCalc
         """
         # Initialize the instance via the BigDFT class
-        super(PolTensorCalc, self).__init__(input_yaml, posinp, prefix=prefix,\
-            run_folder=run_folder, ref_calc=ref_calc)
+        super(PolTensorCalc, self).__init__(input_yaml, posinp, prefix=prefix,
+            run_folder=run_folder, ref_calc=ref_calc)  # noqa
         # Initialize the electric field amplitudes
         self.ef_amplitudes = ef_amplitudes
         # Initialize the dictionary of paths to all the logfiles.
@@ -58,18 +58,17 @@ class PolTensorCalc(BigDFTCalc):
         for coord in COORDS:
             self.logfiles_paths[coord] = []
 
-
     def run(self, nmpi=1, nomp=1, force_run=False):
         """
-        Method running all the calculations and post-processing them 
-        to obtain the polarizability tensor. You may force the 
+        Method running all the calculations and post-processing them
+        to obtain the polarizability tensor. You may force the
         calculation by setting force_run to True.
 
         :param nmpi: Number of MPI tasks
         :type nmpi: int
         :param nomp: Number of OpenMP tasks.
         :type nomp: int
-        :param force_run: States if the calculation has to be run, 
+        :param force_run: States if the calculation has to be run,
                           even though a logfile already exists.
                           (Optional, default value set to False)
         :type force_run: boolean
@@ -89,29 +88,27 @@ class PolTensorCalc(BigDFTCalc):
                 new_input = deepcopy(self.input_yaml)
                 new_input['dft']['elecfield'] = ef
                 # Run the calculation
-                bdft = BigDFTCalc(new_input, self.posinp, prefix=self.prefix, \
-                        run_folder=run_folder, ref_calc=self.ref_calc)
+                bdft = BigDFTCalc(new_input, self.posinp, prefix=self.prefix,
+                        run_folder=run_folder, ref_calc=self.ref_calc)  # noqa
                 bdft.run(nmpi=nmpi, nomp=nomp, force_run=force_run)
                 # Append the path to the logfile to the dictionary
                 self.logfiles_paths[coord].append(bdft.logfile_path)
-
         # Use all the logfiles to compute the polarizability tensor
         self.pol_tensor = self.find_polarizability_tensor()
 
-
     def find_polarizability_tensor(self):
         """
-        Function returning the polarizability tensor. It corresponds 
-        to the response of the system (here, the modification of its 
-        dipole) when an electric field is applied. 
+        Function returning the polarizability tensor. It corresponds
+        to the response of the system (here, the modification of its
+        dipole) when an electric field is applied.
 
-        The dipole and the electric field being vectors, the 
-        polarizability is represented by a tensor. Its elements 
-        alpha_{i, j} = d E_j / d D_i represent the proportionality 
-        coefficient between the dipole in the direction i when an 
-        electric field is applied in the direction j. (i and j 
+        The dipole and the electric field being vectors, the
+        polarizability is represented by a tensor. Its elements
+        alpha_{i, j} = d E_j / d D_i represent the proportionality
+        coefficient between the dipole in the direction i when an
+        electric field is applied in the direction j. (i and j
         represent the x, y or z axis).
-        
+
         :returns: Polarizability tensor
         :rtype: 2D np.array of dimension 3*3
         """
@@ -119,23 +116,22 @@ class PolTensorCalc(BigDFTCalc):
         # Loop over the electric field directions
         for i, coord in enumerate(COORDS):
             dipoles = []
-            # Loop over the electric field calculations in that 
+            # Loop over the electric field calculations in that
             # direction to get their dipoles
             for j in range(2):
                 fname = self.logfiles_paths[coord][j]
                 log = lf.Logfile(fname)
-                dipoles.append(np.array(\
+                dipoles.append(np.array(
                     log.log['Electric Dipole Moment (AU)']['P vector']))
             # Get the delta of the dipoles
             delta_dipoles = dipoles[0] - dipoles[1]
-            # Find the delta of the electric field (which is twice the 
-            # value of the positive electric field along the direction 
+            # Find the delta of the electric field (which is twice the
+            # value of the positive electric field along the direction
             # considered)
             delta_efield = 2 * self.ef_amplitudes[i]
-            # Append the new line of the polarizability tensor, 
-            # defined as the the ratio of the delta of the dipoles and 
+            # Append the new line of the polarizability tensor,
+            # defined as the the ratio of the delta of the dipoles and
             # the delta of the electric fields
             pol_tensor.append(delta_dipoles / delta_efield)
-            
         # Return the polarizability tensor as a numpy array
-        return np.array(pol_tensor) 
+        return np.array(pol_tensor)
