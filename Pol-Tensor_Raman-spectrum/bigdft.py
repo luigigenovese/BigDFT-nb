@@ -19,7 +19,7 @@ SIGNS = {"+": 1., "-": -1.}
 
 
 class BigDFTCalc(object):
-    """
+    r"""
     This class represents an usual BigDFT calculation. There are two
     main methods:
 
@@ -30,7 +30,7 @@ class BigDFTCalc(object):
 
     def __init__(self, input_yaml, posinp, prefix=None, run_folder=None,
                  ref_calc=None):
-        """
+        r"""
         Method initializing a BigDFT calculation. It requires a yaml
         input file and an initial geometry posinp.
 
@@ -107,7 +107,7 @@ class BigDFTCalc(object):
         self.ref_calc = ref_calc
 
     def run(self, nmpi=1, nomp=1, force_run=False):
-        """
+        r"""
         Method running the BigDFT calculation if it was not already
         performed.
 

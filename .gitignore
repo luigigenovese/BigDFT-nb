@@ -1,2 +1,7 @@
 *~
 *.ipynb_checkpoints*
+*pyc
+Pol-Tensor_Raman-spectrum/H2O*
+Pol-Tensor_Raman-spectrum/N2/
+Pol-Tensor_Raman-spectrum/pol_tensor*
+Pol-Tensor_Raman-spectrum/ref.*

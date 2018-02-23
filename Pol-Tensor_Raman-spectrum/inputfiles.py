@@ -1,4 +1,4 @@
-"""
+r"""
 File containing the Input and Posinp classes.
 """
 
@@ -9,13 +9,13 @@ from copy import deepcopy
 
 
 class Input(dict):
-    """
+    r"""
     Class allowing to initialize, read, write and interact with the
     input file of a BigDFT calculation.
     """
 
     def __init__(self, data):
-        """
+        r"""
         An input file is created from a yaml dictionary.
 
         :param data: yaml dictionary of the input file.
@@ -26,7 +26,7 @@ class Input(dict):
 
     @classmethod
     def from_file(cls, filename):
-        """
+        r"""
         Initializes the Input instance from a file.
 
         :param filename: Name of the file to read.
@@ -40,7 +40,7 @@ class Input(dict):
 
     @classmethod
     def from_string(cls, string):
-        """
+        r"""
         Initializes the Input instance from a string.
 
         :param string: String of the input file.
@@ -52,7 +52,7 @@ class Input(dict):
         return cls(data)
 
     def write(self, filename):
-        """
+        r"""
         Method writing an Input instance in filename.
 
         :param filename: Name of the file to read to initialize the
@@ -65,13 +65,13 @@ class Input(dict):
 
 
 class Posinp:
-    """
+    r"""
     Class allowing to initialize, read, write and interact with the
     input geometry of a BigDFT calculation.
     """
 
     def __init__(self, filename):
-        """
+        r"""
         A file is read to initialize a Posinp instance.
 
         :param filename: Name of the file to read to initialize the
@@ -84,11 +84,9 @@ class Posinp:
             content = f.readline().split()
             self.n_at = int(content[0])
             self.units = content[1]
-
             # Read the second line, containing the boundary conditions
             content = f.readline().split()
             self.BC = content[0]
-
             # Loop over all the atoms to read the positions.
             self.atoms = []
             for i in range(self.n_at):
@@ -99,7 +97,7 @@ class Posinp:
 
     @classmethod
     def from_string(cls, string):
-        """
+        r"""
         Class method allowing to initialize a posinp file from a string.
 
         :param string: String of the posinp file.
@@ -118,7 +116,7 @@ class Posinp:
         return posinp
 
     def __str__(self):
-        """
+        r"""
         Method converting the Posinp instance to a string.
 
         :returns: The Posinp instance as a string.
@@ -135,7 +133,7 @@ class Posinp:
         return pos_str
 
     def __eq__(self, other):
-        """
+        r"""
         Two Posinp instances are the same if their string representation
         atoms at the same positions, and use the same units and
         boundary conditions.
@@ -147,7 +145,7 @@ class Posinp:
         return str(self) == str(other)
 
     def write(self, filename):
-        """
+        r"""
         Method writing the posinp in filename.
 
         :param filename: Name of the file to read to initialize the
@@ -158,7 +156,7 @@ class Posinp:
             f.write(str(self))
 
     def translate_atom(self, i_at, vector):
-        """
+        r"""
         Method returning a new posinp where the atom i_at has been
         translated according the vector.
 
@@ -177,5 +175,4 @@ class Posinp:
         new_posinp = deepcopy(self)
         for i in range(3):
             new_posinp.atoms[i_at]['Position'][i] += vector[i]
-
         return new_posinp

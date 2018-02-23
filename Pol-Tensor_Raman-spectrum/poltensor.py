@@ -1,4 +1,4 @@
-"""
+r"""
 File containing the class allowing allowing to compute the
 polarizability tensor of a molecule with BigDFT.
 """
@@ -12,14 +12,14 @@ import numpy as np
 
 
 class PolTensorCalc(BigDFTCalc):
-    """
+    r"""
     This class allows to run all the calculations required to get the
     polarizability tensor for a given geometry of a system.
     """
 
     def __init__(self, input_yaml, posinp, ef_amplitudes=[1.E-4]*3,
                  prefix=None, run_folder=None, ref_calc=None):
-        """
+        r"""
         Method initializing a polarizability tensor calculation. It
         inherits from the BigDFT class. To get the polarizability
         tensor, electric fields in the directions x, y and z are
@@ -59,7 +59,7 @@ class PolTensorCalc(BigDFTCalc):
             self.logfiles_paths[coord] = []
 
     def run(self, nmpi=1, nomp=1, force_run=False):
-        """
+        r"""
         Method running all the calculations and post-processing them
         to obtain the polarizability tensor. You may force the
         calculation by setting force_run to True.
@@ -97,7 +97,7 @@ class PolTensorCalc(BigDFTCalc):
         self.pol_tensor = self.find_polarizability_tensor()
 
     def find_polarizability_tensor(self):
-        """
+        r"""
         Function returning the polarizability tensor. It corresponds
         to the response of the system (here, the modification of its
         dipole) when an electric field is applied.

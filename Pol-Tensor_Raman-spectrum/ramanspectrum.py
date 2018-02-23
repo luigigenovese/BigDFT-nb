@@ -1,4 +1,4 @@
-"""
+r"""
 File containing the class allowing to compute the Raman Spectrum of a
 molecular system with BigDFT.
 """
@@ -31,7 +31,7 @@ HA_TO_CMM1 = 219474.6313705
 
 
 class RamanSpectrumCalc(BigDFTCalc):
-    """
+    r"""
     This class allows one to initialize and run a Raman spectrum
     calculation with BigDFT. The main quantities computed are
     the phonon energies, the intensity of the peaks, and the
@@ -46,7 +46,7 @@ class RamanSpectrumCalc(BigDFTCalc):
     def __init__(self, input_yaml, posinp, alpha_x=1./64.,
             calc_intensities=True, ef_amplitudes=[1.E-4]*3, prefix=None,  # noqa
             run_folder=None, ref_calc=None):  # noqa
-        """
+        r"""
         Method initializing a Raman spectrum calculation. It inherits
         from a BigDFTCalc object.
 
@@ -124,7 +124,7 @@ class RamanSpectrumCalc(BigDFTCalc):
             self.ef_amplitudes = ef_amplitudes
 
     def run(self, nmpi=1, nomp=1, force_run=False):
-        """
+        r"""
         Method running all the necessary calculations and
         post-processing the logfiles to set all the quantities of
         interest (energies, intensities, depolarization ratios, ...).
@@ -237,15 +237,25 @@ class RamanSpectrumCalc(BigDFTCalc):
                 # Reshape the derivative of the polarizability tensor
                 # along the current normal mode
                 pt = pt_flat.reshape(3, 3)
+                # Find the principal values of polarizability
+                alphas = np.linalg.eigvals(pt)
                 # Mean polarizability derivative
-                alpha = 1./3. * pt.trace()
+                alpha = np.sum(alphas) / 3.
                 self.alphas.append(alpha)
                 # Anisotropy of the polarizability tensor derivative
-                beta_sq = 1./2. * ((pt[0][0]-pt[1][1])**2 +
-                                   (pt[0][0]-pt[2][2])**2 +
-                                   (pt[1][1]-pt[2][2])**2 +
-                                   6.*(pt[0][1]**2+pt[0][2]**2+pt[1][2]**2))
+                beta_sq = ((alphas[0]-alphas[1])**2 +
+                           (alphas[1]-alphas[2])**2 +
+                           (alphas[2]-alphas[0])**2) / 2.
                 self.betas_sq.append(beta_sq)
+                ## # Mean polarizability derivative
+                ## alpha = 1./3. * pt.trace()
+                ## self.alphas.append(alpha)
+                ## # Anisotropy of the polarizability tensor derivative
+                ## beta_sq = 1./2. * ((pt[0][0]-pt[1][1])**2 +
+                ##                    (pt[0][0]-pt[2][2])**2 +
+                ##                    (pt[1][1]-pt[2][2])**2 +
+                ##                    6.*(pt[0][1]**2+pt[0][2]**2+pt[1][2]**2))
+                ## self.betas_sq.append(beta_sq)
                 # From the two previous quantities, it is possible to
                 # compute the intensity (converted from atomic units
                 # to Ang^4.amu^-1) and the depolarization ratio
@@ -256,7 +266,7 @@ class RamanSpectrumCalc(BigDFTCalc):
                 self.depol_ratios.append(3*beta_sq / (45*alpha**2 + 4*beta_sq))
 
     def solve_dynamical_matrix(self):
-        """
+        r"""
         Method solving the dynamical matrix to get the phonon energies
         (converted in Hartree) and the eigenvectors.
 
@@ -269,7 +279,7 @@ class RamanSpectrumCalc(BigDFTCalc):
         return eigs, vecs
 
     def build_dyn_mat(self):
-        """
+        r"""
         Method computing the dynamical matrix of the system. It is
         very similar to the Hessian matrix: its elements are only
         corrected by a weight w, which is the inverse of the sqrt of
@@ -297,7 +307,7 @@ class RamanSpectrumCalc(BigDFTCalc):
         return h/masses
 
     def build_masses(self):
-        """
+        r"""
         Method computing the masses array used to define the dynamical
         matrix. The masses are counted in electronic mass units (which
         is the atomic unit of mass, that is different from the atomic
@@ -319,7 +329,7 @@ class RamanSpectrumCalc(BigDFTCalc):
         return np.array(masses)*AMU_TO_EMU
 
     def build_hessian(self):
-        """
+        r"""
         Method computing the Hessian of the system. Its size is 3*n_at
         by 3*n_at, where n_at is the number of atoms of the system.
 
@@ -391,7 +401,7 @@ class RamanSpectrumCalc(BigDFTCalc):
         return np.array(h)
 
     def find_deriv_pol_tensors(self):
-        """
+        r"""
         Method computing the derivative of the polarizability tensor
         along all the atom displacements.
 
