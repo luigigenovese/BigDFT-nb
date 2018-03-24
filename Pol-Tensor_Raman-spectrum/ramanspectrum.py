@@ -21,11 +21,11 @@ MASS_ATOMS = {"H": 1.00794, "He": 4.002602, "Li": 6.941, "Be": 9.012182,
 # Conversion from atomic to electronic mass unit
 AMU_TO_EMU = 1.660538782e-27 / 9.10938215e-31
 # Conversion from electronic to atomic mass unit
-EMU_TO_AMU = 1./AMU_TO_EMU
+EMU_TO_AMU = 1. / AMU_TO_EMU
 # Conversion factor from bohr to angstroem
 B_TO_ANG = 0.529177249
 # Conversion factor from angstroem to bohr
-ANG_TO_B = 1/B_TO_ANG
+ANG_TO_B = 1. / B_TO_ANG
 # Conversion factor from Hartree to cm^-1
 HA_TO_CMM1 = 219474.6313705
 
@@ -105,10 +105,11 @@ class RamanSpectrumCalc(BigDFTCalc):
         # Define if intensities must be calculated.
         if posinp.BC != 'free':
             self.calc_intensities = False
-            print("calc_intensities set to False. The posinp must use free \
-                   boundary conditions for the intensities to be computed.")
-        else:
-            self.calc_intensities = True
+            raise UserWarning(
+                "calc_intensities set to False. The posinp must use free "
+                "boundary conditions for the intensities to be computed.")
+#        else:
+#            self.calc_intensities = True
 
         # Initialize the name of the folders for each atom
         if posinp.n_at <= 999:
@@ -373,7 +374,8 @@ class RamanSpectrumCalc(BigDFTCalc):
         h = []  # Hessian matrix
         n_at = self.posinp.n_at  # Number of atoms
         # First loop over all atoms
-        for i_at, atom_dir in enumerate(self.atom_dirs):
+        # for i_at, atom_dir in enumerate(self.atom_dirs):
+        for atom_dir in self.atom_dirs:
             # Loop over the coordinates (x, y and z)
             for i, coord in enumerate(COORDS):
                 # Read the two logfiles corresponding to the moves

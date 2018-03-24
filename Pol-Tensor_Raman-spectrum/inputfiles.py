@@ -60,8 +60,7 @@ class Input(dict):
         :type filename: str
         """
         with open(filename, "w") as f:
-            for key in self:
-                yaml.dump({key: self[key]}, f)
+            yaml.dump(dict(self), f)
 
 
 class Posinp:
