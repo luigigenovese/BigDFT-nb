@@ -8,7 +8,7 @@ from copy import deepcopy
 import os
 import numpy as np
 from BigDFT import Logfiles as lf
-from bigdft import BigDFTCalc, COORDS, SIGNS
+from mybigdft import BigDFTCalc, COORDS, SIGNS
 from poltensor import PolTensorCalc
 
 
@@ -108,8 +108,8 @@ class RamanSpectrumCalc(BigDFTCalc):
             raise UserWarning(
                 "calc_intensities set to False. The posinp must use free "
                 "boundary conditions for the intensities to be computed.")
-#        else:
-#            self.calc_intensities = True
+        else:
+            self.calc_intensities = True
 
         # Initialize the name of the folders for each atom
         if posinp.n_at <= 999:

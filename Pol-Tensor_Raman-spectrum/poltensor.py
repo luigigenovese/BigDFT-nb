@@ -6,7 +6,7 @@ polarizability tensor of a molecule with BigDFT.
 from __future__ import print_function
 import os
 from copy import deepcopy
-from bigdft import BigDFTCalc, COORDS, SIGNS
+from mybigdft import BigDFTCalc, COORDS, SIGNS
 from BigDFT import Logfiles as lf
 import numpy as np
 
