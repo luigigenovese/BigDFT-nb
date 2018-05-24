@@ -14,7 +14,7 @@ from poltensor import PolTensorCalc
 
 # Mass of the different types of atoms in atomic mass units
 # TODO: Add more types of atoms
-#       (found in $BUILD_DIR/bigdft/src/orbitals/eleconf-inc.f90)
+#       (found in $SRC_DIR/bigdft/src/orbitals/eleconf-inc.f90)
 MASS_ATOMS = {"H": 1.00794, "He": 4.002602, "Li": 6.941, "Be": 9.012182,
               "B": 10.811, "C": 12.011, "N": 14.00674, "O": 15.9994,
               "F": 18.9984032, "Ne": 20.1797}
