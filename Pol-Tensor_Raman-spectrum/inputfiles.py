@@ -85,7 +85,11 @@ class Posinp:
             self.units = content[1]
             # Read the second line, containing the boundary conditions
             content = f.readline().split()
-            self.BC = content[0]
+            BC = content
+            if BC[0] != "free":
+                self.BC = "{}  {}  {}  {}".format(*BC[:4])
+            else:
+                self.BC = BC[0]
             # Loop over all the atoms to read the positions.
             self.atoms = []
             for i in range(self.n_at):

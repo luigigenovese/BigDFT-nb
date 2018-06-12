@@ -99,17 +99,20 @@ class RamanSpectrumCalc(BigDFTCalc):
             hgrids = np.array([0.45]*3)
             input_yaml['dft']['hgrids'] = hgrids
         else:
-            hgrids = np.array(input_yaml['dft']['hgrids'])
+            hgrids = input_yaml['dft']['hgrids']
+            if not isinstance(hgrids, list):
+                hgrids = [hgrids] * 3
+            hgrids = np.array(hgrids)
         self.displacements = hgrids * alpha_x
 
         # Define if intensities must be calculated.
-        if posinp.BC != 'free':
+        if posinp.BC != 'free' and calc_intensities:
             self.calc_intensities = False
             raise UserWarning(
                 "calc_intensities set to False. The posinp must use free "
                 "boundary conditions for the intensities to be computed.")
         else:
-            self.calc_intensities = True
+            self.calc_intensities = calc_intensities
 
         # Initialize the name of the folders for each atom
         if posinp.n_at <= 999:
@@ -142,7 +145,13 @@ class RamanSpectrumCalc(BigDFTCalc):
         # Initialize a new input file so that BigDFT outputs the
         # wavefunctions.
         new_input = deepcopy(self.input_yaml)
-        new_input['dft']['output_wf'] = 1
+        # Old input style
+        # new_input['dft']['output_wf'] = 1
+        # New input style
+        # if self.calc_intensities:
+        #     new_input['output'] = {'orbitals': True}
+        # else:
+        #     new_input['output'] = {'orbitals': False}
         # Run the reference calculation
         if self.ref_calc is None:
             run_folder = os.path.join(self.run_folder, "ref")
@@ -248,15 +257,15 @@ class RamanSpectrumCalc(BigDFTCalc):
                            (alphas[1]-alphas[2])**2 +
                            (alphas[2]-alphas[0])**2) / 2.
                 self.betas_sq.append(beta_sq)
-                ## # Mean polarizability derivative
-                ## alpha = 1./3. * pt.trace()
-                ## self.alphas.append(alpha)
-                ## # Anisotropy of the polarizability tensor derivative
-                ## beta_sq = 1./2. * ((pt[0][0]-pt[1][1])**2 +
-                ##                    (pt[0][0]-pt[2][2])**2 +
-                ##                    (pt[1][1]-pt[2][2])**2 +
-                ##                    6.*(pt[0][1]**2+pt[0][2]**2+pt[1][2]**2))
-                ## self.betas_sq.append(beta_sq)
+                # # Mean polarizability derivative
+                # alpha = 1./3. * pt.trace()
+                # self.alphas.append(alpha)
+                # # Anisotropy of the polarizability tensor derivative
+                # beta_sq = 1./2. * ((pt[0][0]-pt[1][1])**2 +
+                #                    (pt[0][0]-pt[2][2])**2 +
+                #                    (pt[1][1]-pt[2][2])**2 +
+                #                    6.*(pt[0][1]**2+pt[0][2]**2+pt[1][2]**2))
+                # self.betas_sq.append(beta_sq)
                 # From the two previous quantities, it is possible to
                 # compute the intensity (converted from atomic units
                 # to Ang^4.amu^-1) and the depolarization ratio
@@ -393,8 +402,10 @@ class RamanSpectrumCalc(BigDFTCalc):
                 # 2- Find the delta forces for each atom and update
                 #    the new line of the Hessian.
                 for j_at in range(n_at):
-                    forces = [np.array(log.forces[j_at].values()[0])
+                    forces = [np.array(log.log['Atomic Forces (Ha/Bohr)'][j_at].values()[0])  # noqa
                               for log in logs]
+                    # forces = [np.array(log.forces[j_at].values()[0])
+                    #           for log in logs]
                     delta_forces = forces[0] - forces[1]
                     new_line += list(delta_forces/delta_x)
                 # The new line of the Hessian is now complete
