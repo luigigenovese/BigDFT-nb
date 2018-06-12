@@ -2,8 +2,15 @@
 *.ipynb_checkpoints*
 *pyc
 *.swp
+Pol-Tensor_Raman-spectrum/logfiles/
 Pol-Tensor_Raman-spectrum/N2/
+Pol-Tensor_Raman-spectrum/N2_new/
 Pol-Tensor_Raman-spectrum/H2O/
+Pol-Tensor_Raman-spectrum/H2O_new/
 Pol-Tensor_Raman-spectrum/H2O_better/
 Pol-Tensor_Raman-spectrum/pol_tensor*
 Pol-Tensor_Raman-spectrum/ref.*
+Pol-Tensor_Raman-spectrum/*E*.yaml
+Pol-Tensor_Raman-spectrum/*GS*.yaml
+Pol-Tensor_Raman-spectrum/H2O.xyz
+Pol-Tensor_Raman-spectrum/input_minimal.yaml
