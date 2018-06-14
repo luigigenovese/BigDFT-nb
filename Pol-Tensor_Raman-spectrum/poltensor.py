@@ -77,22 +77,25 @@ class PolTensorCalc(BigDFTCalc):
         for i, coord in enumerate(COORDS):
             # Add a new key to the dictionary of logfiles
             norm = self.ef_amplitudes[i]
-            # Loop over the sign of the electric field amplitude
-            for sign in SIGNS:
-                # Set the run folder of the calculation
-                ef_dir = "along_{}{}_{}".format(coord, sign, norm)
-                run_folder = os.path.join(self.run_folder, ef_dir)
-                # Set the electric field in the input file
-                ef = [0.0] * 3
-                ef[i] = SIGNS[sign] * norm
-                new_input = deepcopy(self.input_yaml)
-                new_input['dft']['elecfield'] = ef
-                # Run the calculation
-                bdft = BigDFTCalc(new_input, self.posinp, prefix=self.prefix,
-                        run_folder=run_folder, ref_calc=self.ref_calc)  # noqa
-                bdft.run(nmpi=nmpi, nomp=nomp, force_run=force_run)
-                # Append the path to the logfile to the dictionary
-                self.logfiles_paths[coord].append(bdft.logfile_path)
+            if norm is not None:
+                # Loop over the sign of the electric field amplitude
+                for sign in SIGNS:
+                    # Set the run folder of the calculation
+                    ef_dir = "along_{}{}_{}".format(coord, sign, norm)
+                    run_folder = os.path.join(self.run_folder, ef_dir)
+                    # Set the electric field in the input file
+                    ef = [0.0] * 3
+                    ef[i] = SIGNS[sign] * norm
+                    new_input = deepcopy(self.input_yaml)
+                    new_input['dft']['elecfield'] = ef
+                    # Run the calculation
+                    bdft = BigDFTCalc(new_input, self.posinp,
+                                      prefix=self.prefix,
+                                      run_folder=run_folder,
+                                      ref_calc=self.ref_calc)
+                    bdft.run(nmpi=nmpi, nomp=nomp, force_run=force_run)
+                    # Append the path to the logfile to the dictionary
+                    self.logfiles_paths[coord].append(bdft.logfile_path)
         # Use all the logfiles to compute the polarizability tensor
         self.pol_tensor = self.find_polarizability_tensor()
 
@@ -104,10 +107,12 @@ class PolTensorCalc(BigDFTCalc):
 
         The dipole and the electric field being vectors, the
         polarizability is represented by a tensor. Its elements
-        alpha_{i, j} = d E_j / d D_i represent the proportionality
-        coefficient between the dipole in the direction i when an
-        electric field is applied in the direction j. (i and j
-        represent the x, y or z axis).
+        :math:`alpha_{i, j} = d D_i / d E_j` represent the
+        proportionality coefficient between the dipole :math:`D` in the
+        direction :math:`i` when an electric field of amplitude
+        :math:`E` is applied in the direction :math:`j`. (:math:`i` and
+        :math:`j` represent one of the :math:`x`, :math:`y` or :math:`z`
+        axis).
 
         :returns: Polarizability tensor
         :rtype: 2D np.array of dimension 3*3
@@ -116,22 +121,25 @@ class PolTensorCalc(BigDFTCalc):
         # Loop over the electric field directions
         for i, coord in enumerate(COORDS):
             dipoles = []
-            # Loop over the electric field calculations in that
-            # direction to get their dipoles
-            for j in range(2):
-                fname = self.logfiles_paths[coord][j]
-                log = lf.Logfile(fname)
-                dipoles.append(np.array(
-                    log.log['Electric Dipole Moment (AU)']['P vector']))
-            # Get the delta of the dipoles
-            delta_dipoles = dipoles[0] - dipoles[1]
-            # Find the delta of the electric field (which is twice the
-            # value of the positive electric field along the direction
-            # considered)
-            delta_efield = 2 * self.ef_amplitudes[i]
-            # Append the new line of the polarizability tensor,
-            # defined as the the ratio of the delta of the dipoles and
-            # the delta of the electric fields
-            pol_tensor.append(delta_dipoles / delta_efield)
+            if self.ef_amplitudes[i] is not None:
+                # Loop over the electric field calculations in that
+                # direction to get their dipoles
+                for j in range(2):
+                    fname = self.logfiles_paths[coord][j]
+                    log = lf.Logfile(fname)
+                    dipoles.append(np.array(
+                        log.log['Electric Dipole Moment (AU)']['P vector']))
+                # Get the delta of the dipoles
+                delta_dipoles = dipoles[0] - dipoles[1]
+                # Find the delta of the electric field (which is twice the
+                # value of the positive electric field along the direction
+                # considered)
+                delta_efield = 2 * self.ef_amplitudes[i]
+                # Append the new line of the polarizability tensor,
+                # defined as the the ratio of the delta of the dipoles and
+                # the delta of the electric fields
+                pol_tensor.append(delta_dipoles / delta_efield)
+            else:
+                pol_tensor.append(np.zeros(3))
         # Return the polarizability tensor as a numpy array
         return np.array(pol_tensor)

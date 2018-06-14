@@ -11,6 +11,12 @@ Pol-Tensor_Raman-spectrum/H2O_better/
 Pol-Tensor_Raman-spectrum/pol_tensor*
 Pol-Tensor_Raman-spectrum/ref.*
 Pol-Tensor_Raman-spectrum/*E*.yaml
+Pol-Tensor_Raman-spectrum/*x*.yaml
+Pol-Tensor_Raman-spectrum/*y*.yaml
+Pol-Tensor_Raman-spectrum/*z*.yaml
+Pol-Tensor_Raman-spectrum/*x*.xyz
+Pol-Tensor_Raman-spectrum/*y*.xyz
+Pol-Tensor_Raman-spectrum/*z*.xyz
 Pol-Tensor_Raman-spectrum/*GS*.yaml
 Pol-Tensor_Raman-spectrum/H2O.xyz
 Pol-Tensor_Raman-spectrum/input_minimal.yaml

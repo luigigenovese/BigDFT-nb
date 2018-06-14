@@ -106,8 +106,10 @@ class RamanSpectrumCalc(BigDFTCalc):
         self.displacements = hgrids * alpha_x
 
         # Define if intensities must be calculated.
-        if posinp.BC != 'free' and calc_intensities:
-            self.calc_intensities = False
+        if (posinp.BC == 'periodic' and calc_intensities) \
+            or (posinp.BC == 'surface' and calc_intensities
+                and ef_amplitudes[0] is not None
+                and ef_amplitudes[2] is not None):
             raise UserWarning(
                 "calc_intensities set to False. The posinp must use free "
                 "boundary conditions for the intensities to be computed.")
@@ -188,7 +190,8 @@ class RamanSpectrumCalc(BigDFTCalc):
                     units = self.posinp.units
                     if 'angstroem' in units:
                         vector = [val*B_TO_ANG for val in vector]
-                    elif 'bohr' not in units or 'atomic' not in units:
+                    elif all([elem not in units
+                              for elem in ['bohr', 'atomic']]):
                         raise NotImplementedError(
                             "Conversion from bohr to {} not possible yet."
                             .format(units))
