@@ -31,7 +31,7 @@ class PolTensorWorkflow(object):
         r"""
         :param calculator: A BigDFT Calculator.
         :type calculator: GIBinding or SystemCalculator
-        :param input_base: Input parameters
+        :param input_base: Input parameters.
         :type input_base: str
         :param ef_amplitudes: Electric field amplitudes to be applied
             along each of the three space coordinates.
@@ -67,9 +67,9 @@ class PolTensorWorkflow(object):
                 else:
                     ef_amplitude *= sign  # Do not forget the EF sign!
                     self.inputs[key] = \
-                        self._create_input_from_ef_amplitude(i, ef_amplitude)
+                        self._add_ef_to_input(i, ef_amplitude)
 
-    def _create_input_from_ef_amplitude(self, i, ef_amplitude):
+    def _add_ef_to_input(self, i, ef_amplitude):
         r"""
         Create a new input file based on the base input file, the
         electric field amplitude and the index of the coordinate.
@@ -91,7 +91,7 @@ class PolTensorWorkflow(object):
 
     def run(self):
         r"""
-        This method runs all the calculations and then performs the
+        Method running all the calculations and then performs the
         post-processing.
         """
         # Loop over the inputs to run the calculations
@@ -100,12 +100,11 @@ class PolTensorWorkflow(object):
             coord = key[-2]
             direction = key[-1]
             # Set the message for verbosity
-            msg = "electric field applied along {}!".format(coord)
             if SIGNS[direction] == 1.:
-                prefix = "positive "
+                msg = "positive "
             else:
-                prefix = "negative "
-            msg = prefix + msg
+                msg = "negative "
+            msg += "electric field applied along {}!".format(coord)
             # Do action based on the existence of an input file
             if inp is None:
                 # No calculation if there is no input file
@@ -127,7 +126,7 @@ class PolTensorWorkflow(object):
                 # Treat the logfile to retrieve information
                 self.dipoles[key] = self.get_dipole(key)
             print(msg.capitalize())
-        self.pol_tensor = self.find_polarizability_tensor()
+        self._post_processing()
 
     def get_dipole(self, key):
         r"""
@@ -140,7 +139,14 @@ class PolTensorWorkflow(object):
         dipole = log.log['Electric Dipole Moment (AU)']['P vector']
         return np.array(dipole)
 
-    def find_polarizability_tensor(self):
+    def _post_processing(self):
+        r"""
+        Method running the post-processing of the calculation, here:
+        * compute the polarizability tensor
+        """
+        self.pol_tensor = self._build_polarizability_tensor()
+
+    def _build_polarizability_tensor(self):
         r"""
         Function returning the polarizability tensor. It corresponds
         to the response of the system (here, the modification of its
