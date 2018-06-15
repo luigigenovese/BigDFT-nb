@@ -25,6 +25,8 @@ class PolTensorWorkflow(object):
     electric field along the :math:`x`, :math:`y` and :math:`z` axis.
     """
 
+    RADICAL = "EF_along_"
+
     def __init__(self, calculator, input_base, ef_amplitudes=[1.E-4]*3):
         r"""
         :param calculator: A BigDFT Calculator.
@@ -57,7 +59,7 @@ class PolTensorWorkflow(object):
             ef_amplitude = self.ef_amplitudes[i]
             # Loop over the signs of the electric field
             for direction, sign in SIGNS.iteritems():
-                key = coord + direction
+                key = self.RADICAL + coord + direction
                 # Do not create an input if there is no electric field
                 if ef_amplitude is None or ef_amplitude == 0.:
                     self.inputs[key] = None
@@ -95,8 +97,8 @@ class PolTensorWorkflow(object):
         # Loop over the inputs to run the calculations
         for key, inp in self.inputs.iteritems():
             # Unwrap coordinate and directions from the key
-            coord = key[0]
-            direction = key[1]
+            coord = key[-2]
+            direction = key[-1]
             # Set the message for verbosity
             msg = "electric field applied along {}!".format(coord)
             if SIGNS[direction] == 1.:
@@ -165,8 +167,8 @@ class PolTensorWorkflow(object):
             else:
                 # Get the delta of the dipoles when the electric field
                 # is applied along a given coordinate
-                dipole_p = self.dipoles[coord+"+"]
-                dipole_m = self.dipoles[coord+"-"]
+                dipole_p = self.dipoles[self.RADICAL+coord+"+"]
+                dipole_m = self.dipoles[self.RADICAL+coord+"-"]
                 delta_dipoles = dipole_p - dipole_m
                 # Find the delta of the electric field (which is twice
                 # the absolute value of the electric field amplitude
