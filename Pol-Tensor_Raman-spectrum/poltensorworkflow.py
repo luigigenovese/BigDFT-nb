@@ -43,8 +43,29 @@ class PolTensorWorkflow(object):
             raise ValueError("The initial positions must be included in the "
                              "input file.")
         self.ef_amplitudes = ef_amplitudes
+        self._set_efields()
         self.initialize_inputs()
         self.dipoles = {}
+
+    def _set_efields(self):
+        r"""
+        Function used to define the six electric fields the system must
+        undergo from the input amplitudes of electric field.
+        """
+        assert len(self.ef_amplitudes) == 3
+        self.efields = {}
+        for i, coord in enumerate(COORDS):
+            amplitude = self.ef_amplitudes[i]
+            for sign in SIGNS:
+                # Set the electric field vector
+                if amplitude is not None and amplitude != 0.:
+                    vector = [0.0] * 3
+                    vector[i] = SIGNS[sign] * amplitude
+                else:
+                    vector = None
+                # Add a new element to the dictionary of electric fields
+                key = self.RADICAL + coord + sign
+                self.efields[key] = vector
 
     def initialize_inputs(self):
         r"""
@@ -53,41 +74,13 @@ class PolTensorWorkflow(object):
         keys allow to distinguish each calculation.
         """
         self.inputs = {}
-        # Loop over the space coordinates along which an electric field
-        # has to be applied
-        for i, coord in enumerate(COORDS):
-            ef_amplitude = self.ef_amplitudes[i]
-            # Loop over the signs of the electric field
-            for direction, sign in SIGNS.iteritems():
-                key = self.RADICAL + coord + direction
-                # Do not create an input if there is no electric field
-                if ef_amplitude is None or ef_amplitude == 0.:
-                    self.inputs[key] = None
-                # Else, create a new input file
-                else:
-                    ef_amplitude *= sign  # Do not forget the EF sign!
-                    self.inputs[key] = \
-                        self._add_ef_to_input(i, ef_amplitude)
-
-    def _add_ef_to_input(self, i, ef_amplitude):
-        r"""
-        Create a new input file based on the base input file, the
-        electric field amplitude and the index of the coordinate.
-
-        :param i: Index of the coordinate of the non-zero electric field
-            amplitude.
-        :type i: int
-        :param ef_amplitude: Electric field amplitude along the above-
-            mentioned index.
-        :type ef_amplitude: float
-        """
-        # Set the electric field
-        efield = [0] * 3
-        efield[i] = ef_amplitude
-        # Return a new input specifying the electric field
-        new_input = deepcopy(self.input_base)
-        new_input['dft']['elecfield'] = efield
-        return new_input
+        for key, efield in self.efields.iteritems():
+            if efield is None:
+                self.inputs[key] = None
+            else:
+                new_input = deepcopy(self.input_base)
+                new_input['dft']['elecfield'] = efield
+                self.inputs[key] = new_input
 
     def run(self):
         r"""
