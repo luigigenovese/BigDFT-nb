@@ -36,17 +36,56 @@ class PolTensorWorkflow(Workflow):
         """
         super(PolTensorWorkflow, self).__init__(calculator, input_base)
         self.ef_amplitudes = ef_amplitudes
+
+    @property
+    def ef_amplitudes(self):
+        r"""
+        :returns: Amplitudes of the electric field to be applied along
+            each space coordinate.
+        :rtype: array of length three
+        """
+        return self._ef_amplitudes
+
+    @ef_amplitudes.setter
+    def ef_amplitudes(self, new_ef_amplitudes):
+        # This setter makes sure that there are three elements to define
+        # the electric field amplitude along each space coordinate
+        try:
+            assert len(new_ef_amplitudes) == 3
+            self._ef_amplitudes = new_ef_amplitudes
+        except AssertionError:
+            raise ValueError("There must be three electric field amplitudes, "
+                             "one for each space coordinate.")
+
+    @property
+    def dipoles(self):
+        r"""
+        :returns: Output dipole of each calculation.
+        :rtype: dict
+        """
+        return self._dipoles
+
+    @property
+    def efields(self):
+        r"""
+        :returns: All the electric fields the system must undergo.
+        :rtype: dict
+        """
+        return self._efields
+
+    def _initialize_calculations(self):
+        r"""
+        Method initializing the input parameters for each calculation.
+        """
         self._set_efields()
-        self.initialize_inputs()
-        self.dipoles = {}
+        self._initialize_inputs()
 
     def _set_efields(self):
         r"""
         Function used to define the six electric fields the system must
         undergo from the input amplitudes of electric field.
         """
-        assert len(self.ef_amplitudes) == 3
-        self.efields = {}
+        self._efields = {}
         for i, coord in enumerate(COORDS):
             amplitude = self.ef_amplitudes[i]
             for sign in SIGNS:
@@ -58,28 +97,34 @@ class PolTensorWorkflow(Workflow):
                     vector = None
                 # Add a new element to the dictionary of electric fields
                 key = self.RADICAL + coord + sign
-                self.efields[key] = vector
+                self._efields[key] = vector
 
-    def initialize_inputs(self):
+    def _initialize_inputs(self):
         r"""
         Initialize the six input files required to compute the
         polarizability tensor. They are stored in a dictionary whose
         keys allow to distinguish each calculation.
         """
-        self.inputs = {}
+        self._inputs = {}
         for key, efield in self.efields.iteritems():
             if efield is None:
-                self.inputs[key] = None
+                self._inputs[key] = None
             else:
                 new_input = deepcopy(self.input_base)
                 new_input['dft']['elecfield'] = efield
-                self.inputs[key] = new_input
+                self._inputs[key] = new_input
 
-    def run(self):
+    def _run_calculations(self):
         r"""
-        Method running all the calculations and then performs the
-        post-processing.
+        Method running all the calculations. 
+        
+        It also gathers the output dipole of the system for each
+        calculation in the 'dipoles' attribute as a dictionary.
         """
+        # The dipoles attribute will contain the output dipole of each
+        # calculation. It will be a dictionary with the same keys as the
+        # inputs dictionary.
+        self._dipoles = {}
         # Loop over the inputs to run the calculations
         for key, inp in self.inputs.iteritems():
             # Unwrap coordinate and directions from the key
@@ -95,7 +140,7 @@ class PolTensorWorkflow(Workflow):
             if inp is None:
                 # No calculation if there is no input file
                 msg = "no " + msg
-                self.dipoles[key] = np.zeros(3)
+                self._dipoles[key] = np.zeros(3)
             else:
                 # Run the calculation if there is an input file
                 # TODO: The difference between the calculators should be
@@ -110,11 +155,10 @@ class PolTensorWorkflow(Workflow):
                         yaml.dump(inp, f)
                     self.calculator.run(name=key)
                 # Treat the logfile to retrieve information
-                self.dipoles[key] = self.get_dipole(key)
+                self._dipoles[key] = self._get_dipole(key)
             print(msg.capitalize())
-        self._post_processing()
 
-    def get_dipole(self, key):
+    def _get_dipole(self, key):
         r"""
         :param key: Key leading to a particular logfile.
         :type key: str
@@ -128,7 +172,7 @@ class PolTensorWorkflow(Workflow):
     def _post_processing(self):
         r"""
         Method running the post-processing of the calculations, here:
-        * compute the polarizability tensor
+        * computing the polarizability tensor
         """
         self.pol_tensor = self._build_polarizability_tensor()
 

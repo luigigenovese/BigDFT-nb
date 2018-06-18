@@ -57,26 +57,60 @@ class RamanWorkflow(Workflow):
         """
         super(RamanWorkflow, self).__init__(calculator, input_base)
         self.amplitudes = amplitudes
-        self._set_displacements()
-        self.initialize_inputs()
-        self.forces = {}
 
     @property
-    def posinp(self):
+    def amplitudes(self):
         r"""
-        :returns: Positions provided in the base input file.
-        :rtype: list
+        :returns: Amplitudes of the displacements to be applied along
+            each space coordinate.
+        :rtype: array of length three
         """
-        return self.input_base["posinp"]["positions"]
+        return self._amplitudes
+
+    @amplitudes.setter
+    def amplitudes(self, new_amplitudes):
+        # This setter makes sure that there are three elements to define
+        # the displacement amplitude along each space coordinate
+        try:
+            assert len(new_amplitudes) == 3
+            self._amplitudes = new_amplitudes
+        except AssertionError:
+            raise ValueError("There must be three translation amplitudes, "
+                             "one for each space coordinate.")
+
+    @property
+    def forces(self):
+        r"""
+        :returns: Output forces of each calculation.
+        :rtype: dict
+        """
+        return self._forces
+
+    @property
+    def displacements(self):
+        r"""
+        :returns: Displacements each atom of the system must undergo.
+            There are six of them (two per space coordinate) in order
+            to be able to compute the Hessian matrix by using the
+            central difference scheme.
+        :rtype: dict of length 6
+        """
+        return self._displacements
+
+    def _initialize_calculations(self):
+        r"""
+        Method initializing the input parameters for each calculation.
+        """
+        self._set_displacements()
+        self._initialize_inputs()
 
     def _set_displacements(self):
         r"""
-        Function used to define the six similar displacements
-        each atom must undergo from the amplitudes of
-        displacement in each direction.
+        Function used to define the six similar displacements each atom
+        must undergo from the amplitudes of displacement in each
+        direction.
         """
-        assert len(self.amplitudes) == 3
-        self.displacements = {}
+        self._displacements = {}
         for i, coord in enumerate(COORDS):
             amplitude = self.amplitudes[i]
             for sign in SIGNS:
@@ -88,16 +122,16 @@ class RamanWorkflow(Workflow):
                     vector = None
                 # Add a new element to the dictionary of displacements
                 key = coord + sign
-                self.displacements[key] = vector
+                self._displacements[key] = vector
 
-    def initialize_inputs(self):
+    def _initialize_inputs(self):
         r"""
         Initialize the six input files per atom required to compute the
         Raman spectrum. They are stored in a dictionary whose
         keys allow to distinguish each calculation.
         """
-        self.inputs = {}
-        posinp = self.posinp
+        self._inputs = {}
+        posinp = self.posinp_base
         for i_at in range(len(posinp)):
             # Loop over the space coordinates along which the atom has
             # to be displaced
@@ -105,10 +139,10 @@ class RamanWorkflow(Workflow):
                 key = self.RADICAL(i_at) + disp_key
                 # Do not create an input if there is no displacement
                 if vector is None:
-                    self.inputs[key] = None
+                    self._inputs[key] = None
                 # Else, create a new input file
                 else:
-                    self.inputs[key] = self._translate_atom(i_at, vector)
+                    self._inputs[key] = self._translate_atom(i_at, vector)
 
     def _translate_atom(self, i_at, vector):
         r"""
@@ -116,7 +150,7 @@ class RamanWorkflow(Workflow):
         translated according the vector.
 
         .. warning::
-        
+
             You have to make sure that the units of the vector match
             those used by the posinp.
 
@@ -134,11 +168,17 @@ class RamanWorkflow(Workflow):
             atom_to_translate[at_type][i] += dpos
         return new_input
 
-    def run(self):
+    def _run_calculations(self):
         r"""
-        Method running all the calculations and then performs the
-        post-processing.
+        Method running all the calculations.
+
+        It also gathers the output forces of the system for each
+        calculation in the 'forces' attribute as a dictionary.
         """
+        # The forces attribute will contain the output forces of each
+        # calculation. It will be a dictionary with the same keys as the
+        # inputs dictionary.
+        self._forces = {}
         # Loop over the inputs to run the calculations
         for key, inp in self.inputs.iteritems():
             # Unwrap atom index, coordinate and direction from the key
@@ -156,8 +196,8 @@ class RamanWorkflow(Workflow):
                 # No calculation if there is no input file
                 msg = "no " + msg
                 # All the forces are set to 0
-                self.forces[key] = [{"X": [0.0]*3}
-                                    for _ in range(len(self.posinp))]
+                self._forces[key] = [{"X": [0.0]*3}
+                                     for _ in range(len(self.posinp_base))]
             else:
                 # Run the calculation if there is an input file
                 # TODO: The difference between the calculators should be
@@ -173,15 +213,14 @@ class RamanWorkflow(Workflow):
                     self.calculator.run(name=key)
                 # Store the forces
                 log = Logfile("log-{}.yaml".format(key))
-                self.forces[key] = log.forces
+                self._forces[key] = log.forces
             print(msg.capitalize())
-        self._post_processing()
 
     def _post_processing(self):
         r"""
         Method running the post-processing of the calculations, here:
-        * compute the dynamical matrix,
-        * solve it to get the normal modes and the associated energies.
+        * computing the dynamical matrix,
+        * solving it to get the normal modes and their energies.
         """
         # - Set the dynamical matrix
         self.dyn_mat = self._build_dyn_mat()
@@ -209,7 +248,7 @@ class RamanWorkflow(Workflow):
         very similar to the Hessian matrix: its elements are only
         corrected by a weight :math:`w,` which is the inverse of the
         square-root of the product of the atomic masses of the atoms
-        involved in the Hessian matrix element. 
+        involved in the Hessian matrix element.
 
         The masses are counted in electronic mass units (which is the
         atomic unit of mass, that is different from the atomic mass
@@ -218,7 +257,7 @@ class RamanWorkflow(Workflow):
         :returns: Dynamical matrix.
         :rtype: 2D square numpy array of dimension :math:`3 n_{at}`
         """
-        # Numpy does the ratio of arrays intellegently: by making
+        # Numpy does the ratio of arrays intelligently: by making
         # masses an array of the same size as the Hessian, there is
         # nothing but the ratio of both arrays to perform to get
         # the dynamical matrix.
@@ -237,7 +276,7 @@ class RamanWorkflow(Workflow):
         :rtype: 2D square numpy array of dimension :math:`3 n_{at}`
         """
         # Get the atoms of the system from the reference posinp
-        posinp = self.posinp
+        posinp = self.posinp_base
         atom_types = [atom.keys()[0] for atom in posinp]
         # Build the masses matrix (the loops over range(3) are here
         # to ensure that masses has the same dimension as the Hessian)
@@ -259,7 +298,7 @@ class RamanWorkflow(Workflow):
         """
         # Initialization of variables
         h = []  # Hessian matrix
-        n_at = len(self.posinp)  # Number of atoms
+        n_at = len(self.posinp_base)  # Number of atoms
         # First loop over all atoms
         for i_at in range(n_at):
             # Loop over the coordinates (x, y and z)
@@ -281,7 +320,7 @@ class RamanWorkflow(Workflow):
                 key_base = self.RADICAL(i_at) + coord
                 keys = [key_base+sign for sign in SIGNS]
                 for j_at in range(n_at):
-                    forces = [np.array(self.forces[key][j_at].values()[0])
+                    forces = [np.array(self._forces[key][j_at].values()[0])
                               for key in keys]
                     delta_forces = forces[0] - forces[1]
                     new_line += list(delta_forces/delta_x)
