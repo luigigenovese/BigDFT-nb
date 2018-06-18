@@ -179,7 +179,7 @@ class RamanWorkflow(Workflow):
 
     def _post_processing(self):
         r"""
-        Method running the post-processing of the calculation, here:
+        Method running the post-processing of the calculations, here:
         * compute the dynamical matrix,
         * solve it to get the normal modes and the associated energies.
         """

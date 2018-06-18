@@ -127,7 +127,7 @@ class PolTensorWorkflow(Workflow):
 
     def _post_processing(self):
         r"""
-        Method running the post-processing of the calculation, here:
+        Method running the post-processing of the calculations, here:
         * compute the polarizability tensor
         """
         self.pol_tensor = self._build_polarizability_tensor()
