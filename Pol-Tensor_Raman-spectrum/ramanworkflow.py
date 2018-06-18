@@ -4,8 +4,7 @@ import numpy as np
 import yaml
 from BigDFT.Calculators import GIBinding  # , SystemCalculator
 from BigDFT.Logfiles import Logfile
-# from poltensorworkflow import PolTensorWorkflow, COORDS, SIGNS
-from poltensorworkflow import COORDS, SIGNS
+from workflow import Workflow, COORDS, SIGNS
 
 
 # Mass of the different types of atoms in atomic mass units
@@ -20,7 +19,7 @@ AMU_TO_EMU = 1.660538782e-27 / 9.10938215e-31
 HA_TO_CMM1 = 219474.6313705
 
 
-class RamanWorkflow(object):
+class RamanWorkflow(Workflow):
     r"""
     This class allows to run all the calculations allowing to compute
     the energies of the Raman spectrum after some post-processing.
@@ -56,11 +55,7 @@ class RamanWorkflow(object):
             applied along each of the three space coordinates.
         :type ef_amplitudes: list (of length 3)
         """
-        self.calculator = calculator
-        self.input_base = yaml.load(input_base)
-        if "posinp" not in self.input_base:
-            raise ValueError("The initial positions must be included in the "
-                             "input file.")
+        super(RamanWorkflow, self).__init__(calculator, input_base)
         self.amplitudes = amplitudes
         self._set_displacements()
         self.initialize_inputs()

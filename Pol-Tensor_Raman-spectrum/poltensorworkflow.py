@@ -4,13 +4,10 @@ import numpy as np
 import yaml
 from BigDFT.Calculators import GIBinding  # , SystemCalculator
 from BigDFT.Logfiles import Logfile
+from workflow import Workflow, COORDS, SIGNS
 
 
-COORDS = ["x", "y", "z"]
-SIGNS = {"+": 1., "-": -1.}
-
-
-class PolTensorWorkflow(object):
+class PolTensorWorkflow(Workflow):
     r"""
     This class allows to run all the calculations allowing to compute
     the polarizability tensor after some post-processing.
@@ -37,11 +34,7 @@ class PolTensorWorkflow(object):
             along each of the three space coordinates.
         :type ef_amplitudes: list (of length 3)
         """
-        self.calculator = calculator
-        self.input_base = yaml.load(input_base)
-        if "posinp" not in self.input_base:
-            raise ValueError("The initial positions must be included in the "
-                             "input file.")
+        super(PolTensorWorkflow, self).__init__(calculator, input_base)
         self.ef_amplitudes = ef_amplitudes
         self._set_efields()
         self.initialize_inputs()
