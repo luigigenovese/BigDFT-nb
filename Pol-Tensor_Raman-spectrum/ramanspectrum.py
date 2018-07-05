@@ -129,7 +129,7 @@ class RamanSpectrumCalc(BigDFTCalc):
             # Initialize the electric field amplitudes
             self.ef_amplitudes = ef_amplitudes
 
-    def run(self, nmpi=1, nomp=1, force_run=False):
+    def run(self, nmpi=1, nomp=1, force_run=False, dry_run=False):
         r"""
         Method running all the necessary calculations and
         post-processing the logfiles to set all the quantities of
@@ -143,13 +143,13 @@ class RamanSpectrumCalc(BigDFTCalc):
                           even though a logfile already exists.
                           (Optional, default value set to False)
         :type force_run: boolean
+        :param dry_run: If True, all folders and input files are written
+            on disk, but are not run.
+        :type dry_run: bool
         """
         # Initialize a new input file so that BigDFT outputs the
         # wavefunctions.
         new_input = deepcopy(self.input_yaml)
-        # Old input style
-        # new_input['dft']['output_wf'] = 1
-        # New input style
         # if self.calc_intensities:
         #     new_input['output'] = {'orbitals': True}
         # else:
@@ -159,7 +159,8 @@ class RamanSpectrumCalc(BigDFTCalc):
             run_folder = os.path.join(self.run_folder, "ref")
             self.ref_calc = BigDFTCalc(new_input, self.posinp,
                               prefix=self.prefix, run_folder=run_folder)  # noqa
-        self.ref_calc.run(nmpi=nmpi, nomp=nomp, force_run=force_run)
+        self.ref_calc.run(nmpi=nmpi, nomp=nomp, force_run=force_run,
+                          dry_run=dry_run)
         # Initialize the dictionary of paths leading to the relevant
         # logfiles and the dictionary of polarizability tensors
         self.logfiles_paths = {}
@@ -204,7 +205,8 @@ class RamanSpectrumCalc(BigDFTCalc):
                     bdft = BigDFTCalc(new_input, new_posinp,
                             prefix=self.prefix, ref_calc=self.ref_calc,
                             run_folder=run_folder)  # noqa
-                    bdft.run(nmpi=nmpi, nomp=nomp, force_run=force_run)
+                    bdft.run(nmpi=nmpi, nomp=nomp, force_run=force_run,
+                             dry_run=dry_run)
                     # Update the dictionary of paths to the logfiles
                     self.logfiles_paths[atom_dir][coord].append(
                             bdft.logfile_path)
@@ -218,65 +220,67 @@ class RamanSpectrumCalc(BigDFTCalc):
                             new_posinp, ef_amplitudes=self.ef_amplitudes,
                             prefix=self.prefix, run_folder=run_folder,
                             ref_calc=bdft)  # noqa
-                        pt_calc.run(force_run=force_run)
+                        pt_calc.run(nmpi=nmpi, nomp=nomp, force_run=force_run,
+                                    dry_run=dry_run)
                         # Update the dictionary of polarizability tensors
                         self.pol_tensors[atom_dir][coord].append(
                                 pt_calc.pol_tensor)
         # Post-processing:
-        # - Set the Hessian
-        self.hessian = self.build_hessian()
-        # - Set the dynamical matrix
-        self.dyn_mat = self.build_dyn_mat()
-        # - Set the energies
-        self.energies = {}
-        self.energies['Ha'], self.normal_modes = self.solve_dynamical_matrix()
-        self.energies['cm^-1'] = self.energies['Ha'] * HA_TO_CMM1
-        # - Extra post-processing if the intensities and
-        #   depolarization were to be computed:
-        if self.calc_intensities:
-            # - Set the derivatives of the polarizability tensors
-            #   along each displacement directions
-            self.deriv_pol_tensors = self.find_deriv_pol_tensors()
-            # - Set the mean polarizability derivatives (alpha), the
-            #   anisotropies of the polarizability tensor derivative
-            #   (beta_sq), the intensity and the depolarization ratio
-            #   for each normal mode:
-            self.alphas = []
-            self.betas_sq = []
-            self.intensities = []
-            self.depol_ratios = []
-            # - Loop over the normal modes
-            for pt_flat in self.deriv_pol_tensors.dot(self.normal_modes).T:
-                # Reshape the derivative of the polarizability tensor
-                # along the current normal mode
-                pt = pt_flat.reshape(3, 3)
-                # Find the principal values of polarizability
-                alphas = np.linalg.eigvals(pt)
-                # Mean polarizability derivative
-                alpha = np.sum(alphas) / 3.
-                self.alphas.append(alpha)
-                # Anisotropy of the polarizability tensor derivative
-                beta_sq = ((alphas[0]-alphas[1])**2 +
-                           (alphas[1]-alphas[2])**2 +
-                           (alphas[2]-alphas[0])**2) / 2.
-                self.betas_sq.append(beta_sq)
-                # # Mean polarizability derivative
-                # alpha = 1./3. * pt.trace()
-                # self.alphas.append(alpha)
-                # # Anisotropy of the polarizability tensor derivative
-                # beta_sq = 1./2. * ((pt[0][0]-pt[1][1])**2 +
-                #                    (pt[0][0]-pt[2][2])**2 +
-                #                    (pt[1][1]-pt[2][2])**2 +
-                #                    6.*(pt[0][1]**2+pt[0][2]**2+pt[1][2]**2))
-                # self.betas_sq.append(beta_sq)
-                # From the two previous quantities, it is possible to
-                # compute the intensity (converted from atomic units
-                # to Ang^4.amu^-1) and the depolarization ratio
-                # of the normal mode.
-#                self.intensities.append(45*alpha**2 + 7*beta_sq)
-                conversion = B_TO_ANG**4 / EMU_TO_AMU
-                self.intensities.append((45*alpha**2 + 7*beta_sq) * conversion)
-                self.depol_ratios.append(3*beta_sq / (45*alpha**2 + 4*beta_sq))
+        if not dry_run:
+            # - Set the Hessian
+            self.hessian = self.build_hessian()
+            # - Set the dynamical matrix
+            self.dyn_mat = self.build_dyn_mat()
+            # - Set the energies
+            self.energies = {}
+            self.energies['Ha'], self.normal_modes = self.solve_dynamical_matrix()
+            self.energies['cm^-1'] = self.energies['Ha'] * HA_TO_CMM1
+            # - Extra post-processing if the intensities and
+            #   depolarization were to be computed:
+            if self.calc_intensities:
+                # - Set the derivatives of the polarizability tensors
+                #   along each displacement directions
+                self.deriv_pol_tensors = self.find_deriv_pol_tensors()
+                # - Set the mean polarizability derivatives (alpha), the
+                #   anisotropies of the polarizability tensor derivative
+                #   (beta_sq), the intensity and the depolarization ratio
+                #   for each normal mode:
+                self.alphas = []
+                self.betas_sq = []
+                self.intensities = []
+                self.depol_ratios = []
+                # - Loop over the normal modes
+                for pt_flat in self.deriv_pol_tensors.dot(self.normal_modes).T:
+                    # Reshape the derivative of the polarizability tensor
+                    # along the current normal mode
+                    pt = pt_flat.reshape(3, 3)
+                    # Find the principal values of polarizability
+                    alphas = np.linalg.eigvals(pt)
+                    # Mean polarizability derivative
+                    alpha = np.sum(alphas) / 3.
+                    self.alphas.append(alpha)
+                    # Anisotropy of the polarizability tensor derivative
+                    beta_sq = ((alphas[0]-alphas[1])**2 +
+                               (alphas[1]-alphas[2])**2 +
+                               (alphas[2]-alphas[0])**2) / 2.
+                    self.betas_sq.append(beta_sq)
+                    # # Mean polarizability derivative
+                    # alpha = 1./3. * pt.trace()
+                    # self.alphas.append(alpha)
+                    # # Anisotropy of the polarizability tensor derivative
+                    # beta_sq = 1./2. * ((pt[0][0]-pt[1][1])**2 +
+                    #                    (pt[0][0]-pt[2][2])**2 +
+                    #                    (pt[1][1]-pt[2][2])**2 +
+                    #                    6.*(pt[0][1]**2+pt[0][2]**2+pt[1][2]**2))
+                    # self.betas_sq.append(beta_sq)
+                    # From the two previous quantities, it is possible to
+                    # compute the intensity (converted from atomic units
+                    # to Ang^4.amu^-1) and the depolarization ratio
+                    # of the normal mode.
+#                    self.intensities.append(45*alpha**2 + 7*beta_sq)
+                    conversion = B_TO_ANG**4 / EMU_TO_AMU
+                    self.intensities.append((45*alpha**2 + 7*beta_sq) * conversion)
+                    self.depol_ratios.append(3*beta_sq / (45*alpha**2 + 4*beta_sq))
 
     def solve_dynamical_matrix(self):
         r"""
@@ -413,8 +417,9 @@ class RamanSpectrumCalc(BigDFTCalc):
                     new_line += list(delta_forces/delta_x)
                 # The new line of the Hessian is now complete
                 h.append(new_line)
-        # Return the Hessian matrix as a numpy array
-        return np.array(h)
+        # Return the symmetrized Hessian matrix as a numpy array
+        h = np.array(h)
+        return (h + h.T) / 2.
 
     def find_deriv_pol_tensors(self):
         r"""

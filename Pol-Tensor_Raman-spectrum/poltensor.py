@@ -58,7 +58,7 @@ class PolTensorCalc(BigDFTCalc):
         for coord in COORDS:
             self.logfiles_paths[coord] = []
 
-    def run(self, nmpi=1, nomp=1, force_run=False):
+    def run(self, nmpi=1, nomp=1, force_run=False, dry_run=False):
         r"""
         Method running all the calculations and post-processing them
         to obtain the polarizability tensor. You may force the
@@ -72,6 +72,9 @@ class PolTensorCalc(BigDFTCalc):
                           even though a logfile already exists.
                           (Optional, default value set to False)
         :type force_run: boolean
+        :param dry_run: If True, all folders and input files are written
+            on disk, but are not run.
+        :type dry_run: bool
         """
         # Loop over the directions of the electric field
         for i, coord in enumerate(COORDS):
@@ -93,7 +96,8 @@ class PolTensorCalc(BigDFTCalc):
                                       prefix=self.prefix,
                                       run_folder=run_folder,
                                       ref_calc=self.ref_calc)
-                    bdft.run(nmpi=nmpi, nomp=nomp, force_run=force_run)
+                    bdft.run(nmpi=nmpi, nomp=nomp, force_run=force_run,
+                             dry_run=dry_run)
                     # Append the path to the logfile to the dictionary
                     self.logfiles_paths[coord].append(bdft.logfile_path)
         # Use all the logfiles to compute the polarizability tensor

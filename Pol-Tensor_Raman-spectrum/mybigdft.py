@@ -46,13 +46,13 @@ class BigDFTCalc(object):
         :param posinp: BigDFT initial geometry file.
         :type posinp: posinp.Posinp
         :param prefix: Prefix of the BigDFT calculation (optional,
-                       default value set to None).
+            default value set to None).
         :type prefix: str
         :param run_folder: Folder where to run the calculation
-                           (optional, default value set to None).
+            (optional, default value set to None).
         :type run_folder: str
         :param ref_calc: Other BigDFT calculation, taken as reference
-                         (optional, default value set to None)
+            (optional, default value set to None)
         :type ref_calc: bigdft.BigDFTCalc
         """
         # Set the initial folder
@@ -106,7 +106,7 @@ class BigDFTCalc(object):
         # Set the reference calculation
         self.ref_calc = ref_calc
 
-    def run(self, nmpi=1, nomp=1, force_run=False):
+    def run(self, nmpi=1, nomp=1, force_run=False, dry_run=False):
         r"""
         Method running the BigDFT calculation if it was not already
         performed.
@@ -124,6 +124,9 @@ class BigDFTCalc(object):
                           even though a logfile already exists.
                           (Optional, default value set to False)
         :type force_run: boolean
+        :param dry_run: If True, all folders and input files are written
+            on disk, but are not run.
+        :type dry_run: bool
         """
         # Update the BigDFT command with mpi, if necessary
         if int(nmpi) > 1:
@@ -184,11 +187,13 @@ class BigDFTCalc(object):
                 # Write the posinp file
                 self.posinp.write(self.posinp_name)
                 # Launch the calculation
-                print(self.command, "...")
-                run = subprocess.Popen(self.command, stdout=subprocess.PIPE,
-                                       stderr=subprocess.PIPE)
-                out, err = run.communicate()
-                print(out)
+                if not dry_run:
+                    print(self.command, "...")
+                    run = subprocess.Popen(self.command,
+                                           stdout=subprocess.PIPE,
+                                           stderr=subprocess.PIPE)
+                    out, err = run.communicate()
+                    print(out)
             else:
                 print("Logfile {} already exists!\n".format(self.output_name))
         finally:
